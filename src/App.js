@@ -1,30 +1,37 @@
 import './App.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { reduxPlus, __thunkPrac } from './Redux/modules/testSlice';;
+import { Container, Nav, Navbar } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import Router from './Shared/router';
 
 
 function App() {
 
-
-  //리덕스 연결 확인 코드입니다 확인 후 지워주세요!
-  const dispatch = useDispatch() 
-
-  const prac = useSelector((state) => state.prac)
-  console.log(prac)
-
+  const navigate = useNavigate()
 
   return (
     <div className="App">
-        <h1>Hello, React!</h1>
 
-        {/* 리덕스 연결 확인 코드입니다 확인 후 지워주세요! */}
-        <div>
-          <button onClick={()=>{dispatch(reduxPlus(1))}}>리덕스 연결확인 버튼</button>
-        </div>
+      {/* Navbar 입니다 App.js 가 커지면 component화 시키면 좋을 것 같습니다*/}
+      <Navbar bg="light" variant="light">
+        <Container>
+          <Navbar.Brand type='button' onClick={()=>{navigate('/')}}>Crux</Navbar.Brand>
+          <Nav className="me-auto">
+              <Nav.Link >크루 모임</Nav.Link>
+              <Nav.Link >크루 생성</Nav.Link>
+              <Nav.Link >클라이밍짐 후기</Nav.Link>
 
-        <div>
-        <button onClick={()=>{dispatch(__thunkPrac(3))}}>리덕스_thunk 연결확인 버튼</button>
-        </div>
+            <span style={{display:'flex', position:'absolute', marginLeft:'60%'}}>
+              <Nav.Link onClick={()=>{navigate('/login')}}>LOGIN</Nav.Link>
+              <Nav.Link >REGISTER</Nav.Link>
+            </span>
+          </Nav>
+        </Container>
+      </Navbar>
+      
+      {/* router 연결 */}
+      <Router />
+
+
 
     </div>
   );
