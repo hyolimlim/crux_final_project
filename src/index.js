@@ -6,11 +6,13 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router} from 'react-router-dom';
 import { Provider } from "react-redux"
 import store from './Redux/config/configStore';
+import GlobalStyle from './Shared/GlobalStyle';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider store={store}>
       <Router>
+          <GlobalStyle />
           <App />
       </Router>
   </Provider>
