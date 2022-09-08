@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 import { Container, Row, Col } from 'react-bootstrap';
-import HomeMap from './components/HomeMap';
 import SliderBanner from './components/SliderBanner';
 
 
@@ -62,18 +61,6 @@ const Home = () => {
                 
             </CrewArea>
 
-        {/* 내 주변 클라이밍 짐 Area입니다 */}
-            <MapArea>
-                <div style={{position:'relative', top:'9rem', margin:'0 auto', width:'162rem'}}>
-                    <h2 >
-                        <span style={{fontWeight:'700'}}>내 주변 클라이밍 짐</span> | 내 주변 인공암벽
-                    </h2>
-                </div>        
-                <MainMap> 
-                    <HomeMap />  {/* 카카오 Map 입니다 */}
-                </MainMap>
-
-            </MapArea>
 
         {/* 이번 달 클라이밍 짐 순위 Area입니다 */}
             <div style={{position:'relative', top:'9rem', margin:'0 auto', width:'164rem'}}>
@@ -162,23 +149,6 @@ width: 38rem;
 height: 50rem;
 margin: 2rem 3rem 0 0;
 `
-
-
-const MapArea = styled.div`
-width: 100%;
-height: 87rem;
-
-background-color: #D9D9D9;
-`
-
-const MainMap = styled.div`
-width: 163rem;
-height: 61rem;
-top: 12rem;
-margin: 0 auto;
-position: relative;
-`
-
 
 const GymArea = styled.div`
 display: flex;

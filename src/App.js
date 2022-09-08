@@ -2,7 +2,7 @@ import './App.css';
 // import { Container, Nav, Navbar } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Router from './Shared/router';
-import Navbar from './Pages/Home/components/Navbar';
+import Navbar from './Shared/Navbar';
 
 
 function App() {

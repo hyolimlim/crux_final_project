@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 
 
-const HomeMap = () => {
+const KakaoMap = () => {
 
 const [markerOpen, setMarkerOpen] = useState([])
   //개별 마커 열리고 내리는거 어떻게하지?? 배열 여러개 만들어서 boolean push 해주는식으로 하면되나?
@@ -69,7 +69,7 @@ const [markerOpen, setMarkerOpen] = useState([])
 
       <Map
         center={ state.center }
-        style={{ width: "163rem", height: "61rem" }}
+        style={{ width: "134rem", height: "110rem" }}
         level={7}
       >
         <MapMarker position={state.center}>
@@ -96,4 +96,4 @@ const [markerOpen, setMarkerOpen] = useState([])
 }
 
 
-export default HomeMap;
+export default KakaoMap;

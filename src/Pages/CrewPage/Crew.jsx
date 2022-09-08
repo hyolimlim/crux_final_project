@@ -1,4 +1,3 @@
-import Navbar from "../Home/components/Navbar";
 import styled from 'styled-components'
 import { Container, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from "react-redux";
