@@ -36,15 +36,15 @@ if (isLoading) {
                 <Row md={3} style={{justifyContent:'center'}}>
                     
                     {
-                        crews?.map((val) => {
+                        crews?.map((crew) => {
                             return (
-                                <Col key={val.id} style={{width:'38rem', margin:'0 3rem 0 0'}} 
-                                    onClick={()=>{ navigate(`/crews/${val.id}`) }}>
-                                    <img src={val.imgUrl}
+                                <Col key={crew.id} style={{width:'38rem', margin:'0 3rem 0 0'}} 
+                                    onClick={()=>{ navigate(`/crews/${crew.id}`) }}>
+                                    <img src={crew.imgUrl}
                                         alt='' style={{width:'38rem', height:'38rem'}}/>
-                                    <h3>{val.name}</h3>
-                                    <p>{val.content}</p>
-                                    <p>🖤 50명 | 🙍‍♀️ {val.crewNum}</p>
+                                    <h3>{crew.name}</h3>
+                                    <p>{crew.content}</p>
+                                    <p>🖤 50명 | 🙍‍♀️ {crew.crewNum}</p>
                                 </Col>
                             );
                         })

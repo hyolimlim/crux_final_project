@@ -1,8 +1,28 @@
 import styled from 'styled-components'
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { __getGyms } from '../../Redux/modules/gymSlice';
 import KakaoMap from './components/KakaoMap';
+import Loading from "../../Shared/Loading.js"
+import { useNavigate } from 'react-router-dom';
 
 const Gym = () => {
 
+    const navigate = useNavigate()
+    const {isLoading, error, gyms} = useSelector((state)=>state.gyms)
+    // console.log(gyms)
+
+    const dispatch = useDispatch()
+    
+    useEffect(()=>{
+        dispatch(__getGyms())
+    },[dispatch])
+
+
+
+if (isLoading) {
+    <Loading />
+}
 
     return (
         <div>
@@ -23,14 +43,24 @@ const Gym = () => {
                     <div>
                         <h3>강남역 주변 클라이밍짐</h3>
                         <div>
-                            <div style={{display:'flex'}}>
-                                <img src='http://dkmedal.co.kr/web/product/big/201611/362_shop1_803761.jpg' alt='' style={{width:'15rem', height:'15rem'}}/>
-                                <div style={{width:'23rem'}}>
-                                    <h3>와우산30</h3>
-                                    <p>마포구를 베이스로 달리는 러닝 크루이며 매주 화요일에 뛰어요! 많은 참여 부탁드립니다.</p>
-                                    <p>🖤 50명 | 🙍‍♀️ 30명</p>
-                                </div>
-                            </div>
+
+                        {
+                            gyms?.map((gym)=>{
+                                return(
+                                    <div key={gym.id} style={{display:'flex', margin:'2rem auto', width:'50rem'}} 
+                                    onClick={()=>{ navigate(`/gyms/${gym.id}`) }}>
+                                        <img src='http://dkmedal.co.kr/web/product/big/201611/362_shop1_803761.jpg' alt='' style={{width:'15rem', height:'15rem'}}/>
+                                        <div style={{width:'23rem'}}>
+                                            <h3>{gym.name}</h3>
+                                            <p>{gym.location}</p>
+                                            <p>{gym.phone}</p>
+                                            <p>✨ {gym.avgScore}</p>
+                                        </div>
+                                    </div>
+                                );
+                            })
+                        }
+
                         </div>
                     </div>
                 </GymContainer>
