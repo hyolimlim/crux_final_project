@@ -69,7 +69,7 @@ const [markerOpen, setMarkerOpen] = useState([])
 
       <Map
         center={ state.center }
-        style={{ width: "100%", height: "500px" }}
+        style={{ width: "163rem", height: "61rem" }}
         level={7}
       >
         <MapMarker position={state.center}>
