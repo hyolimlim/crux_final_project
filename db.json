@@ -1,19 +1,18 @@
 {
-  "posts": [
+  "crews": [
     {
-      "id": 1,
-      "title": "json-server",
-      "author": "typicode"
-    }
-  ],
-  "comments": [
+      "id" : 1,
+      "name": "용규크루",
+      "content": "최적화를 위해 노력하는 크루입니다",
+      "imgUrl":"http://dkmedal.co.kr/web/product/big/201611/362_shop1_803761.jpg",
+      "crewNum": 4
+    },
     {
-      "id": 1,
-      "body": "some comment",
-      "postId": 1
+      "id" : 2,
+      "name": "현우크루",
+      "content": "야호 야호 크루입니다",
+      "imgUrl":"http://dkmedal.co.kr/web/product/big/201712/464_shop1_539894.jpg",
+      "crewNum": 4
     }
-  ],
-  "profile": {
-    "name": "typicode"
-  }
+  ]
 }

@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit"
-import pracSlice from "../modules/testSlice"
+import { crewSlice } from "../modules/crewSlice";
 
 const store = configureStore (
     {
         reducer: {
-            prac: pracSlice
+            crews: crewSlice.reducer,
         },
     }
 );
