@@ -25,7 +25,10 @@ const Navbar = () => {
 
 const NavContainer = styled.div`
 display: flex;
-background-color: #42f9b9;
+background-color: transparent;
+z-index: 100;
+position: absolute;
+margin: 0;
 width: 192rem;
 height: 18rem;
 `

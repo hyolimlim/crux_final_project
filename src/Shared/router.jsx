@@ -4,7 +4,7 @@ import Login from "../Pages/Login/Login";
 import Gym from "../Pages/GymPage/Gym";
 import Crew from "../Pages/CrewPage/Crew";
 import CrewDetail from "../Pages/CrewPage/CrewDetail";
-import GymDetail from "../Pages/GymPage/GymDetail";
+import GymDetail from "../Pages/GymDetailPage/GymDetail";
 
 const Router = () => {
     return (
