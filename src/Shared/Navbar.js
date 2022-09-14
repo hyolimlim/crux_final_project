@@ -3,20 +3,27 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import ModalPortal from "../Pages/Login/MordalPortal";
 import LoginModal from "../Pages/Login/LoginModal";
+import Legister from "../Pages/Register/Register";
 
 const Navbar = () => {
   const navigate = useNavigate();
 
-  const [visible, setVisible] = useState(false);
+  const [loginVisible, setLoginVisible] = useState(false);
+  const [registerVisible, setRegisterVisible] = useState(false);
 
-  const handleModal = () => {
-    setVisible(!visible);
+  const handleLoginModal = () => {
+    setLoginVisible(!loginVisible);
+  };
+
+  const handleRegisterModal = () => {
+    setRegisterVisible(!registerVisible);
   };
 
   return (
     <NavContainer>
       <ModalPortal>
-        {visible && <LoginModal onClose={handleModal} />}
+        {loginVisible && <LoginModal onClose={handleLoginModal} />}
+        {registerVisible && <Legister onClose={handleRegisterModal} />}
       </ModalPortal>
       <NavContent>
         <h1
@@ -36,7 +43,15 @@ const Navbar = () => {
         >
           크루 모임
         </h3>
-        <h3 style={{ position: "relative", left: "10rem" }}>크루 생성</h3>
+        <h3
+          type="button"
+          style={{ position: "relative", left: "10rem" }}
+          onClick={() => {
+            navigate("/createcrew");
+          }}
+        >
+          크루 생성
+        </h3>
         <h3
           type="button"
           onClick={() => {
@@ -47,10 +62,15 @@ const Navbar = () => {
           클라이밍짐 후기
         </h3>
         <div style={{ display: "flex", position: "relative", left: "60rem" }}>
-          <h4 type="button" onClick={handleModal}>
+          <h4 type="button" onClick={handleLoginModal}>
             LOGIN
           </h4>
-          <h4 style={{ position: "relative", left: "2.5rem" }}>REGISTER</h4>
+          <h4
+            style={{ position: "relative", left: "2.5rem" }}
+            onClick={handleRegisterModal}
+          >
+            REGISTER
+          </h4>
         </div>
       </NavContent>
     </NavContainer>
@@ -74,9 +94,7 @@ const NavContent = styled.div`
   /* top: 11rem; */
 `;
 
-
 export default Navbar;
-
 
 //     return (
 //         <NavContainer>
