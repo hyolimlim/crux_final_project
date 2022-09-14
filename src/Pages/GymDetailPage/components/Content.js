@@ -8,12 +8,13 @@ const Content = ({gym}) => {
 const [modal, setModal] = useState(false)
 console.log(gym.imgUrl)
 
+
     return(
         <div style={{width:'192rem', height:'80rem', backgroundColor:'#cccccc'}}>
             <div style={{width:'120rem', height:'64rem', margin:'auto', display:'flex'}}>
                 <div style={{width:'70rem', height:'100%', margin:'8rem 0 0 0'}}>
                     
-                    <MainImg gymImg={gym.imgUrl} />
+                    <img src={gym.imgUrl} style={{width:'100%', height:'100%'}}/>
                 
                 </div>
 
@@ -34,13 +35,13 @@ console.log(gym.imgUrl)
                     <div style={{fontSize:'2rem', fontWeight:'700', margin:'3rem 0 0 0'}}>주소 <S_content> {gym.location} </S_content></div>
                     <div style={{fontSize:'2rem', fontWeight:'700', margin:'2rem 0 0 0'}}>전화번호 <S_content> {gym.phone} </S_content></div>
 
-                    <div style={{fontSize:'2rem', fontWeight:'700', margin:'20rem 0 0 0'}}>클라이밍짐 사진이 들어와요</div>
+                    <div style={{fontSize:'2rem', fontWeight:'700', margin:'10rem 0 0 0'}}>클라이밍짐 사진이 들어와요</div>
 
                     <div>
-                        슬라이더형식으로 들어와요
-                        <img src="https://modo-phinf.pstatic.net/20160808_283/14706506407410zqiW_JPEG/mosa5uoyzj.jpeg?type=a1100" 
-                            style={{width:'20rem'}}/>
+                        리뷰 예시 2~3개 주고 <br/> 
+                        {'<'}리뷰 상세보기{'>'} 클릭하면 밑에 review 모음 쭉 깔아주는걸로?
                     </div>
+                    <div style={{margin:'20rem 0 0 0', color:'red'}}>리뷰 상세보기</div>
                 </div>
             </div>
 
@@ -49,19 +50,18 @@ console.log(gym.imgUrl)
                 modal && <ModalReview setModal={setModal} gym={gym}/>
             }
 
-
         </div>
     )
 }
 
-const MainImg = styled.div`
-width: 100%;
-height: 100%;
-background: url(${(props) => props.gymImg});
-background-position: center;
-background-size: cover;
-background-repeat: no-repeat;
-`
+// const MainImg = styled.div`
+// width: 100%;
+// height: 100%;
+// background: url(${(props) => props.gymImg});
+// background-position: center;
+// background-size: cover;
+// background-repeat: no-repeat;
+// `
 
 
 const S_content = styled.span`
