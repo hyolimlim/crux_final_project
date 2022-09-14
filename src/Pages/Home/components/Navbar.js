@@ -15,8 +15,12 @@ const Navbar = () => {
                 <h3 style={{fontWeight:'500', marginLeft:'4rem'}}>크루 생성</h3>
                 <h3 type="button" onClick={()=>{ navigate('/gyms') }} style={{fontWeight:'500', marginLeft:'4rem'}}>클라이밍짐 후기</h3>
                 <div style={{display:'flex'}}>
-                    <h4 type="button" onClick={()=>{ navigate('/login') }} style={{fontWeight:'500', marginLeft:'47rem'}}>LOGIN</h4>
+                
+              {/* 로그인 모달창 */}
+                    <h4 type="button" onClick={()=>{  }} style={{fontWeight:'500', marginLeft:'47rem'}}>LOGIN</h4>
+                    
                     <h4 style={{fontWeight:'500', marginLeft:'2.5rem'}}>REGISTER</h4>
+
                 </div>
             </NavContent>
         </NavContainer>
