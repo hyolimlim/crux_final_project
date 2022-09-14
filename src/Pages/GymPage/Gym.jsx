@@ -82,9 +82,9 @@ const Gym = () => {
        setLoad(false);
     }, [page]);
 
-    useEffect(()=>{
-        // getGyms();
-    }, [page])
+    // useEffect(()=>{
+    //     getGyms();
+    // }, [page])
 
 
 

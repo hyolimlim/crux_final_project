@@ -6,12 +6,15 @@ import ModalReview from "./ModalReview";
 const Content = ({gym}) => {
 
 const [modal, setModal] = useState(false)
+console.log(gym.imgUrl)
 
     return(
         <div style={{width:'192rem', height:'80rem', backgroundColor:'#cccccc'}}>
             <div style={{width:'120rem', height:'64rem', margin:'auto', display:'flex'}}>
                 <div style={{width:'70rem', height:'100%', margin:'8rem 0 0 0'}}>
-                    <img src={gym.imgUrl} style={{width:'100%', height:'100%'}}/>
+                    
+                    <MainImg gymImg={gym.imgUrl} />
+                
                 </div>
 
                 <div style={{width:'50rem', height:'100%', margin:'8rem 0 0 0', padding:'4rem', backgroundColor:'#f4f4f4'}}>
@@ -41,18 +44,31 @@ const [modal, setModal] = useState(false)
                 </div>
             </div>
 
+    {/* 리뷰 작성 모달창입니다 */}
             {
-                modal && <ModalReview setModal={setModal}/>
+                modal && <ModalReview setModal={setModal} gym={gym}/>
             }
+
 
         </div>
     )
 }
+
+const MainImg = styled.div`
+width: 100%;
+height: 100%;
+background: url(${(props) => props.gymImg});
+background-position: center;
+background-size: cover;
+background-repeat: no-repeat;
+`
+
 
 const S_content = styled.span`
 margin-left: 1rem;
 font-size: 2rem;
 font-weight: 400;
 `
+
 
 export default Content;

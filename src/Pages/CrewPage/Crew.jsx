@@ -31,11 +31,8 @@ const Crew = () => {
     const obsRef = useRef(null); //observer 요소
     // console.log(obsRef)
     const [list, setList] = useState([]) 
-    // console.log(list)
-    // console.log(list.at(-1).id)
-    // const [List, setList] = useState(() => list)  //post List
 
-    const [lastCrewId, setLastCrewId] = useState(21000000000) //현재 페이지
+    const [page, setPage] = useState(0) //현재 페이지
     const [load, setLoad] = useState(false); //로딩 스피너
     const preventRef = useRef(true) //옵저버 중복 실행 방지
     const endRef = useRef(false) //모든 글 로드 확인
@@ -47,14 +44,11 @@ const Crew = () => {
         if(!endRef.current && target.isIntersecting && preventRef.current) { //옵저버 중복 실행 방지
             preventRef.current = false;
 
-            // const lastId = list?.at(-1).id
-            // console.log(lastId)
-            setLastCrewId(7); //페이지 값 증가 -> 마지막 crewId 가져오기
+            setPage(prev => prev + 1); //페이지 값 증가 
         }
     })
 
     useEffect(()=>{
-        getCrew();
         const observer = new IntersectionObserver(obsHandler, { threshold : 0.1 });
 
         if(obsRef.current) observer.observe(obsRef.current); 
@@ -63,21 +57,184 @@ const Crew = () => {
 
     const getCrew = useCallback(async() => { //crewList 불러오기
         setLoad(true); //로딩 시작
-        console.log('getCrew 불러오기')
-        await axios.get(`https://01192mg.shop/crews?lastCrewId=${lastCrewId}&size=10`)
+        await axios.get(`https://01192mg.shop/crews/popular?page=${page}&size=6`)
         .then((res) => {
-            console.log(res.data.data) //..
-            setList(prev => [...prev, ...res.data.data])
+            console.log(res.data.data.content) 
+            setList(prev => [...prev, ...res.data.data.content])
         })
         .catch((err) => {
             console.log(err)
         })
        setLoad(false);
-    }, [lastCrewId]);
+    }, [page]);
 
     useEffect(()=>{
         getCrew();
-    }, [lastCrewId])
+    }, [page])
+
+
+// 신규크루 API 입니다
+    const [newlist, setNewlist] = useState([])
+    console.log(newlist)
+    const [newpage, setNewpage] = useState(0)
+
+    const onclickNewCrew = () => {
+        newCrew();
+    }
+
+    const newCrew = useCallback(async() => {
+        setLoad(true); //로딩 시작
+        await axios.get(`https://01192mg.shop/crews?page=${newpage}&size=6`)
+        .then((res) => {
+            console.log(res.data.data.content) 
+            setNewlist(prev => [...prev, ...res.data.data.content])
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+       setLoad(false);
+    }, [newpage]);
+
+
+// 크루검색 API 입니다
+    const [search, setSearch] = useState('')
+
+    const onclickSearchCrew = () => {
+        searchCrew();
+    }
+
+    const searchCrew = useCallback(async() => {
+        setLoad(true); //로딩 시작
+        await axios.get(`https://01192mg.shop/crews/search?query=${search}`)
+        .then((res) => {
+            
+            setList(res.data.data)
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+       setLoad(false);
+    }, [onclickSearchCrew])
+
+    
+    
+// 아래처럼 하지말고 load 처리 하려면 리덕스에서 받아온 Loading으로 할것
+// if (load) {
+//     return(
+//         <Loading />
+//     )
+// }
+
+    return(
+        <div>
+            <Navbar />
+
+            <HeaderWrap>
+                <h1 style={{width:'120rem', margin:'0 auto', padding:'10rem 0 0 0'}}>크루 모임</h1>
+                
+            {/* 검색 박스 */}
+                <div style={{width:'120rem', margin:'0 auto', height:'8rem'}}>
+                    <S_search placeholder='검색어를 입력해 주세요' onChange={(e)=> setSearch(e.target.value)}/>
+                    <img src={검색아이콘} type="button" style={{width:'3rem', height:'3rem', margin:'0 0 0 -5rem'}} 
+                        onClick={onclickSearchCrew}/>
+                </div>
+                <div style={{width:'120rem', margin:'8rem auto 0 auto'}}>
+                    <h3>
+                        <span style={{fontWeight:'700', margin:'0 2rem 0 0'}}> 인기 크루 </span> 
+                        <span style={{color:'#cccccc'}} 
+                            onClick={onclickNewCrew}> 신규 크루 
+                        </span>
+                    </h3>
+                </div>
+            </HeaderWrap>
+
+            {/* <div style={{width:'120rem', height:'134rem', margin:'0 auto'}}> */}
+            
+            <Container style={{width:'120rem', height:'134rem', margin:'0 auto', padding:'0'}}>
+                <Row md={3} style={{margin:'0 auto', padding:'1rem 0 0 0'}}>
+                
+                {   
+                    newlist.length === 0 ? 
+
+                    list?.map((val, i) => (
+                        <React.Fragment key={i}>
+                                
+                                <Col key={i} style={{width:'38rem', margin:'2rem 2rem 0 0', padding:'0'}} 
+                                    onClick={()=>{ navigate(`/crews/${val.id}`) }}>
+                                    <img src={val.imgUrl}
+                                        alt='' style={{width:'38rem', height:'38rem'}}/>
+                                    <h3 style={{margin:'2rem 0 0 0'}}>{val.name}</h3>
+                                    <p style={{margin:'0.5rem 0 0 0'}}>{val.content}</p>
+                                    <p style={{margin:'1rem 0 0 0'}}>🖤 50명 | 🙍‍♀️ {val.crewNum}</p>
+                                </Col>
+
+                        </React.Fragment>
+                        )
+                    )           //기본적으로 위의 인기크루 list 를 반복문으로 보여주고
+                    :           //신규크루값이 들어오면 newlist 반복문을 돌려줍니다 
+                    newlist?.map((val, i) => (
+                        <React.Fragment key={i}>
+                                
+                                <Col key={i} style={{width:'38rem', margin:'2rem 2rem 0 0', padding:'0'}} 
+                                    onClick={()=>{ navigate(`/crews/${val.id}`) }}>
+                                    <img src={val.imgUrl}
+                                        alt='' style={{width:'38rem', height:'38rem'}}/>
+                                    <h3 style={{margin:'2rem 0 0 0'}}>{val.name}</h3>
+                                    <p style={{margin:'0.5rem 0 0 0'}}>{val.content}</p>
+                                    <p style={{margin:'1rem 0 0 0'}}>🖤 50명 | 🙍‍♀️ {val.crewNum}</p>
+                                </Col>
+
+                        </React.Fragment>
+                        )
+                    )
+                }
+
+                </Row>
+            </Container>
+
+            {
+                load ? <Loading />
+                : null
+            }
+
+            <div ref={obsRef}></div>
+
+        </div>
+    );
+}
+
+const HeaderWrap = styled.div`
+width: 192rem;
+height: 35rem;
+background-color: #fafafa;
+
+`
+
+const S_search = styled.input`
+width: 60rem;
+height: 5rem;
+margin: 2rem auto;
+border: 1px solid #f0f0f0;
+border-radius: 0.5rem;
+font-size: 1.4rem; 
+padding: 0 0 0 1rem;
+`
+
+const Card = styled.span`
+width: 38rem;
+height: 49rem;
+`
+
+export default Crew;
+
+
+
+
+
+
+
+
+
 
 
     // 무한스크롤 2페이즈!!
@@ -113,80 +270,3 @@ const Crew = () => {
 //                 <Loading />
 //             </div>
 // }
-
-    return(
-        <div>
-            <Navbar />
-
-            <HeaderWrap>
-                <h1 style={{width:'120rem', margin:'0 auto', padding:'10rem 0 0 0'}}>크루 모임</h1>
-                
-            {/* 검색 박스 */}
-                <div style={{width:'120rem', margin:'0 auto', height:'8rem'}}>
-                    <S_search placeholder='검색어를 입력해 주세요'/>
-                    <img src={검색아이콘} type="button" style={{width:'3rem', height:'3rem', margin:'0 0 0 -5rem'}}/>
-                </div>
-                <div style={{width:'120rem', margin:'8rem auto 0 auto'}}>
-                    <h3>
-                        <span style={{fontWeight:'700', margin:'0 2rem 0 0'}}>인기 크루</span> <span style={{color:'#cccccc'}}>신규 크루</span>
-                    </h3>
-                </div>
-            </HeaderWrap>
-
-            {/* <div style={{width:'120rem', height:'134rem', margin:'0 auto'}}> */}
-            
-            <Container style={{width:'120rem', height:'134rem', margin:'0 auto', padding:'0'}}>
-                <Row md={3} style={{margin:'0 auto', padding:'1rem 0 0 0'}}>
-                
-                {
-                    list?.map((val, i) => (
-                        <React.Fragment key={i}>
-                                
-                                <Col key={i} style={{width:'38rem', margin:'2rem 2rem 0 0', padding:'0'}} 
-                                    onClick={()=>{ navigate(`/crews/${val.id}`) }}>
-                                    <img src={val.imgUrl}
-                                        alt='' style={{width:'38rem', height:'38rem'}}/>
-                                    <h3 style={{margin:'2rem 0 0 0'}}>{val.name}</h3>
-                                    <p style={{margin:'0.5rem 0 0 0'}}>{val.content}</p>
-                                    <p style={{margin:'1rem 0 0 0'}}>🖤 50명 | 🙍‍♀️ {val.crewNum}</p>
-                                </Col>
-
-                        </React.Fragment>
-                        )
-                    )
-                }
-                </Row>
-            </Container>
-
-            {
-                load ? <Loading />
-                : null
-            }
-
-            <div ref={obsRef}></div>
-
-        </div>
-    );
-}
-
-const HeaderWrap = styled.div`
-width: 192rem;
-height: 35rem;
-background-color: #fafafa;
-
-`
-
-const S_search = styled.input`
-width: 60rem;
-height: 5rem;
-margin: 2rem auto;
-border: 1px solid #f0f0f0;
-border-radius: 0.5rem;
-`
-
-const Card = styled.span`
-width: 38rem;
-height: 49rem;
-`
-
-export default Crew;

@@ -1,13 +1,19 @@
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+
 import styled from "styled-components"
 import { Rating } from 'react-simple-star-rating'
 import { useEffect, useState } from "react"
+import { useParams } from 'react-router-dom';
+import 이미지업로드 from "../../../Image/이미지업로드 아이콘.png"
 
 
-const ModalReview = ({setModal}) => {
+const ModalReview = ({setModal, gym}) => {
 
     const closeModal = () => {
         setModal(false)
     }
+
+// 별점 주기 <star rating> 라이브러리!
 
     const [rating, setRating] = useState(0)
 
@@ -18,6 +24,42 @@ const ModalReview = ({setModal}) => {
     useEffect(()=>{
         console.log(rating)
     },[rating])
+
+// 이미지 업로드 <firebase> 라이브러리! 
+
+const [fileUrl, setFileUrl] = useState()
+const [comment, setComment] = useState('')
+
+// const storage = getStorage();
+//   const storageRef = ref(storage);
+
+// const uploadFB = async (e) => {
+// // console.log(e.target.files);
+// const upload_file = await uploadBytes(
+//     ref(storage, `images/${e.target.files[0].name}`),
+//     e.target.files[0]
+// );
+// // console.log(upload_file)
+
+// const file_url = await getDownloadURL(upload_file.ref)
+// // console.log(file_url)
+// setFileUrl(file_url)
+// // file_url !== '' ? setFileUrl(file_url) : setFileUrl(basicImg)
+// // 기본 이미지 주는게 나으려나 그냥 없는게 나으려나
+// }
+
+// const uploadPost = () => {
+//     const post = {
+//       file: fileUrl,
+//       description: comment,
+//     }
+//     // console.log(post)
+//     // dispatch(__postPost(post))
+//     alert('포스팅완료!')
+//     // dispatch(getPost)
+//     window.location.reload(`/gyms/${gym.id}`)
+// }
+
 
     return(
         <ModalPage onClick={closeModal}>
@@ -36,6 +78,8 @@ const ModalReview = ({setModal}) => {
                         </div>
                         <textarea placeholder='후기를 남겨주세요' style={{width:'94.1%', heihgt:'58%', border:'none', padding:'3%'}}/>
                     </div>
+
+                    <ImgPreview src={fileUrl !== '' ? fileUrl : {이미지업로드}} />
                     
                     <label htmlFor='upload-photo'>
                         <input 
@@ -47,10 +91,11 @@ const ModalReview = ({setModal}) => {
                         style={{display:'none'}}
                         // onChange={uploadFB}
                         />
-                        <SelectComputer type="button">
-                            업로드 이미지가 들어와요
-                        </SelectComputer>
+                        <UploadImg type="button">
+                            후기 사진 올리기:)
+                        </UploadImg>
                     </label>
+                    
             </Container>
 
         </ModalPage>
@@ -89,16 +134,22 @@ right: 10px;
 top: 10px;
 `
 
-const SelectComputer = styled.div`
+const UploadImg = styled.div`
 width: 100px;
-background-color: red;
+background-color: #FFB800;
 color: white;
 border: none;
 border-radius: 5px;
 padding: 0.2rem 0.7rem;
 /* margin-top: 10px; */
 margin: -12px 0 0 6%;
-  `
+`
+
+const ImgPreview = styled.img`
+width: 5rem;
+height: 5rem;
+margin: 0 0 0 3rem;
+`
 
 
 export default ModalReview;
