@@ -18,7 +18,7 @@ function CreateCrew() {
   const onSubmit = (data) => {
     const payload = {
       name: data.name,
-      content: data.contet,
+      content: data.content,
       imgUrl: imgUrl,
     };
     dispatch(createCrew(payload));
