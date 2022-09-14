@@ -6,7 +6,8 @@ export const __getCrew = createAsyncThunk(
     'getCrew',
     async (payload, thunkAPI) => {
         try {
-            const data = await axios.get(`http://localhost:3001/crews`)
+        
+            const data = await axios.get(`https://01192mg.shop/crews?lastCrewId=1000000&size=10`)
             return thunkAPI.fulfillWithValue(data.data)
         } catch (err) {
             return thunkAPI.rejectWithValue(err)

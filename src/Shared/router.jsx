@@ -3,7 +3,9 @@ import Home from "../Pages/Home/Home";
 import Gym from "../Pages/GymPage/Gym";
 import Crew from "../Pages/CrewPage/Crew";
 import CrewDetail from "../Pages/CrewPage/CrewDetail";
+import GymDetail from "../Pages/GymDetailPage/GymDetail";
 import KakaoLogin from "../Pages/Login/KakaoLogin";
+
 
 const Router = () => {
   return (
@@ -12,9 +14,11 @@ const Router = () => {
       <Route path="/crews" element={<Crew />} />
       <Route path={"/crews/:crewId"} element={<CrewDetail />} />
       <Route path="/gyms" element={<Gym />} />
+      <Route path={"/gyms/:gymId"} element={<GymDetail />}/>
       <Route path="/kakaoLogin" element={<KakaoLogin />} />
     </Routes>
   );
 };
+
 
 export default Router;

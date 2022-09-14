@@ -13,11 +13,9 @@ const Loading = () => {
 }
 
 const LoadingSpinner = styled.div`
-position: absolute;
-width: 100vw;
-height: 100vh;
-top: 0;
-left: 0;
+width: 100%;
+height: 10rem;
+margin: 2rem auto;
 background: #ffffffb7;
 z-index: 999;
 display: flex;

@@ -11,8 +11,6 @@ function App() {
 
   return (
     <div className="App">
-
-      <Navbar />
       
       {/* router 연결 */}
       <Router />

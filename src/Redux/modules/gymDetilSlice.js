@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
 
-export const __getGyms= createAsyncThunk(
-    'getGyms',
+export const __getGymDetail = createAsyncThunk(
+    'getGymDetail',
     async (payload, thunkAPI) => {
         try {
-            const data = await axios.get('http://localhost:3001/gyms')
+            const data = await axios.get(`https://01192mg.shop/gyms/${payload}`)
+            console.log(data.data)
             return thunkAPI.fulfillWithValue(data.data)
         } catch(err) {
             return thunkAPI.rejectWithValue(err)
@@ -13,23 +14,23 @@ export const __getGyms= createAsyncThunk(
     }
 )
 
-export const gymSlice = createSlice({
-    name: 'gyms',
+export const gymDetailSlice = createSlice({
+    name: 'gymDetail',
     initialState: {
-        gyms: [],
+        gymDetail: [],
         isLoading: false,
         error: null,
     },
     reducers: {},
     extraReducers: {
-        [__getGyms.pending]: (state) => {
+        [__getGymDetail.pending]: (state) => {
             state.isLoading = true;
         },
-        [__getGyms.fulfilled]: (state, action) => {
+        [__getGymDetail.fulfilled]: (state, action) => {
             state.isLoading = false;
-            state.gyms = action.payload;
+            state.gymDetail = action.payload;
         },
-        [__getGyms.rejected]: (state, action) => {
+        [__getGymDetail.rejected]: (state, action) => {
             state.isLoading = false;
             state.error = action.payload;
         }
