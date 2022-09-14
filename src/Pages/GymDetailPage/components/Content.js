@@ -14,7 +14,8 @@ console.log(gym.imgUrl)
             <div style={{width:'120rem', height:'64rem', margin:'auto', display:'flex'}}>
                 <div style={{width:'70rem', height:'100%', margin:'8rem 0 0 0'}}>
                     
-                    <img src={gym.imgUrl} style={{width:'100%', height:'100%'}}/>
+                    <img src={gym.imgUrl} 
+                    style={{width:'100%', height:'100%'}}/>
                 
                 </div>
 
