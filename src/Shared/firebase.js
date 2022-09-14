@@ -1,17 +1,23 @@
-import { initializeApp } from 'firebase/app';
-import { getStorage } from "firebase/storage";
+import firebase from "firebase/app";
+import "firebase/storage";
 
-// TODO: Replace the following with your app's Firebase project configuration
+const APIKEY = process.env.REACT_APP_FIREBASE_APPKEY;
+const AUTH = process.env.REACT_APP_FIREBASE_AUTHDOMAIN;
+const PROJECTID = process.env.REACT_APP_FIREBASE_PROJECTID;
+const STORAGEBUCKET = process.env.REACT_APP_FIREBASE_STORAGEBUCKET;
+const MESSAGESENDER = process.env.REACT_APP_FIREBASE_MESSAGEINGSENDER;
+const FIRBASEAPPID = process.env.REACT_APP_FIREBASE_APPID;
+const MEASUREMENTID = process.env.MEASUREREACT_APP_FIREBASE_MEASUREMENTID;
+
 const firebaseConfig = {
-    apiKey: "AIzaSyB4E1xTZMfV8ZU7U7-MV1TXd_hu0uAdY5U",
-    authDomain: "fir-ec6e2.firebaseapp.com",
-    projectId: "fir-ec6e2",
-    storageBucket: "fir-ec6e2.appspot.com",
-    messagingSenderId: "194035575697",
-    appId: "1:194035575697:web:90d60885a5624e27ccc830",
-    measurementId: "G-RSKH6LCSJC"
+  apiKey: APIKEY,
+  authDomain: AUTH,
+  projectId: PROJECTID,
+  storageBucket: STORAGEBUCKET,
+  messagingSenderId: MESSAGESENDER,
+  appId: FIRBASEAPPID,
+  measurementId: MEASUREMENTID,
 };
 
-const app = initializeApp(firebaseConfig);
-
-export const storage = getStorage(app);
+firebase.initializeApp(firebaseConfig);
+export const storage = firebase.storage();

@@ -5,7 +5,7 @@ import Crew from "../Pages/CrewPage/Crew";
 import CrewDetail from "../Pages/CrewPage/CrewDetail";
 import GymDetail from "../Pages/GymDetailPage/GymDetail";
 import KakaoLogin from "../Pages/Login/KakaoLogin";
-
+import CreateCrew from "../Pages/CrewPage/CreateCrew";
 
 const Router = () => {
   return (
@@ -14,11 +14,11 @@ const Router = () => {
       <Route path="/crews" element={<Crew />} />
       <Route path={"/crews/:crewId"} element={<CrewDetail />} />
       <Route path="/gyms" element={<Gym />} />
-      <Route path={"/gyms/:gymId"} element={<GymDetail />}/>
+      <Route path={"/gyms/:gymId"} element={<GymDetail />} />
       <Route path="/kakaoLogin" element={<KakaoLogin />} />
+      <Route path="/createcrew" element={<CreateCrew />} />
     </Routes>
   );
 };
-
 
 export default Router;

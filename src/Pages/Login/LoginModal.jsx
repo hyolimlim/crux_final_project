@@ -217,23 +217,6 @@ const Buttonbox = styled.div`
       left: 45px;
     }
   }
-  div {
-    width: 410px;
-    height: 60px;
-    border: none;
-    background-color: #cccccc;
-    font-family: "Spoqa Han Sans Neo";
-    font-style: normal;
-    font-weight: 400;
-    font-size: 1.25rem;
-    color: #ffffff;
-    letter-spacing: -0.05em;
-    &:first-child {
-      position: absolute;
-      top: 510px;
-      left: 45px;
-    }
-  }
 `;
 
 const Xbtn = styled.button`
