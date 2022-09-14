@@ -1,30 +1,23 @@
 import './App.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { reduxPlus, __thunkPrac } from './Redux/modules/testSlice';;
+// import { Container, Nav, Navbar } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import Router from './Shared/router';
+import Navbar from './Shared/Navbar';
 
 
 function App() {
 
-
-  //리덕스 연결 확인 코드입니다 확인 후 지워주세요!
-  const dispatch = useDispatch() 
-
-  const prac = useSelector((state) => state.prac)
-  console.log(prac)
-
+  const navigate = useNavigate()
 
   return (
     <div className="App">
-        <h1>Hello, React!</h1>
 
-        {/* 리덕스 연결 확인 코드입니다 확인 후 지워주세요! */}
-        <div>
-          <button onClick={()=>{dispatch(reduxPlus(1))}}>리덕스 연결확인 버튼</button>
-        </div>
+      <Navbar />
+      
+      {/* router 연결 */}
+      <Router />
 
-        <div>
-        <button onClick={()=>{dispatch(__thunkPrac(3))}}>리덕스_thunk 연결확인 버튼</button>
-        </div>
+
 
     </div>
   );

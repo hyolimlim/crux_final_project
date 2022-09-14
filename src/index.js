@@ -3,18 +3,18 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter as Router} from 'react-router-dom';
 import { Provider } from "react-redux"
 import store from './Redux/config/configStore';
+import GlobalStyle from './Shared/GlobalStyle';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider store={store}>
-      <BrowserRouter>
-
+      <Router>
+          <GlobalStyle />
           <App />
-
-      </BrowserRouter>
+      </Router>
   </Provider>
 );
 
