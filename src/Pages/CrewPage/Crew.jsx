@@ -10,11 +10,14 @@ import axios from 'axios';
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useInView } from 'react-intersection-observer';
 import React from 'react';
+import {FontHightlight, FontHightlight2} from './components/FontHightlight.js';
 
 const Crew = () => {
 
+    const [choicePopularCrew, setChoicePopularCrew] = useState(true)
+
     const navigate = useNavigate()
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
     // const { crews, error, isLoading } = useSelector((state)=>state.crews)
     // console.log( isLoading, error, crews )
     // // const state = useSelector((state) => state)
@@ -55,7 +58,13 @@ const Crew = () => {
         return () => { observer.disconnect(); }
     }, []);
 
+    const onclickGetCrew = () => {
+        getCrew();
+        setChoicePopularCrew(true)
+    } 
     const getCrew = useCallback(async() => { //crewList 불러오기
+        
+    if(choicePopularCrew){
         setLoad(true); //로딩 시작
         await axios.get(`https://01192mg.shop/crews/popular?page=${page}&size=6`)
         .then((res) => {
@@ -65,35 +74,41 @@ const Crew = () => {
         .catch((err) => {
             console.log(err)
         })
-       setLoad(false);
+        setLoad(false);
+    }
+        
     }, [page]);
 
     useEffect(()=>{
         getCrew();
+        newCrew()
     }, [page])
 
 
 // 신규크루 API 입니다
     const [newlist, setNewlist] = useState([])
-    console.log(newlist)
+    // console.log(newlist)
     const [newpage, setNewpage] = useState(0)
 
     const onclickNewCrew = () => {
         newCrew();
+        setChoicePopularCrew(false);
     }
 
     const newCrew = useCallback(async() => {
-        setLoad(true); //로딩 시작
-        await axios.get(`https://01192mg.shop/crews?page=${newpage}&size=6`)
-        .then((res) => {
-            console.log(res.data.data.content) 
-            setNewlist(prev => [...prev, ...res.data.data.content])
-        })
-        .catch((err) => {
-            console.log(err)
-        })
-       setLoad(false);
-    }, [newpage]);
+        if(!choicePopularCrew) {
+            setLoad(true); //로딩 시작
+            await axios.get(`https://01192mg.shop/crews?page=${page}&size=6`)
+            .then((res) => {
+                console.log(res.data.data.content) 
+                setNewlist(prev => [...prev, ...res.data.data.content])
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+           setLoad(false);
+        }
+    }, [page]);
 
 
 // 크루검색 API 입니다
@@ -109,6 +124,7 @@ const Crew = () => {
         .then((res) => {
             
             setList(res.data.data)
+            setSearch('')
         })
         .catch((err) => {
             console.log(err)
@@ -138,18 +154,21 @@ const Crew = () => {
                     <img src={검색아이콘} type="button" style={{width:'3rem', height:'3rem', margin:'0 0 0 -5rem'}} 
                         onClick={onclickSearchCrew}/>
                 </div>
-                <div style={{width:'120rem', margin:'8rem auto 0 auto'}}>
-                    <h3>
-                        <span style={{fontWeight:'700', margin:'0 2rem 0 0'}}> 인기 크루 </span> 
-                        <span style={{color:'#cccccc'}} 
-                            onClick={onclickNewCrew}> 신규 크루 
-                        </span>
-                    </h3>
+                <div style={{width:'120rem', margin:'7.5rem auto 0 auto'}}>
+                    
+                        {
+                            choicePopularCrew === true ?
+                            
+                            <FontHightlight onclickNewCrew={onclickNewCrew} />
+                            : 
+                            <FontHightlight2 onclickGetCrew={onclickGetCrew}/>
+                        }
+                        
                 </div>
             </HeaderWrap>
 
-            {/* <div style={{width:'120rem', height:'134rem', margin:'0 auto'}}> */}
             
+        <div style={{width:'192rem',height:'135rem', overflow:'auto', backgroundColor:'#141414', color:'#999999'}}>
             <Container style={{width:'120rem', height:'134rem', margin:'0 auto', padding:'0'}}>
                 <Row md={3} style={{margin:'0 auto', padding:'1rem 0 0 0'}}>
                 
@@ -191,6 +210,7 @@ const Crew = () => {
 
                 </Row>
             </Container>
+        </div>
 
             {
                 load ? <Loading />
@@ -206,7 +226,8 @@ const Crew = () => {
 const HeaderWrap = styled.div`
 width: 192rem;
 height: 35rem;
-background-color: #fafafa;
+background-color: #262626;
+color:#ffffff;
 
 `
 

@@ -21,7 +21,11 @@ const ModalReview = ({setModal, gym}) => {
     const [rating, setRating] = useState(0)
     console.log(rating)
     const handleRating = (rate: number) => {
-        setRating(rate/20)
+        if(rate<20) {
+            setRating(0)
+        } else {
+            setRating(rate/20)
+        }
     }
     
     useEffect(()=>{
@@ -46,8 +50,8 @@ const createReview = useCallback(async() => {
         headers: {access_token: window.localStorage.getItem("access_token")}})
     .then((res) => {
         console.log(res.data)
-        // alert('리뷰 작성완료!')
-        // window.location.reload('/')
+        alert('리뷰 작성완료!')
+        // window.location.reload(`/gyms/${gym.id}`)
     })
     .catch((err) => {
         console.log(err)
@@ -91,7 +95,8 @@ const createReview = useCallback(async() => {
                             <span style={{margin:'0 7px 0 0'}}>별점 남기기</span> 
                             <Rating onClick={handleRating} ratingValue={rating}/>
                         </div>
-                    <textarea placeholder='후기를 남겨주세요' style={{width:'100%', height: '74%', border:'none', padding:'3%'}}/>
+                    <textarea placeholder='후기를 남겨주세요' style={{width:'100%', height: '74%', border:'none', padding:'3%'}}
+                        onChange={(e)=>{setContent(e.target.value)}}/>
                     </div>
 
                     <ImgPreview src={fileUrl !== null ? fileUrl : 이미지업로드} />
