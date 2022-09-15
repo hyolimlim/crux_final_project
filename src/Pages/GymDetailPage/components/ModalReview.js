@@ -5,6 +5,9 @@ import { Rating } from 'react-simple-star-rating'
 import { useEffect, useState } from "react"
 import { useParams } from 'react-router-dom';
 import 이미지업로드 from "../../../Image/이미지업로드 아이콘.png"
+import { useRef } from "react";
+import { useCallback } from "react";
+import axios from "axios";
 
 
 const ModalReview = ({setModal, gym}) => {
@@ -16,85 +19,100 @@ const ModalReview = ({setModal, gym}) => {
 // 별점 주기 <star rating> 라이브러리!
 
     const [rating, setRating] = useState(0)
-
+    console.log(rating)
     const handleRating = (rate: number) => {
-        setRating(rate)
+        setRating(rate/20)
     }
     
     useEffect(()=>{
-        console.log(rating)
+        
     },[rating])
 
 // 이미지 업로드 <firebase> 라이브러리! 
 
-const [fileUrl, setFileUrl] = useState()
-const [comment, setComment] = useState('')
+const onsubmit = () => {
+    createReview();
+}
 
-// const storage = getStorage();
-//   const storageRef = ref(storage);
+const [content, setContent] = useState('')
 
-// const uploadFB = async (e) => {
-// // console.log(e.target.files);
-// const upload_file = await uploadBytes(
-//     ref(storage, `images/${e.target.files[0].name}`),
-//     e.target.files[0]
-// );
-// // console.log(upload_file)
+const createReview = useCallback(async() => {
+    const payload = {
+        score: rating,
+        content: content,
+        reviewPhotoList: [{imgUrl: fileUrl}],
+      };
+    await axios.post(`https://01192mg.shop/reviews/${gym.id}`, payload, {
+        headers: {access_token: window.localStorage.getItem("access_token")}})
+    .then((res) => {
+        console.log(res.data)
+        // alert('리뷰 작성완료!')
+        // window.location.reload('/')
+    })
+    .catch((err) => {
+        console.log(err)
+    })
+}, [onsubmit])
 
-// const file_url = await getDownloadURL(upload_file.ref)
-// // console.log(file_url)
-// setFileUrl(file_url)
-// // file_url !== '' ? setFileUrl(file_url) : setFileUrl(basicImg)
-// // 기본 이미지 주는게 나으려나 그냥 없는게 나으려나
-// }
+  const [fileUrl, setFileUrl] = useState('')
+  const [reload, setReload] = useState(false)
 
-// const uploadPost = () => {
-//     const post = {
-//       file: fileUrl,
-//       description: comment,
-//     }
-//     // console.log(post)
-//     // dispatch(__postPost(post))
-//     alert('포스팅완료!')
-//     // dispatch(getPost)
-//     window.location.reload(`/gyms/${gym.id}`)
-// }
+  const storage = getStorage();
+  const storageRef = ref(storage);
+
+  const uploadFB = async (e) => {
+    console.log(e.target.files);
+    const upload_file = await uploadBytes(
+      ref(storage, `images/${e.target.files[0].name}`),
+      e.target.files[0]
+    );
+    console.log(upload_file)
+
+    const file_url = await getDownloadURL(upload_file.ref)
+    console.log(file_url)
+    setFileUrl(file_url)
+    // file_url !== '' ? setFileUrl(file_url) : setFileUrl(basicImg)
+    // 기본 이미지 줄 수 있나? 없음 말고..
+  }
+
 
 
     return(
         <ModalPage onClick={closeModal}>
             <Container onClick={(e) => e.stopPropagation()}>
-                <CloseButton onClick={closeModal}>
-                    X
-                </CloseButton>
-                <div style={{margin:'7% 0 0 0'}}>
+                
+                <div style={{margin:'7% auto 0 auto', width:'90%'}}>
                         <span style={{fontSize:'36px', fontWeight:'700'}}>엠투 클라이밍</span>
                         <span>에 대한 솔직한 리뷰를 작성해주세요</span>
                     </div>
                     
                     <div style={{width:'90%', height:'200px', border:'1px solid black', margin:'3% auto'}}>
-                        <div style={{width:'100%', height:'50px', borderBottom:'1px solid black'}}>별점 남기기 
+                        <div style={{width:'100%', height:'50px', borderBottom:'1px solid black', padding:'5px 0 0 16px'}}>
+                            <span style={{margin:'0 7px 0 0'}}>별점 남기기</span> 
                             <Rating onClick={handleRating} ratingValue={rating}/>
                         </div>
-                        <textarea placeholder='후기를 남겨주세요' style={{width:'94.1%', heihgt:'58%', border:'none', padding:'3%'}}/>
+                    <textarea placeholder='후기를 남겨주세요' style={{width:'100%', height: '74%', border:'none', padding:'3%'}}/>
                     </div>
 
-                    <ImgPreview src={fileUrl !== '' ? fileUrl : {이미지업로드}} />
-                    
-                    <label htmlFor='upload-photo'>
+                    <ImgPreview src={fileUrl !== null ? fileUrl : 이미지업로드} />
+
+                    <label>
                         <input 
                         encType="multipart/form-data"
                         accept='image/*'
                         type="file"
-                        id="upload-photo"
-                        name='upload-photo'
                         style={{display:'none'}}
-                        // onChange={uploadFB}
+                        onChange={uploadFB}
                         />
+
                         <UploadImg type="button">
-                            후기 사진 올리기:)
+                                후기 사진 올리기
                         </UploadImg>
                     </label>
+                    <div style={{display:'flex', margin:'-6rem 0 0 31.8rem'}}>
+                        <S_btn style={{margin:'0 1rem 0 0'}} onClick={closeModal}>취소</S_btn>
+                        <S_btn onClick={onsubmit}>리뷰 올리기</S_btn>
+                    </div>
                     
             </Container>
 
@@ -143,13 +161,33 @@ border-radius: 5px;
 padding: 0.2rem 0.7rem;
 /* margin-top: 10px; */
 margin: -12px 0 0 6%;
+text-align: center;
 `
+
 
 const ImgPreview = styled.img`
 width: 5rem;
 height: 5rem;
 margin: 0 0 0 3rem;
 `
+
+const S_btn = styled.button`
+width: 12rem;
+margin: 0 0 0 0;
+height: 3rem;
+background-color: #ffb800;
+`
+
+// const Imgbox = styled.div`
+// width: 600px;
+// height: 600px;
+// position: relative;
+// top: 57px;
+// img {
+// width: 100%;
+// height: 100%;
+// }
+// `;
 
 
 export default ModalReview;

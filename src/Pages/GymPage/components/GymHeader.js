@@ -1,15 +1,13 @@
 // import styled from "styled-components";
 
 
-// const GymHeader = ({onclickCategory}) => {
+// const GymHeader = () => {
 
 //     const onclickSearch = (e) => {
         
 //     }
 
-//     const handleChange = (e) => {
-//         console.log(e.target.value)
-//     }
+    
 
 //     return(
         
