@@ -13,39 +13,6 @@ const initialState = {
   error: null,
 };
 
-export const __getCrew = createAsyncThunk(
-  "getCrew",
-  async (payload, thunkAPI) => {
-    try {
-      const data = await axios.get(
-        `https://01192mg.shop/crews?lastCrewId=1000000&size=10`
-      );
-      return thunkAPI.fulfillWithValue(data.data);
-    } catch (err) {
-      return thunkAPI.rejectWithValue(err);
-    }
-  }
-);
-
-export const crewSlice = createSlice({
-  name: "crews",
-  initialState,
-  reducers: {},
-  extraReducers: {
-    [__getCrew.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [__getCrew.fulfilled]: (state, action) => {
-      state.isLoading = false;
-      state.crews = action.payload;
-    },
-    [__getCrew.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    },
-  },
-});
-
 //크루 생성
 export const createCrew = createAsyncThunk(
   "post/createCrew",
@@ -88,4 +55,40 @@ export const createCrewSlice = createSlice({
   },
 });
 
-export default { createCrewSlice }.reducer;
+export const getCrewDetail = createAsyncThunk(
+  "getCrewDetail",
+  async (payload, thunkAPI) => {
+    try {
+      const data = await axios.get(`https://01192mg.shop/crews/${payload}`);
+      console.log(data.data);
+      return thunkAPI.fulfillWithValue(data.data);
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err);
+    }
+  }
+);
+
+export const crewDetailSlice = createSlice({
+  name: "crewDetail",
+  initialState: {
+    crewDetail: [],
+    isLoading: false,
+    error: null,
+  },
+  reducers: {},
+  extraReducers: {
+    [getCrewDetail.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [getCrewDetail.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.crewDetail = action.payload;
+    },
+    [getCrewDetail.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+  },
+});
+
+export default { crewDetailSlice, createCrewSlice }.reducer;
