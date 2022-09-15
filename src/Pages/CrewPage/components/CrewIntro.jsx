@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
-function CrewIntro() {
+function CrewIntro({ content, adminNickname, adminContent }) {
   return (
     <Container>
       <Intro>
         <IntroContent>
-          <p>크루소개크루소개</p>
+          <p>{content}</p>
         </IntroContent>
       </Intro>
       <HostIntro>
@@ -14,9 +14,9 @@ function CrewIntro() {
         <HostDetailBox>
           <img src="https://helpx.adobe.com/content/dam/help/en/photoshop/using/quick-actions/remove-background-before-qa1.png"></img>
           <HostDetail>
-            <p>김러닝 크루장</p>
+            <p>{adminNickname}</p>
             <div>
-              <p>안녕하세요 열정빼면 시체입니다 저는</p>
+              <p>{adminContent}</p>
             </div>
           </HostDetail>
         </HostDetailBox>
