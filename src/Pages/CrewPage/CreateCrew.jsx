@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { set, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
@@ -19,7 +20,7 @@ function CreateCrew() {
     const payload = {
       name: data.name,
       content: data.content,
-      imgUrl: imgUrl,
+      imgUrl: fileUrl,
     };
     dispatch(createCrew(payload));
   };
@@ -44,14 +45,23 @@ function CreateCrew() {
     setFiles(file);
   }
 
-  const uploadFB = () => {
-    let image = imgRef.current?.files[0];
-    const _upload = storage.ref(`images/${image.name}`).put(image);
-    _upload.then((snapshot) => {
-      snapshot.ref.getDownloadURL().then((url) => {
-        setImgUrl(url);
-      });
-    });
+  const [fileUrl, setFileUrl] = useState("");
+  const [reload, setReload] = useState(false);
+
+  const storage = getStorage();
+  const storageRef = ref(storage);
+
+  const uploadFB = async (e) => {
+    console.log(e.target.files);
+    const upload_file = await uploadBytes(
+      ref(storage, `images/${e.target.files[0].name}`),
+      e.target.files[0]
+    );
+    console.log(upload_file);
+
+    const file_url = await getDownloadURL(upload_file.ref);
+    console.log(file_url);
+    setFileUrl(file_url);
   };
 
   return (
