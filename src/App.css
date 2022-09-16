@@ -1,10 +1,10 @@
 html {
-    font-size: 62.5%;
-    font-family: SpoqaHanSansNeo;
+  font-size: 62.5%;
+  font-family: SpoqaHanSansNeo;
 }
 
 .App {
-    width: 192rem;
-    margin: 0 auto;
+  width: 192rem;
+  height: auto;
+  /* margin: 0 auto; */
 }
-    

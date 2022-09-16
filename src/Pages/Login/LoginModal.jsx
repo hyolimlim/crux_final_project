@@ -105,6 +105,7 @@ const Background = styled.div`
   display: flex;
   justify-content: center;
   padding-top: 200px;
+  z-index: 99999;
 `;
 
 const Modal = styled.form`

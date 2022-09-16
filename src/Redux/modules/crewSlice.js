@@ -35,6 +35,37 @@ export const createCrew = createAsyncThunk(
   }
 );
 
+//크루 수정
+export const editCrew = createAsyncThunk(
+  "put/editCrew",
+  async (payload, thunkAPI) => {
+    try {
+      const response = await axios
+        .put(
+          `http://3.35.22.118/crews/${payload.id}`,
+          {
+            name: payload.name,
+            content: payload.content,
+            imgUrl: payload.imgUrl,
+          },
+          {
+            headers: {
+              Authorization: window.localStorage.getItem("access_token"),
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response);
+        });
+      window.location.replace("/crews");
+      return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+      window.alert("권한이 없습니다.");
+      return thunkAPI.rejectWithValue(error.data);
+    }
+  }
+);
+
 //크루 삭제
 export const deleteCrew = createAsyncThunk(
   "delete/createCrew",
@@ -80,7 +111,7 @@ export const joinCrew = createAsyncThunk(
         .post(`https://3.35.22.118/crews/${payload}`, {
           headers: {
             "Content-Type": "application/json",
-            access_token: window.localStorage.getItem("access_token"),
+            Authorization: window.localStorage.getItem("access_token"),
           },
         })
         .then((response) => {
@@ -144,6 +175,17 @@ export const crewSlice = createSlice({
       state.crewDetail = action.payload;
     },
     [deleteCrew.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    [editCrew.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [editCrew.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.crewDetail = action.payload;
+    },
+    [editCrew.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },
