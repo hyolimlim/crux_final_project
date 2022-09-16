@@ -1,43 +1,61 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { ReactReduxContext } from "react-redux/es";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 import {
   getCrewDetail,
   joinCrew,
   deleteCrew,
 } from "../../Redux/modules/crewSlice";
+import { likeCrew } from "../../Redux/modules/userSlice";
 import Navbar from "../../Shared/Navbar";
 import CrewIntro from "./components/CrewIntro";
 import CrewMember from "./components/CrewMember";
 import CrewNotice from "./components/CrewNotice";
 import CrewPhotos from "./components/CrewPhotos";
+import { ReactComponent as Heart } from "../../Image/heart.svg";
 
 const CrewDetail = () => {
   const params = useParams().crewId;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getCrewDetail(params));
   }, []);
 
-  //crews안에 crewdetail이 있는거였음!!!!!!
-
   const crewDetail = useSelector((state) => state.crews.crewDetail);
   const crew = crewDetail.data;
-  console.log(crew);
+  // console.log(crew);
+  // console.log(crew.memberList[0]);
 
   //크루 가입신청
   const handleJoin = () => {
+    console.log(crew.id);
     dispatch(joinCrew(crew.id));
   };
 
   //크루 삭제
-
   const onCrewDelte = () => {
     if (window.confirm("삭제하시겠습니까?")) {
       dispatch(deleteCrew(crew.id));
+    } else {
+      return;
+    }
+  };
+
+  //크루 수정-->누구나 다 수정할 수 있는거?
+  const onCrewEdit = () => {
+    if (window.confirm("수정하시겠습니까?")) {
+      navigate(`/crewedit/${params}`, {
+        state: {
+          id: crew.id,
+          name: crew.name,
+          content: crew.content,
+          imgURL: crew.imgUrl,
+        },
+      });
     } else {
       return;
     }
@@ -77,6 +95,15 @@ const CrewDetail = () => {
     setPhotosVisible(true);
   };
 
+  //하트클릭이벤트
+  const [heartFillClick, setHeartFillClick] = useState(false);
+
+  //클릭하면 하트필 true로 만들어둠
+  const handleHeartFill = () => {
+    setHeartFillClick(!heartFillClick);
+    dispatch(likeCrew(crew.id));
+  };
+
   if (crewDetail.success) {
     return (
       <div>
@@ -85,12 +112,23 @@ const CrewDetail = () => {
           <ThumbnailContainer>
             <ThumbnailContentBox>
               <ImgBox>
+                <HeartIcon type="button">
+                  <Heart
+                    width="50px"
+                    height="50px"
+                    fill="#000000"
+                    onClick={handleHeartFill}
+                    opacity={heartFillClick ? "80%" : "30%"}
+                  />
+                </HeartIcon>
                 <img src={crewDetail.data.imgUrl} />
               </ImgBox>
               <ContentBox>
                 <TextBox>
                   <TextButton>
-                    <span type="button">수정</span>
+                    <span type="button" onClick={onCrewEdit}>
+                      수정
+                    </span>
                     <span type="button" onClick={onCrewDelte}>
                       삭제
                     </span>
@@ -188,6 +226,13 @@ const ImgBox = styled.div`
     width: 100%;
     height: 100%;
   }
+  position: relative;
+`;
+
+const HeartIcon = styled.div`
+  position: absolute;
+  right: 30px;
+  top: 26px;
 `;
 
 const ContentBox = styled.div`

@@ -2,30 +2,39 @@ import { useRef, useState } from "react";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Navbar from "../../Shared/Navbar";
 import { storage } from "../../Shared/firebase";
 import { createCrew } from "../../Redux/modules/crewSlice";
 
-const CreateCrew = () => {
+const CrewEdit = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { state } = useLocation();
+  //location sate로 받아온 값에서 value추출
+  const { id, name, content, imgURL } = state;
+  console.log(state);
+  console.log(imgURL);
+
+  //받아온 값으로 기본값 설정
   const {
     register,
     handleSubmit,
     formState: { isSubmitting },
-  } = useForm();
-
-  const dispatch = useDispatch();
+  } = useForm({ defaultValues: { name: name, content: content } });
 
   const onSubmit = (data) => {
     const payload = {
+      id: id,
       name: data.name,
       content: data.content,
-      imgUrl: fileUrl,
+      imgUrl: imgUrl,
     };
     dispatch(createCrew(payload));
   };
 
-  const [imgUrl, setImgUrl] = useState(null);
+  const [imgUrl, setImgUrl] = useState(imgURL);
   const imgRef = useRef();
 
   const onChangeImg = (e) => {
@@ -61,7 +70,7 @@ const CreateCrew = () => {
 
     const file_url = await getDownloadURL(upload_file.ref);
     console.log(file_url);
-    setFileUrl(file_url);
+    setImgUrl(file_url);
   };
 
   //이미지 인풋박스 클릭시 업로드
@@ -70,9 +79,18 @@ const CreateCrew = () => {
   };
 
   //이미지 인풋 박스 내 텍스트 안보이게 하기
-  const [imgTextVisible, setImgTextVisible] = useState(true);
+  const [imgTextVisible, setImgTextVisible] = useState(false);
   const handleImgText = () => {
     setImgTextVisible(false);
+  };
+
+  //취소버튼
+  const onReturn = () => {
+    if (window.confirm("취소하시겠습니까?")) {
+      navigate(`/crews/${id}`);
+    } else {
+      return;
+    }
   };
 
   return (
@@ -99,10 +117,10 @@ const CreateCrew = () => {
                 }}
               >
                 {imgTextVisible && (
-                  <PhotoButton>
+                  <>
                     <Xbtn />
                     <p>사진올리기</p>
-                  </PhotoButton>
+                  </>
                 )}
               </ImgText>
               <img src={imgUrl}></img>
@@ -122,8 +140,9 @@ const CreateCrew = () => {
               </TextDetail>
               <ButtonBox>
                 <button type="submit" disabled={isSubmitting}>
-                  크루 등록
+                  입력완료
                 </button>
+                <button onClick={onReturn}>취소</button>
               </ButtonBox>
             </ContentBox>
           </ThumbnailContentBox>
@@ -134,7 +153,7 @@ const CreateCrew = () => {
   );
 };
 
-export default CreateCrew;
+export default CrewEdit;
 
 const Warp = styled.div`
   display: flex;
@@ -191,7 +210,7 @@ const ImgText = styled.div`
   top: 250px;
   p {
     margin-top: 170px;
-    margin-left: 114px;
+    margin-left: 77px;
     font-weight: 700;
     font-size: 20px;
     color: #666666;
@@ -264,7 +283,7 @@ const ButtonBox = styled.div`
   letter-spacing: -0.05em;
   backgrond-color: white;
   button {
-    width: 100%;
+    width: 255px;
     height: 60px;
     border: none;
     color: #666666;
@@ -277,15 +296,13 @@ const ButtonBox = styled.div`
   }
 `;
 
-const PhotoButton = styled.div``;
-
 const Xbtn = styled.button`
   width: 60px;
   height: 60px;
   background: none;
   border: none;
   position: absolute;
-  right: 110px;
+  right: 147px;
   top: 97px;
   ::before,
   ::after {

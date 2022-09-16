@@ -1,22 +1,26 @@
 import React from "react";
 import styled from "styled-components";
 
-function CrewMember() {
+function CrewMember({ members }) {
+  console.log(members[0]);
   return (
     <Container>
-      <Intro>
-        <IntroContent>
-          <HostDetailBox>
-            <img src="https://helpx.adobe.com/content/dam/help/en/photoshop/using/quick-actions/remove-background-before-qa1.png"></img>
-            <HostDetail>
-              <p>김러닝 크루루루</p>
-              <div>
-                <p>안녕하세요 열정빼면 시체입니다 저는</p>
-              </div>
-            </HostDetail>
-          </HostDetailBox>
-        </IntroContent>
-      </Intro>
+      {members &&
+        members.map((member) => {
+          <Intro key={member.id}>
+            <IntroContent>
+              <HostDetailBox>
+                <img src="https://helpx.adobe.com/content/dam/help/en/photoshop/using/quick-actions/remove-background-before-qa1.png"></img>
+                <HostDetail>
+                  <p>메롱</p>
+                  <div>
+                    <p>{member.content}</p>
+                  </div>
+                </HostDetail>
+              </HostDetailBox>
+            </IntroContent>
+          </Intro>;
+        })}
       <Intro>
         <IntroContent>
           <HostDetailBox>
@@ -24,7 +28,7 @@ function CrewMember() {
             <HostDetail>
               <p>김러닝 크루장</p>
               <div>
-                <p>안녕하세요 열정빼면 시체입니다 저는</p>
+                <p>안녕하세요 열정빼면 시체입니다 </p>
               </div>
             </HostDetail>
           </HostDetailBox>
