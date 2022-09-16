@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const SERVERH = process.env.REACT_APP_SERVER_H;
-const SERVERM = process.env.REACT_APP_SERVER_M;
+// const SERVERH = process.env.REACT_APP_SERVER_H;
+// const SERVERM = process.env.REACT_APP_SERVER_M;
 
-const BASE_URL = SERVERM;
+// const BASE_URL = SERVERM;
 
 const initialState = {
   user: [],
@@ -134,24 +134,45 @@ export const kakaoLoginSlice = createSlice({
 });
 
 //유저 크루 좋아요
+// export const likeCrew = createAsyncThunk(
+//   "post/like-crew",
+//   async (payload, thunkAPI) => {
+//     console.log(payload);
+//     try {
+//       const data = await axios
+//         .post(`https://3.35.22.118/like-crews/${payload}`, {
+//           headers: {
+//             "Content-Type": "application/json",
+//             Authorization: window.localStorage.getItem("access_token"),
+//           },
+//         })
+//         .then((response) => {
+//           console.log(response);
+//         });
+//       return thunkAPI.fulfillWithValue(data.data);
+//     } catch (error) {
+//       return thunkAPI.rejectWithValue(error);
+//     }
+//   }
+// );
+
 export const likeCrew = createAsyncThunk(
   "post/like-crew",
   async (payload, thunkAPI) => {
-    console.log(payload);
     try {
-      const data = await axios
-        .post(`https://3.35.22.118/like-crews/${payload}`, {
+      const response = await axios
+        .post(`http://3.35.22.118/like-crews/${payload}`, {
           headers: {
-            "Content-Type": "application/json",
             Authorization: window.localStorage.getItem("access_token"),
           },
         })
         .then((response) => {
           console.log(response);
         });
-      return thunkAPI.fulfillWithValue(data.data);
+      // window.location.replace("/crews");
+      return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
-      return thunkAPI.rejectWithValue(error);
+      return thunkAPI.rejectWithValue(error.data);
     }
   }
 );

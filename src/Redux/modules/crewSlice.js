@@ -27,7 +27,7 @@ export const createCrew = createAsyncThunk(
         .then((response) => {
           console.log(response);
         });
-      // window.location.replace("/crews");
+      window.location.replace("/crews");
       return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.data);
@@ -101,24 +101,24 @@ export const getCrewDetail = createAsyncThunk(
   }
 );
 
-//크루 가입신청-->로그인이 필요합니다 뜸. 다시 확인해볼 것.
+//크루 가입신청
 export const joinCrew = createAsyncThunk(
   "post/joinCrew",
   async (payload, thunkAPI) => {
     try {
-      const data = await axios
-        .post(`https://3.35.22.118/crews-members/${payload}`, {
+      const response = await axios
+        .post(`http://3.35.22.118/crew-members/${payload}`, {
           headers: {
-            "Content-Type": "application/json",
             Authorization: window.localStorage.getItem("access_token"),
           },
         })
         .then((response) => {
           console.log(response);
         });
-      return thunkAPI.fulfillWithValue(data.data);
+      // window.location.replace("/crews");
+      return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
-      return thunkAPI.rejectWithValue(error);
+      return thunkAPI.rejectWithValue(error.data);
     }
   }
 );
