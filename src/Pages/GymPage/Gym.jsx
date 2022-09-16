@@ -182,9 +182,9 @@ if(state.isLoading) {
                     </MapMarker>
 
                     {
-                        gyms?.map((val, i) => (
+                        gyms?.map((val, i) => ( 
                           <>
-                            <MapMarker 
+                            <MapMarker onClick={()=>setIsopen(!isopen)}
                             key={`${val.name}-${val.lat}`}
                             position={{
                                 lat: val.lat,
@@ -192,10 +192,11 @@ if(state.isLoading) {
                             }}
                             image={{size:{width: 40, height: 60}, src:"https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"}}
                             title={val.name}
-                            // clickable={true} onClick={()=>setIsopen(!isopen)}
+                            clickable={true} 
                             >
                             </MapMarker>
 
+                              {isopen && (
                               <CustomOverlayMap
                               position={{lat: val.lat,lng: val.lon}}
                               yAnchor={1}
@@ -203,11 +204,13 @@ if(state.isLoading) {
                               <Wrap>
                                 <GymName>{val.name}</GymName>
                                 <GymAddress>{val.location}</GymAddress>
-                                <a href="https://map.kakao.com/link/map/11394059" target="_blank"rel="noreferrer">
+                                <a href={`https://map.kakao.com/link/to/HelloWorld!,${val.lat},${val.lon}`} target="_blank"rel="noreferrer">
                                   <span className="title">길찾기</span>
                                 </a>
                               </Wrap>
                             </CustomOverlayMap>
+                            )}
+
                           </>
                         ))
                     }
@@ -252,18 +255,26 @@ if(state.isLoading) {
     );
 }
 const Wrap = styled.div`
-border:1px solid gray;
-width:10rem;
-height: 3rem;
-margin: 0 0 0 0;
+    border: 1px solid gray;
+    border-radius: 1px;
+    height: 6rem;
+    text-align: center;
+    margin: -126px 0 0 -8px;
+    background-color: white;
 `
 
 const GymName = styled.div`
+font-size: 14px;
+width:100%;
+height: 2rem;
+padding: 2px 0 0 0;
+border-bottom: #ebebeb;
+background-color: #eeeeee;
 
 `
 
 const GymAddress = styled.div`
-
+font-size: 11px;
 `
 
 const S_input = styled.input`
