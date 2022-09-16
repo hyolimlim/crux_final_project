@@ -65,11 +65,11 @@ console.log(reviewImg)
                     
                     <div style={{margin:'1rem 0 0 0', display:'flex'}}> <span style={{margin:'0 16rem 0 0'}}>🖤 즐겨찾기 한 짐 갯수가 들어와요</span>
                         <div type='button' onClick={()=>{setModal(true)}}>
-                            <FontAwesomeIcon icon={faMarker} size="3x"/> 
+                            <FontAwesomeIcon icon={faMarker} size="3x" color="#FFB800"/> 
                             <div style={{margin:'0.7rem 0 0 0'}}>리뷰쓰기</div>
                         </div>
                         <div type='button' onClick={onclickLikeGym} style={{margin:'0 0 0 2rem'}}>
-                            <FontAwesomeIcon icon={faStar} size="3x"/>
+                            <FontAwesomeIcon icon={faStar} size="3x" color="#FFB800"/>
                             <div style={{margin:'0.7rem 0 0 0'}}>즐겨찾기</div>
                         </div>
                         
@@ -115,12 +115,10 @@ console.log(reviewImg)
 // background-repeat: no-repeat;
 // `
 
-
 const S_content = styled.span`
 margin-left: 1rem;
 font-size: 2rem;
 font-weight: 400;
 `
-
 
 export default Content;

@@ -4,7 +4,7 @@ import styled from "styled-components"
 import { Rating } from 'react-simple-star-rating'
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from 'react-router-dom';
-import 이미지업로드 from "../../../Image/사진올리기.png"
+import 이미지업로드 from "../../../Image/이미지업로드.png"
 import { useRef } from "react";
 import { useCallback } from "react";
 import axios from "axios";
@@ -47,14 +47,14 @@ const createReview = useCallback(async() => {
         content: content,
         reviewPhotoList: [{imgUrl: fileUrl}],
       };
-    // console.log(gym.id)
-    // console.log(window.localStorage.getItem("access_token"))
+    console.log(gym.id)
+    console.log(window.localStorage.getItem("access_token"))
     await axios.post(`http://3.35.22.118/reviews/${gym.id}`, payload, {
-        headers: {Authorization: window.localStorage.getItem("access_token")}})
-    .then((res) => {
+        headers: {Authorization: window.localStorage.getItem("access_token")}})    
+        .then((res) => {
         console.log(res.data)
         alert('리뷰 작성완료!')
-        navigate(`/gyms/${gym.id}`)
+        window.location.reload(`/gyms/${gym.id}`)
     })
     .catch((err) => {
         console.log(err)
@@ -94,15 +94,15 @@ const createReview = useCallback(async() => {
                     </div>
                     
                     <div style={{width:'90%', height:'200px', border:'1px solid black', margin:'3% auto'}}>
-                        <div style={{width:'100%', height:'50px', borderBottom:'1px solid black', padding:'5px 0 0 16px'}}>
-                            <span style={{margin:'0 7px 0 0'}}>별점 남기기</span> 
-                            <Rating onClick={handleRating} ratingValue={rating}/>
+                        <div style={{width:'100%', height:'50px', display:'flex',borderBottom:'1px solid black', padding:'5px 0 0 16px'}}>
+                            <div style={{margin:'0.9rem 1.5rem 0 0', fontSize:'1.4rem'}}>별점 남기기</div> 
+                            <div><Rating onClick={handleRating} ratingValue={rating}/></div>
                         </div>
-                    <textarea placeholder='후기를 남겨주세요' style={{width:'100%', height: '74%', border:'none', padding:'3%'}}
+                    <textarea placeholder='후기를 남겨주세요' style={{width:'100%', height: '74%', fontSize:'1.3rem', border:'none', padding:'3%'}}
                         onChange={(e)=>{setContent(e.target.value)}}/>
                     </div>
 
-                    <ImgPreview src={fileUrl !== '' ? fileUrl : 'images/addImg.png'} />
+                    <ImgPreview src={fileUrl !== '' ? fileUrl : 이미지업로드} />
 
                     <label>
                         <input 
