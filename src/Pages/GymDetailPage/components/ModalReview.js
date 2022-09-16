@@ -3,8 +3,8 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import styled from "styled-components"
 import { Rating } from 'react-simple-star-rating'
 import { useEffect, useState } from "react"
-import { useParams } from 'react-router-dom';
-import 이미지업로드 from "../../../Image/이미지업로드 아이콘.png"
+import { useNavigate, useParams } from 'react-router-dom';
+import 이미지업로드 from "../../../Image/이미지업로드.png"
 import { useRef } from "react";
 import { useCallback } from "react";
 import axios from "axios";
@@ -12,6 +12,7 @@ import axios from "axios";
 
 const ModalReview = ({setModal, gym}) => {
 
+    const navigate = useNavigate()
     const closeModal = () => {
         setModal(false)
     }
@@ -21,7 +22,11 @@ const ModalReview = ({setModal, gym}) => {
     const [rating, setRating] = useState(0)
     console.log(rating)
     const handleRating = (rate: number) => {
-        setRating(rate/20)
+        if(rate<20) {
+            setRating(0)
+        } else {
+            setRating(rate/20)
+        }
     }
     
     useEffect(()=>{
@@ -42,12 +47,14 @@ const createReview = useCallback(async() => {
         content: content,
         reviewPhotoList: [{imgUrl: fileUrl}],
       };
-    await axios.post(`https://01192mg.shop/reviews/${gym.id}`, payload, {
-        headers: {access_token: window.localStorage.getItem("access_token")}})
-    .then((res) => {
+    console.log(gym.id)
+    console.log(window.localStorage.getItem("access_token"))
+    await axios.post(`http://3.35.22.118/reviews/${gym.id}`, payload, {
+        headers: {Authorization: window.localStorage.getItem("access_token")}})    
+        .then((res) => {
         console.log(res.data)
-        // alert('리뷰 작성완료!')
-        // window.location.reload('/')
+        alert('리뷰 작성완료!')
+        window.location.reload(`/gyms/${gym.id}`)
     })
     .catch((err) => {
         console.log(err)
@@ -83,18 +90,19 @@ const createReview = useCallback(async() => {
                 
                 <div style={{margin:'7% auto 0 auto', width:'90%'}}>
                         <span style={{fontSize:'36px', fontWeight:'700'}}>엠투 클라이밍</span>
-                        <span>에 대한 솔직한 리뷰를 작성해주세요</span>
+                        <span style={{fontSize:'1.4rem', margin:'0 0 0 1rem'}}>에 대한 솔직한 리뷰를 작성해주세요</span>
                     </div>
                     
                     <div style={{width:'90%', height:'200px', border:'1px solid black', margin:'3% auto'}}>
-                        <div style={{width:'100%', height:'50px', borderBottom:'1px solid black', padding:'5px 0 0 16px'}}>
-                            <span style={{margin:'0 7px 0 0'}}>별점 남기기</span> 
-                            <Rating onClick={handleRating} ratingValue={rating}/>
+                        <div style={{width:'100%', height:'50px', display:'flex',borderBottom:'1px solid black', padding:'5px 0 0 16px'}}>
+                            <div style={{margin:'0.9rem 1.5rem 0 0', fontSize:'1.4rem'}}>별점 남기기</div> 
+                            <div><Rating onClick={handleRating} ratingValue={rating}/></div>
                         </div>
-                    <textarea placeholder='후기를 남겨주세요' style={{width:'100%', height: '74%', border:'none', padding:'3%'}}/>
+                    <textarea placeholder='후기를 남겨주세요' style={{width:'100%', height: '74%', fontSize:'1.3rem', border:'none', padding:'3%'}}
+                        onChange={(e)=>{setContent(e.target.value)}}/>
                     </div>
 
-                    <ImgPreview src={fileUrl !== null ? fileUrl : 이미지업로드} />
+                    <ImgPreview src={fileUrl !== '' ? fileUrl : 이미지업로드} />
 
                     <label>
                         <input 
@@ -128,6 +136,7 @@ width: 100%;
 height: 100%;
 z-index: 998;
 background-color: rgba(0, 0, 0, 0.4);
+color:black
 `
 
 const Container = styled.div`

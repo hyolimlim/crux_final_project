@@ -5,18 +5,18 @@ export const __getGymDetail = createAsyncThunk(
     'getGymDetail',
     async (payload, thunkAPI) => {
         try {
+            console.log(payload)
             const data = await axios.get(`https://01192mg.shop/gyms/${payload}`)
-            console.log(data.data)
             return thunkAPI.fulfillWithValue(data.data)
-        } catch(err) {
-            return thunkAPI.rejectWithValue(err)
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
         }
     }
 )
 
 export const gymDetailSlice = createSlice({
     name: 'gymDetail',
-    initialState: {
+    initialState:{
         gymDetail: [],
         isLoading: false,
         error: null,

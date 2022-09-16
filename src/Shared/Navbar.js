@@ -79,7 +79,7 @@ const Navbar = () => {
 
 const NavContainer = styled.div`
   display: flex;
-  background-color: #42f9b9;
+  background-color: #141414;
 `;
 
 const NavContent = styled.div`

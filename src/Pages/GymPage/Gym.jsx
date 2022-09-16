@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import 돋보기 from '../../Image/검색 아이콘.png'
+import 디폴트짐 from "../../Image/인기 클라이밍짐.png"
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { __getGyms } from '../../Redux/modules/gymSlice';
@@ -11,58 +12,14 @@ import GymHeader from './components/GymHeader';
 import axios from 'axios';
 import { Map, MapMarker } from 'react-kakao-maps-sdk'
 
+
 const Gym = () => {
+
+    const [location, setLocation] = useState('내')
 
     const navigate = useNavigate()
     
-    // 무한스크롤 적용하기
-
-    const obsRef = useRef(null); //observer 요소
     const [gyms, setGyms] = useState([]) 
-
-    const [page, setPage] = useState(1) //현재 페이지
-    const [load, setLoad] = useState(false); //로딩 스피너
-    const preventRef = useRef(true) //옵저버 중복 실행 방지
-    // console.log(preventRef.current)
-
-
-    const obsHandler = ((entries) => { //옵저버 콜백함수
-        const target = entries[0];
-        if(target.isIntersecting && preventRef.current) { //옵저버 중복 실행 방지
-            preventRef.current = false;
-
-            setPage(prev => prev + 1); //페이지 값 증가
-            console.log(page)
-        }
-    })
-
-    useEffect(()=>{
-        const observer = new IntersectionObserver(obsHandler, { threshold : 1 });
-
-        if(obsRef.current) observer.observe(obsRef.current); 
-        return () => { observer.disconnect(); }
-    }, []);
-
-    const getGyms = useCallback(async() => { //gymList 불러오기
-        setLoad(true); //로딩 시작
-        
-        await axios.get(`https://01192mg.shop/gyms?page=${page}&size=5&lat=${state.center.lat}&lon=${state.center.lng}`)
-        
-        .then((res) => {
-            console.log(res.data) //..
-            setGyms(prev => [...prev, ...res.data])
-        })
-        .catch((err) => {
-            console.log(err)
-        })
-       setLoad(false);
-    }, [page]);
-
-    // useEffect(()=>{
-    //     getGyms();
-    // }, [page])
-
-
 
 // 카카오 Map 입니다
     const [markerOpen, setMarkerOpen] = useState([])
@@ -83,7 +40,18 @@ const Gym = () => {
   useEffect(()=>{
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
+        async (position) => {
+          const lat = position.coords.latitude
+          const lng = position.coords.longitude
+          await axios.get(`http://3.35.22.118/gyms?page=0&size=10&lon=${lng}&lat=${lat}`)
+        .then((res) => {
+            console.log(res.data.data)
+            setGyms(res.data.data)
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+
           setState((prev) => ({
             ...prev,
             center: {
@@ -109,13 +77,6 @@ const Gym = () => {
       }))
     }
   }, [])
-
-  const positions = [
-    {
-      title: "버티고클라이밍짐",
-      latlng: { lat: 37.5551030, lng: 127.085719 }
-    },
-  ] 
 
   const categorySeoul = () => {
     //서울을 클릭하면 서울 특정 주소로 지도 중심을 이동시킨다
@@ -150,52 +111,50 @@ const Gym = () => {
 //gym 검색 API 입니다~
     const [search, setSearch] = useState('')
 
-    const handleChange = (e) => {
-      console.log(e.target.value)
-    }
-
     const onclickSearchGym = () => {
         searchGym();
     }
 
-    const searchGym = useCallback(async() => {
-        await axios.get(`https://01192mg.shop/gyms/search?page=0&size=5&query=${search}`)
+    const searchGym = async() => {
+        await axios.get(`http://3.35.22.118/gyms/search?page=0&size=5&query=${search}`)
         .then((res) => {
             console.log(res.data.data)
             setGyms(res.data.data)
+            setLocation(search)
+            setSearch('')
         })
         .catch((err) => {
             console.log(err)
         })
-    }, [onclickSearchGym])
+      }
     console.log(gyms)
+
+
+if(state.isLoading) {
+  return(<Loading />)
+}
+
     return (
         <div>
 
             <Navbar />
 
-            <div style={{width:'192rem', height:'19.2rem'}}>
+            <div style={{width:'192rem', height:'26rem', padding:'8rem 0 0 0', backgroundColor:'#262626', color:'#ffffff'}}>
                 
-              <div style={{width:'120rem', margin:'10rem auto 0 auto', display:'flex'}}>
+              <div style={{width:'120rem', margin:'0 auto 0 auto', display:'flex'}}>
                   <h1 style={{width:'38rem', margin:'0 35.2rem 0 0'}}>클라이밍짐 후기</h1>
-                  {/* <S_select onChange={handleChange}>
-                      <S_option key="서울" defaultValue="서울">서울</S_option>
-                      <option key="인천" value="인천">인천</option>
-                      <option key="경기" value="경기">경기</option>
-                      <option key="부산" value="부산">부산</option>
-                      <option key="제주도" value="제주도">제주도</option>  
-                  </S_select>  */}
-                  <S_input onChange={(e)=>{ setSearch(e.target.value) }}/> 
+                 
+                  <S_input onChange={(e)=>{ setSearch(e.target.value) }} value={search}/> 
                   <img src={돋보기} type="button" onClick={onclickSearchGym}
-                  style={{width:'3rem', height:'3rem', margin:'1.1rem 0 0 116rem', position:'absolute'}} />
+                  style={{width:'3rem', height:'3rem', margin:'1.1rem 0 0 107rem', position:'absolute'}} />
               </div>
 
               <div style={{width:'120rem', margin:'6.5rem auto 0 auto', display:'flex'}}>
                   <S_category onClick={categorySeoul} type="button"><h3>서울</h3></S_category>
-                  <S_category onClick={categoryIncheon}><h3>인천</h3></S_category>
-                  <S_category onClick={categoryGg}><h3>경기</h3></S_category>
-                  <S_category onClick={categoryBusan}><h3>부산</h3></S_category>
-                  <S_category onClick={categoryJeju}><h3>제주도</h3></S_category>
+                  <S_category onClick={categoryIncheon} type="button"><h3>인천</h3></S_category>
+                  <S_category onClick={categoryGg} type="button"><h3>경기</h3></S_category>
+                  <S_category onClick={categoryBusan} type="button"><h3>부산</h3></S_category>
+                  <S_category onClick={categoryJeju} type="button"><h3>제주도</h3></S_category>
               </div>
               
             </div>
@@ -216,14 +175,17 @@ const Gym = () => {
                     </MapMarker>
 
                     {
-                        positions?.map((val, i) => (
+                        gyms?.map((val, i) => (
                             <MapMarker 
-                            key={`${val.title}-${val.latlng}`}
-                            position={val.latlng}
+                            key={`${val.name}-${val.lat}`}
+                            position={{
+                                lat: val.lat,
+                                lng: val.lon
+                            }}
                             image={{size:{width: 24, height: 35}, src:"https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"}}
-                            title={val.title}
+                            title={val.name}
                             >
-                            <div style={{ padding: "5px", color: "black", textAlign:'center' }}>{val.title}</div>
+                            <div style={{ padding: "5px", color: "black", textAlign:'center' }}>{val.name}</div>
                             </MapMarker>
                         ))
                     }
@@ -233,8 +195,8 @@ const Gym = () => {
 
                 <GymContainer>
                     <div>
-                        <div style={{width:'100%', height:'9.5rem', borderBottom:'1px solid #CCCCCC',padding:'3.5rem 3.5rem 3rem 3.5rem'}}>
-                            <h3 style={{fontWeight:'700'}}>강남역 주변 클라이밍짐</h3>
+                        <div style={{width:'100%', height:'9.5rem', borderBottom:'1px solid #ffffff',padding:'3.5rem 3.5rem 3rem 3.5rem'}}>
+                            <h3 style={{fontWeight:'700'}}>{location} 주변 클라이밍짐</h3>
                         </div>
                         
                         <div>
@@ -242,30 +204,22 @@ const Gym = () => {
                         {
                             gyms?.map((gym, i)=>{
                                 return(
-                                    <div key={i} style={{display:'flex', margin:'2rem auto', width:'50rem', height:'17rem', borderBottom:'1px solid #cccccc'}} 
+                                    <div key={i} style={{display:'flex', margin:'2rem auto', width:'50rem', height:'17rem', borderBottom:'1px solid #262626'}} 
                                     onClick={()=>{ navigate(`/gyms/${gym.id}`) }}>
-                                        <img src='http://dkmedal.co.kr/web/product/big/201611/362_shop1_803761.jpg' alt='' style={{width:'15rem', height:'15rem'}}/>
-                                        <div style={{width:'23rem'}}>
-                                            <h3>{gym.name}</h3>
-                                            <p>{gym.location}</p>
-                                            <p>{gym.phone}</p>
-                                            <p>✨ {gym.avgScore}</p>
+                                        <img src={디폴트짐} alt='' style={{width:'15rem', height:'15rem'}}/>
+                                        <div style={{width:'35rem', padding:'1rem'}}>
+                                            <h3 style={{margin:'0 0 0 0'}}>{gym.name}</h3>
+                                            <p style={{margin:'2rem 0 0 0'}}>{gym.location}</p>
+                                            <p style={{margin:'1rem 0 0 0'}}>{gym.phone}</p>
+                                            <p style={{margin:'1rem 0 0 0'}}>✨ {gym.avgScore}</p>
                                         </div>
                                     </div>
                                 );
                             })
                         }
 
-                        <div ref={obsRef}></div>
-
-                        {
-                            load ? <Loading />
-                            : null
-                        }
-
                         </div>
                     </div>
-                    
                     
                 </GymContainer>
             </div>
@@ -280,6 +234,8 @@ const S_input = styled.input`
 width: 39rem;
 height: 5rem;
 
+font-size: 1.4rem;
+padding: 0 0 0 1rem;
 border: 1px solid #CCCCCC;
 `
 
@@ -291,6 +247,8 @@ const GymContainer = styled.div`
 width: 58rem;
 height: 110rem;
 
+background-color: #141414;
+color: #ffffff;
 border: 1px solid #CCCCCC;
 overflow: auto;
 `
