@@ -18,7 +18,10 @@ export const signup = createAsyncThunk(
   "/members/signup",
   async (payload, thunkAPI) => {
     try {
-      const response = await axios.post(`${BASE_URL}/members/signup`, payload);
+      const response = await axios.post(
+        `http://3.35.22.118/members/signup`,
+        payload
+      );
       window.alert("회원가입 성공");
       window.location.replace("/");
       return response.data;
@@ -53,7 +56,7 @@ export const login = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await axios
-        .post(`${BASE_URL}/members/login`, payload)
+        .post(`http://3.35.22.118/members/login`, payload)
         .then((response) => {
           console.log(response);
           window.localStorage.setItem(
@@ -130,4 +133,47 @@ export const kakaoLoginSlice = createSlice({
   },
 });
 
-export default { signupSlice, loginSlice, kakaoLoginSlice }.reducer;
+//유저 크루 좋아요
+export const likeCrew = createAsyncThunk(
+  "post/like-crew",
+  async (payload, thunkAPI) => {
+    console.log(payload);
+    try {
+      const data = await axios
+        .post(`https://3.35.22.118/like-crews/${payload}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: window.localStorage.getItem("access_token"),
+          },
+        })
+        .then((response) => {
+          console.log(response);
+        });
+      return thunkAPI.fulfillWithValue(data.data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const userSlice = createSlice({
+  name: "user",
+  initialState,
+  reducers: {},
+  extraReducers: {
+    [likeCrew.pending]: (state) => {
+      state.isLoading = true;
+      state.error = null;
+    },
+    [likeCrew.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.user = action.payload;
+    },
+    [likeCrew.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+  },
+});
+
+export default { userSlice, signupSlice, loginSlice, kakaoLoginSlice }.reducer;
