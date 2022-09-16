@@ -1,39 +1,27 @@
 import React from "react";
 import styled from "styled-components";
+import { useSelector, useDispatch } from "react-redux";
 
-function CrewMember({ members }) {
-  console.log(members[0]);
+function CrewMember() {
+  const crewDetail = useSelector((state) => state.crews.crewDetail);
+  const members = crewDetail.data.memberList;
+  console.log(members);
+
   return (
     <Container>
-      {members &&
-        members.map((member) => {
-          <Intro key={member.id}>
-            <IntroContent>
-              <HostDetailBox>
-                <img src="https://helpx.adobe.com/content/dam/help/en/photoshop/using/quick-actions/remove-background-before-qa1.png"></img>
-                <HostDetail>
-                  <p>메롱</p>
-                  <div>
-                    <p>{member.content}</p>
-                  </div>
-                </HostDetail>
-              </HostDetailBox>
-            </IntroContent>
-          </Intro>;
-        })}
-      <Intro>
-        <IntroContent>
+      {members.map((member) => (
+        <IntroContent key={member.id}>
           <HostDetailBox>
-            <img src="https://helpx.adobe.com/content/dam/help/en/photoshop/using/quick-actions/remove-background-before-qa1.png"></img>
+            <img src={member.imgUrl}></img>
             <HostDetail>
-              <p>김러닝 크루장</p>
+              <p>{member.nickname}</p>
               <div>
-                <p>안녕하세요 열정빼면 시체입니다 </p>
+                <p>{member.content}</p>
               </div>
             </HostDetail>
           </HostDetailBox>
         </IntroContent>
-      </Intro>
+      ))}
     </Container>
   );
 }
