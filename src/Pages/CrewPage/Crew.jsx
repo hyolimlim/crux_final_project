@@ -128,13 +128,6 @@ const Crew = () => {
        setLoad(false);
     }, [onclickSearchCrew])
 
-    
-    
-if (load) {
-    return(
-        <Loading />
-    )
-}
 
     return(
         <div>
@@ -167,7 +160,10 @@ if (load) {
             <Container style={{width:'120rem', height:'134rem', margin:'0 auto', padding:'0', backgroundColor:'#141414'}}>
                 <Row md={3} style={{margin:'0 auto', padding:'1rem 0 0 0'}}>
                 
-                {   
+                
+                {
+                load === true ? <Loading /> :
+                
                     newlist.length === 0 ? 
 
                     list?.map((val, i) => (
