@@ -3,8 +3,8 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import styled from "styled-components"
 import { Rating } from 'react-simple-star-rating'
 import { useEffect, useState } from "react"
-import { useParams } from 'react-router-dom';
-import 이미지업로드 from "../../../Image/이미지업로드 아이콘.png"
+import { useNavigate, useParams } from 'react-router-dom';
+import 이미지업로드 from "../../../Image/사진올리기.png"
 import { useRef } from "react";
 import { useCallback } from "react";
 import axios from "axios";
@@ -12,6 +12,7 @@ import axios from "axios";
 
 const ModalReview = ({setModal, gym}) => {
 
+    const navigate = useNavigate()
     const closeModal = () => {
         setModal(false)
     }
@@ -46,12 +47,14 @@ const createReview = useCallback(async() => {
         content: content,
         reviewPhotoList: [{imgUrl: fileUrl}],
       };
-    await axios.post(`https://01192mg.shop/reviews/${gym.id}`, payload, {
-        headers: {access_token: window.localStorage.getItem("access_token")}})
+    // console.log(gym.id)
+    // console.log(window.localStorage.getItem("access_token"))
+    await axios.post(`http://3.35.22.118/reviews/${gym.id}`, payload, {
+        headers: {Authorization: window.localStorage.getItem("access_token")}})
     .then((res) => {
         console.log(res.data)
         alert('리뷰 작성완료!')
-        // window.location.reload(`/gyms/${gym.id}`)
+        navigate(`/gyms/${gym.id}`)
     })
     .catch((err) => {
         console.log(err)
@@ -87,7 +90,7 @@ const createReview = useCallback(async() => {
                 
                 <div style={{margin:'7% auto 0 auto', width:'90%'}}>
                         <span style={{fontSize:'36px', fontWeight:'700'}}>엠투 클라이밍</span>
-                        <span>에 대한 솔직한 리뷰를 작성해주세요</span>
+                        <span style={{fontSize:'1.4rem', margin:'0 0 0 1rem'}}>에 대한 솔직한 리뷰를 작성해주세요</span>
                     </div>
                     
                     <div style={{width:'90%', height:'200px', border:'1px solid black', margin:'3% auto'}}>
@@ -99,7 +102,7 @@ const createReview = useCallback(async() => {
                         onChange={(e)=>{setContent(e.target.value)}}/>
                     </div>
 
-                    <ImgPreview src={fileUrl !== null ? fileUrl : 이미지업로드} />
+                    <ImgPreview src={fileUrl !== '' ? fileUrl : 'images/addImg.png'} />
 
                     <label>
                         <input 
@@ -133,6 +136,7 @@ width: 100%;
 height: 100%;
 z-index: 998;
 background-color: rgba(0, 0, 0, 0.4);
+color:black
 `
 
 const Container = styled.div`

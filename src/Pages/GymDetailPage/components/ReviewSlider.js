@@ -35,7 +35,7 @@ return(
         <StyledSlider  {...settings} >
 
         {
-            reviews?.map((review, i) => {
+            [...reviews]?.reverse().map((review, i) => {
                 return(
                     <div key={i} >
                         <img src={review.reviewPhotoList[0].imgUrl} style={{width:'45rem', height:'25rem'}}/>

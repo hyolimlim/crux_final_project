@@ -1,14 +1,17 @@
 import axios from "axios";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import 플러스기호 from "../../../Image/플러스 기호.png"
 import ModalReview from "./ModalReview";
 import ReviewSlider from "./ReviewSlider";
-import 클라이밍 from '../../../Image/클라이밍1.png'
+import 클라이밍 from '../../../Image/인기 클라이밍짐.png'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import { faMarker, faStar } from "@fortawesome/free-solid-svg-icons";
 
 
-const Content = ({gym}) => {
+
+const Content = ({gym, setShowReview, showReview}) => {
 
 const navigate = useNavigate()
 const [modal, setModal] = useState(false)
@@ -24,7 +27,7 @@ const likeGym = useCallback(async() => {
         headers: {access_token: window.localStorage.getItem("access_token")}})
     .then((res) => {
         console.log(res.data)
-        alert('즐겨찾기 추가 완료')
+        alert(res.data.data)
         // window.location.reload(`/gyms/${gym.id}`)
         navigate(`/gyms/${gym.id}`)
     })
@@ -33,50 +36,64 @@ const likeGym = useCallback(async() => {
     })
 }, [onclickLikeGym])
 
+const [reviewImg, setReviewImg] = useState('')
+console.log(reviewImg)
+
+const checkImg = () => {
+    if (gym.reviews.length !== 0) {
+        setReviewImg(gym.reviews[0].reviewPhotoList[0].imgUrl)
+    }
+} 
+useEffect(()=>{
+    checkImg();
+}, [])
+    
+    
+console.log(reviewImg)
+
     return(
-        <div style={{width:'192rem', height:'80rem', backgroundColor:'#cccccc'}}>
+        <div style={{width:'192rem', height:'80rem', backgroundColor:'#141414', color:'#ffffff'}}>
             <div style={{width:'120rem', height:'64rem', margin:'auto', display:'flex'}}>
                 <div style={{width:'70rem', height:'100%', margin:'8rem 0 0 0'}}>
                     
-                    <img src={클라이밍} 
+                    <img src={reviewImg !== '' ? reviewImg : 클라이밍} 
                     style={{width:'100%', height:'100%'}}/>
                 
                 </div>
 
                 <div style={{width:'50rem', height:'100%', margin:'8rem 0 0 0', padding:'4rem', backgroundColor:'#262626', color:'white'}}>
                     
-                    <div style={{margin:'1rem 0 0 0', display:'flex'}}> <span style={{margin:'0 13rem 0 0'}}>🖤 즐겨찾기 한 짐 갯수가 들어와요</span>
+                    <div style={{margin:'1rem 0 0 0', display:'flex'}}> <span style={{margin:'0 16rem 0 0'}}>🖤 즐겨찾기 한 짐 갯수가 들어와요</span>
                         <div type='button' onClick={()=>{setModal(true)}}>
-                            <img src="https://cdn-icons-png.flaticon.com/512/2554/2554339.png" style={{width:'3rem'}}/>
-                            <div>리뷰쓰기</div>
+                            <FontAwesomeIcon icon={faMarker} size="3x"/> 
+                            <div style={{margin:'0.7rem 0 0 0'}}>리뷰쓰기</div>
                         </div>
                         <div type='button' onClick={onclickLikeGym} style={{margin:'0 0 0 2rem'}}>
-                            <img src="https://cdn-icons-png.flaticon.com/512/93/93630.png" style={{width:'3rem'}}/>
-                            <div>즐겨찾기</div>
+                            <FontAwesomeIcon icon={faStar} size="3x"/>
+                            <div style={{margin:'0.7rem 0 0 0'}}>즐겨찾기</div>
                         </div>
                         
                     </div>
                     
-                    <div style={{fontSize:'2rem', fontWeight:'700', margin:'3rem 0 0 0'}}>주소 <S_content> {gym.location} </S_content></div>
+                    <div style={{fontSize:'2rem', fontWeight:'700', margin:'2rem 0 0 0'}}>주소 <S_content> {gym.location} </S_content></div>
                     <div style={{fontSize:'2rem', fontWeight:'700', margin:'2rem 0 0 0'}}>전화번호 <S_content> {gym.phone} </S_content></div>
 
-                    <div style={{fontSize:'2rem', fontWeight:'700', margin:'10rem 0 0 0'}}>방문객 포토리뷰</div>
+                    <div style={{fontSize:'2rem', fontWeight:'700', margin:'3rem 0 0 0'}}>방문객 포토리뷰</div>
 
-                    <div style={{width:'90%', height:'22rem', margin:'2rem auto'}}>
+                    <div style={{width:'90%', height:'22rem', margin:'3rem auto'}}>
                         {
-                            gym.reviews === [null] ? 
+                            gym?.reviews.length === 0 ? 
                             
-                            <div color="white">아직 포토 리뷰가 없습니다 <br/>
+                            <div style={{color:'#ffffff', fontSize:'3rem', textAlign:'center', padding:'7rem 0 0 0' }}>아직 포토 리뷰가 없습니다 <br/>
                                 제일 먼저 리뷰를 남겨주세요!</div> 
                             
                             :  
-                            gym.reviews?.slice(0,2).map((review,i)=>{
-                            return(
                                 <ReviewSlider reviews={gym.reviews}/>
-                            )})
                         }
                     </div>
-                    <div style={{margin:'9rem 0 0 0', color:'#FFB800'}}>리뷰 상세보기</div>
+                    <div style={{margin:'8rem 0 0 0', color:'#FFB800', fontSize:'1.4rem'}} onClick={()=>{setShowReview(!showReview)}} type="button">
+                        리뷰 상세보기
+                    </div>
                 </div>
             </div>
 

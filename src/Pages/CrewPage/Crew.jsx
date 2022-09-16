@@ -14,8 +14,8 @@ import {FontHightlight, FontHightlight2} from './components/FontHightlight.js';
 
 const Crew = () => {
     
-    const SERVERT = process.env.REACT_APP_SERVER_T;
-    const BASE_URL = SERVERT;
+    // const SERVERT = process.env.REACT_APP_SERVER_T;
+    // const BASE_URL = SERVERT;
 
     const [choicePopularCrew, setChoicePopularCrew] = useState(true)
 
@@ -32,7 +32,7 @@ const Crew = () => {
     const preventRef = useRef(true) //옵저버 중복 실행 방지
     const endRef = useRef(false) //모든 글 로드 확인
 
-    console.log(page)
+    // console.log(page)
 
     const obsHandler = ((entries) => { //옵저버 콜백함수
         const target = entries[0];
@@ -54,15 +54,17 @@ const Crew = () => {
     const onclickGetCrew = () => {
         getCrew();
         setChoicePopularCrew(true)
+        setNewlist([])
     } 
     const getCrew = useCallback(async() => { //crewList 불러오기
         
     // if(choicePopularCrew){
         setLoad(true); //로딩 시작
-        await axios.get(`https://01192mg.shop/crews/popular?page=${page}&size=6`)
+        await axios.get(`https://01192mg.shop/crews/popular?page=0&size=30`)
         .then((res) => {
             console.log(res.data.data.content) 
             setList(prev => [...prev, ...res.data.data.content])
+            setNewlist([])
         })
         .catch((err) => {
             console.log(err)
@@ -73,8 +75,8 @@ const Crew = () => {
 
     useEffect(()=>{
         getCrew();
-        newCrew();
-    }, [page])
+        // newCrew();
+    }, [])
 
 
 // 신규크루 API 입니다
@@ -85,11 +87,12 @@ const Crew = () => {
     const onclickNewCrew = () => {
         setChoicePopularCrew(false);
         newCrew();
+        setList([])
     }
 
     const newCrew = useCallback(async() => {
             setLoad(true); //로딩 시작
-            await axios.get(`https://01192mg.shop/crews?page=${page}&size=6`)
+            await axios.get(`https://01192mg.shop/crews?page=0&size=30`)
             .then((res) => {
                 console.log(res.data.data.content) 
                 setNewlist(prev => [...prev, ...res.data.data.content])
@@ -112,8 +115,11 @@ const Crew = () => {
         setLoad(true); //로딩 시작
         await axios.get(`https://01192mg.shop/crews/search?query=${search}`)
         .then((res) => {
-            
-            setList(res.data.data)
+            if(list.length !== 0) {
+                setList(res.data.data)
+            } else {
+                setNewlist(res.data.data)
+            }  
             setSearch('')
         })
         .catch((err) => {
@@ -124,13 +130,11 @@ const Crew = () => {
 
     
     
-// 아래처럼 하지말고 load 처리 하려면 리덕스에서 받아온 Loading으로 할것
-// if (load) {
-//     return(
-//         <Loading />
-//     )
-// }
-
+if (load) {
+    return(
+        <Loading />
+    )
+}
 
     return(
         <div>
@@ -141,7 +145,7 @@ const Crew = () => {
                 
             {/* 검색 박스 */}
                 <div style={{width:'120rem', margin:'0 auto', height:'8rem'}}>
-                    <S_search placeholder='검색어를 입력해 주세요' onChange={(e)=> setSearch(e.target.value)}/>
+                    <S_search placeholder='검색어를 입력해 주세요' onChange={(e)=> setSearch(e.target.value)} value={search}/>
                     <img src={검색아이콘} type="button" style={{width:'3rem', height:'3rem', margin:'0 0 0 -5rem'}} 
                         onClick={onclickSearchCrew}/>
                 </div>
