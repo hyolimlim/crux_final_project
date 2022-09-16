@@ -13,21 +13,13 @@ import React from 'react';
 import {FontHightlight, FontHightlight2} from './components/FontHightlight.js';
 
 const Crew = () => {
+    
+    const SERVERT = process.env.REACT_APP_SERVER_T;
+    const BASE_URL = SERVERT;
 
     const [choicePopularCrew, setChoicePopularCrew] = useState(true)
 
     const navigate = useNavigate()
-    // const dispatch = useDispatch()
-    // const { crews, error, isLoading } = useSelector((state)=>state.crews)
-    // console.log( isLoading, error, crews )
-    // // const state = useSelector((state) => state)
-    // // console.log(state)
-
-    // useEffect(()=>{
-    //     dispatch(__getCrew(lastCrewId))
-    // }, [dispatch])
-
-
 
 // 무한스크롤 적용하기
 
@@ -40,7 +32,7 @@ const Crew = () => {
     const preventRef = useRef(true) //옵저버 중복 실행 방지
     const endRef = useRef(false) //모든 글 로드 확인
 
-
+    console.log(page)
 
     const obsHandler = ((entries) => { //옵저버 콜백함수
         const target = entries[0];
@@ -48,11 +40,12 @@ const Crew = () => {
             preventRef.current = false;
 
             setPage(prev => prev + 1); //페이지 값 증가 
+            
         }
     })
 
     useEffect(()=>{
-        const observer = new IntersectionObserver(obsHandler, { threshold : 0.1 });
+        const observer = new IntersectionObserver(obsHandler, { threshold : 0.5 });
 
         if(obsRef.current) observer.observe(obsRef.current); 
         return () => { observer.disconnect(); }
@@ -64,7 +57,7 @@ const Crew = () => {
     } 
     const getCrew = useCallback(async() => { //crewList 불러오기
         
-    if(choicePopularCrew){
+    // if(choicePopularCrew){
         setLoad(true); //로딩 시작
         await axios.get(`https://01192mg.shop/crews/popular?page=${page}&size=6`)
         .then((res) => {
@@ -75,13 +68,12 @@ const Crew = () => {
             console.log(err)
         })
         setLoad(false);
-    }
-        
+    // }
     }, [page]);
 
     useEffect(()=>{
         getCrew();
-        newCrew()
+        newCrew();
     }, [page])
 
 
@@ -91,12 +83,11 @@ const Crew = () => {
     const [newpage, setNewpage] = useState(0)
 
     const onclickNewCrew = () => {
-        newCrew();
         setChoicePopularCrew(false);
+        newCrew();
     }
 
     const newCrew = useCallback(async() => {
-        if(!choicePopularCrew) {
             setLoad(true); //로딩 시작
             await axios.get(`https://01192mg.shop/crews?page=${page}&size=6`)
             .then((res) => {
@@ -107,7 +98,6 @@ const Crew = () => {
                 console.log(err)
             })
            setLoad(false);
-        }
     }, [page]);
 
 
@@ -141,6 +131,7 @@ const Crew = () => {
 //     )
 // }
 
+
     return(
         <div>
             <Navbar />
@@ -168,8 +159,8 @@ const Crew = () => {
             </HeaderWrap>
 
             
-        <div style={{width:'192rem',height:'135rem', overflow:'auto', backgroundColor:'#141414', color:'#999999'}}>
-            <Container style={{width:'120rem', height:'134rem', margin:'0 auto', padding:'0'}}>
+        <div style={{width:'192rem',height:'134rem', backgroundColor:'#141414', color:'#999999', overflow:'auto'}}>
+            <Container style={{width:'120rem', height:'134rem', margin:'0 auto', padding:'0', backgroundColor:'#141414'}}>
                 <Row md={3} style={{margin:'0 auto', padding:'1rem 0 0 0'}}>
                 
                 {   
@@ -202,23 +193,25 @@ const Crew = () => {
                                     <p style={{margin:'0.5rem 0 0 0'}}>{val.content}</p>
                                     <p style={{margin:'1rem 0 0 0'}}>🖤 50명 | 🙍‍♀️ {val.crewNum}</p>
                                 </Col>
-
+                                
                         </React.Fragment>
                         )
                     )
                 }
-
+                
                 </Row>
+               
             </Container>
+
+           <div ref={obsRef}></div>
+
         </div>
 
             {
                 load ? <Loading />
                 : null
-            }
-
-            <div ref={obsRef}></div>
-
+            } 
+            
         </div>
     );
 }

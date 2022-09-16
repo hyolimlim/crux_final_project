@@ -5,6 +5,7 @@ import styled from "styled-components";
 import 플러스기호 from "../../../Image/플러스 기호.png"
 import ModalReview from "./ModalReview";
 import ReviewSlider from "./ReviewSlider";
+import 클라이밍 from '../../../Image/클라이밍1.png'
 
 
 const Content = ({gym}) => {
@@ -37,7 +38,7 @@ const likeGym = useCallback(async() => {
             <div style={{width:'120rem', height:'64rem', margin:'auto', display:'flex'}}>
                 <div style={{width:'70rem', height:'100%', margin:'8rem 0 0 0'}}>
                     
-                    <img src={gym.imgUrl} 
+                    <img src={클라이밍} 
                     style={{width:'100%', height:'100%'}}/>
                 
                 </div>
