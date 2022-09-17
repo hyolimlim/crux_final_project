@@ -15,21 +15,20 @@ const GymDetail = () => {
 const [showReview, setShowReview] = useState(false)
 
 const params = useParams().gymId
-console.log(params)
+// console.log(params)
 
 const dispatch = useDispatch()
 
 const { isLoading, error, gymDetail } = useSelector((state) => state.gymDetail)
-console.log(isLoading, error, gymDetail)
+// console.log(isLoading, error, gymDetail)
 
 const gym = gymDetail.data
-console.log(gym)
+// console.log(gym)
 
 // const gymDetil = useSelector((state)=> state)
 // console.log(gymDetil)
 
 useEffect(()=>{
-    console.log(1)
     dispatch(__getGymDetail(params))
 
 },[])

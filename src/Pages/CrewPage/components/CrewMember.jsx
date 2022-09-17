@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 function CrewMember({ members }) {
-  console.log(members[0]);
+  // console.log(members[0]);
   return (
     <Container>
       {members &&

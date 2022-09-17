@@ -12,6 +12,7 @@ import { faMarker, faStar } from "@fortawesome/free-solid-svg-icons";
 
 
 const Content = ({gym, setShowReview, showReview}) => {
+    const BASE_URL = 'https://01192mg.shop'
 
 const navigate = useNavigate()
 const [modal, setModal] = useState(false)
@@ -22,11 +23,11 @@ const onclickLikeGym = () => {
 }
 
 const likeGym = useCallback(async() => {
-    console.log(gym.id)
-    await axios.post(`https://01192mg.shop/likegyms/${gym.id}`, null,{
-        headers: {access_token: window.localStorage.getItem("access_token")}})
+    // console.log(gym.id)
+    await axios.post(`${BASE_URL}/likegyms/${gym.id}`, null,{
+        headers: {Authorization: window.localStorage.getItem("access_token")}})
     .then((res) => {
-        console.log(res.data)
+        // console.log(res.data)
         alert(res.data.data)
         // window.location.reload(`/gyms/${gym.id}`)
         navigate(`/gyms/${gym.id}`)
@@ -36,27 +37,14 @@ const likeGym = useCallback(async() => {
     })
 }, [onclickLikeGym])
 
-const [reviewImg, setReviewImg] = useState('')
-console.log(reviewImg)
 
-const checkImg = () => {
-    if (gym.reviews.length !== 0) {
-        setReviewImg(gym.reviews[0].reviewPhotoList[0].imgUrl)
-    }
-} 
-useEffect(()=>{
-    checkImg();
-}, [])
-    
-    
-console.log(reviewImg)
 
     return(
         <div style={{width:'192rem', height:'80rem', backgroundColor:'#141414', color:'#ffffff'}}>
             <div style={{width:'120rem', height:'64rem', margin:'auto', display:'flex'}}>
                 <div style={{width:'70rem', height:'100%', margin:'8rem 0 0 0'}}>
                     
-                    <img src={reviewImg !== '' ? reviewImg : 클라이밍} 
+                    <img src={gym.reviews[0]?.reviewPhotoList[0]?.imgUrl !== undefined ? gym.reviews[0]?.reviewPhotoList[0]?.imgUrl : 클라이밍} 
                     style={{width:'100%', height:'100%'}}/>
                 
                 </div>

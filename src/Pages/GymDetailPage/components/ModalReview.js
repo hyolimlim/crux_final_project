@@ -11,6 +11,7 @@ import axios from "axios";
 
 
 const ModalReview = ({setModal, gym}) => {
+    const BASE_URL = "https://01192mg.shop"
 
     const navigate = useNavigate()
     const closeModal = () => {
@@ -20,7 +21,7 @@ const ModalReview = ({setModal, gym}) => {
 // 별점 주기 <star rating> 라이브러리!
 
     const [rating, setRating] = useState(0)
-    console.log(rating)
+    // console.log(rating)
     const handleRating = (rate: number) => {
         if(rate<20) {
             setRating(0)
@@ -47,12 +48,12 @@ const createReview = useCallback(async() => {
         content: content,
         reviewPhotoList: [{imgUrl: fileUrl}],
       };
-    console.log(gym.id)
-    console.log(window.localStorage.getItem("access_token"))
-    await axios.post(`http://3.35.22.118/reviews/${gym.id}`, payload, {
+    // console.log(gym.id)
+    // console.log(window.localStorage.getItem("access_token"))
+    await axios.post(`${BASE_URL}/reviews/${gym.id}`, payload, {
         headers: {Authorization: window.localStorage.getItem("access_token")}})    
         .then((res) => {
-        console.log(res.data)
+        // console.log(res.data)
         alert('리뷰 작성완료!')
         window.location.reload(`/gyms/${gym.id}`)
     })
@@ -68,15 +69,15 @@ const createReview = useCallback(async() => {
   const storageRef = ref(storage);
 
   const uploadFB = async (e) => {
-    console.log(e.target.files);
+    // console.log(e.target.files);
     const upload_file = await uploadBytes(
       ref(storage, `images/${e.target.files[0].name}`),
       e.target.files[0]
     );
-    console.log(upload_file)
+    // console.log(upload_file)
 
     const file_url = await getDownloadURL(upload_file.ref)
-    console.log(file_url)
+    // console.log(file_url)
     setFileUrl(file_url)
     // file_url !== '' ? setFileUrl(file_url) : setFileUrl(basicImg)
     // 기본 이미지 줄 수 있나? 없음 말고..

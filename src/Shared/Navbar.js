@@ -7,7 +7,7 @@ import Legister from "../Pages/Register/Register";
 
 const Navbar = () => {
   const userToken = window.localStorage.getItem("access_token")
-  console.log(userToken)
+  // console.log(userToken)
   const removeToken = () => {
      localStorage.removeItem("access_token")
      alert('로그아웃 되었습니다.')

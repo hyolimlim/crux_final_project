@@ -94,7 +94,7 @@ const Container = styled.div`
   column-gap: 27px;
   > div {
     :first-child {
-      background-color: red;
+      background-color: #262626;
     }
   }
 `;

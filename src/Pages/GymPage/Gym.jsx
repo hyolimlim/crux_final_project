@@ -15,6 +15,7 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 
 const Gym = () => {
+    const BASE_URL = "https://01192mg.shop"
 
     const [location, setLocation] = useState('내')
 
@@ -35,7 +36,7 @@ const Gym = () => {
     errMsg: null,
     isLoading: true,
   })
-  console.log(state.center)
+  // console.log(state.center)
 
 
   useEffect(()=>{
@@ -44,9 +45,9 @@ const Gym = () => {
         async (position) => {
           const lat = position.coords.latitude
           const lng = position.coords.longitude
-          await axios.get(`http://3.35.22.118/gyms?page=0&size=10&lon=${lng}&lat=${lat}`)
+          await axios.get(`${BASE_URL}/gyms?page=0&size=10&lon=${lng}&lat=${lat}`)
         .then((res) => {
-            console.log(res.data.data)
+            // console.log(res.data.data)
             setGyms(res.data.data)
         })
         .catch((err) => {
@@ -117,9 +118,9 @@ const Gym = () => {
     }
 
     const searchGym = async() => {
-        await axios.get(`http://3.35.22.118/gyms/search?page=0&size=5&query=${search}`)
+        await axios.get(`${BASE_URL}/gyms/search?page=0&size=5&query=${search}`)
         .then((res) => {
-            console.log(res.data.data)
+            // console.log(res.data.data)
             setGyms(res.data.data)
             setLocation(search)
             setSearch('')
@@ -128,7 +129,7 @@ const Gym = () => {
             console.log(err)
         })
       }
-    console.log(gyms)
+    // console.log(gyms)
 
 // 마커 마우스 호버 이벤트
       const [isopen, setIsopen] = useState(false)
@@ -237,7 +238,8 @@ if(state.isLoading) {
                                             <h3 style={{margin:'0 0 0 0'}}>{gym.name}</h3>
                                             <p style={{margin:'2rem 0 0 0'}}>{gym.location}</p>
                                             <p style={{margin:'1rem 0 0 0'}}>{gym.phone}</p>
-                                            <p style={{margin:'1rem 0 0 0'}}>✨ {gym.avgScore}</p>
+                                            <p style={{margin:'1rem 0 0 0'}}>✨ {Number(gym.avgScore).toFixed(2)}</p>
+                                            
                                         </div>
                                     </div>
                                 );
