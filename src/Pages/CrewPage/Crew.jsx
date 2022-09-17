@@ -5,12 +5,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { __getCrew } from "../../Redux/modules/crewSlice";
 import Loading from "../../Shared/Loading";
 import { useNavigate } from "react-router-dom";
-import 검색아이콘 from "../../Image/검색 아이콘.png"
 import axios from 'axios';
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useInView } from 'react-intersection-observer';
 import React from 'react';
 import {FontHightlight, FontHightlight2} from './components/FontHightlight.js';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+
 
 const Crew = () => {
     
@@ -139,8 +141,8 @@ const Crew = () => {
             {/* 검색 박스 */}
                 <div style={{width:'120rem', margin:'0 auto', height:'8rem'}}>
                     <S_search placeholder='검색어를 입력해 주세요' onChange={(e)=> setSearch(e.target.value)} value={search}/>
-                    <img src={검색아이콘} type="button" style={{width:'3rem', height:'3rem', margin:'0 0 0 -5rem'}} 
-                        onClick={onclickSearchCrew}/>
+                    <FontAwesomeIcon icon={faMagnifyingGlass} size="3x" color='black' onClick={onclickSearchCrew} style={{position:'absolute', margin:'3rem 2rem 0 0', left:'115rem'}} type="button"/>
+                        
                 </div>
                 <div style={{width:'120rem', margin:'7.5rem auto 0 auto'}}>
                     
