@@ -23,21 +23,21 @@ const CrewDetail = () => {
 
   useEffect(() => {
     dispatch(getCrewDetail(params));
-  }, []);
+  }, [dispatch]);
 
-  const crewDetail = useSelector((state) => state.crews.crewDetail);
-  const crew = crewDetail.data;
+  const crewDetail = useSelector((state) => state?.crews?.crewDetail);
+  const crew = crewDetail?.data;
 
   //크루 가입신청
   const handleJoin = () => {
-    console.log(crew.id);
-    dispatch(joinCrew(crew.id));
+    console.log(crew?.id);
+    dispatch(joinCrew(crew?.id));
   };
 
   //크루 삭제
   const onCrewDelte = () => {
     if (window.confirm("삭제하시겠습니까?")) {
-      dispatch(deleteCrew(crew.id));
+      dispatch(deleteCrew(crew?.id));
     } else {
       return;
     }
@@ -48,10 +48,10 @@ const CrewDetail = () => {
     if (window.confirm("수정하시겠습니까?")) {
       navigate(`/crewedit/${params}`, {
         state: {
-          id: crew.id,
-          name: crew.name,
-          content: crew.content,
-          imgURL: crew.imgUrl,
+          id: crew?.id,
+          name: crew?.name,
+          content: crew?.content,
+          imgURL: crew?.imgUrl,
         },
       });
     } else {
@@ -99,94 +99,89 @@ const CrewDetail = () => {
   //클릭하면 하트필 true로 만들어둠
   const handleHeartFill = () => {
     setHeartFillClick(!heartFillClick);
-    dispatch(likeCrew(crew.id));
+    dispatch(likeCrew(crew?.id));
   };
-
-  if (crewDetail.success) {
-    return (
-      <div>
-        <Navbar />
-        <Warp>
-          <ThumbnailContainer>
-            <ThumbnailContentBox>
-              <ImgBox>
-                <HeartIcon type="button">
-                  <Heart
-                    width="50px"
-                    height="50px"
-                    fill="#000000"
-                    onClick={handleHeartFill}
-                    opacity={heartFillClick ? "80%" : "30%"}
-                  />
-                </HeartIcon>
-                <img src={crewDetail.data.imgUrl} />
-              </ImgBox>
-              <ContentBox>
-                <TextBox>
-                  <TextButton>
-                    <span type="button" onClick={onCrewEdit}>
-                      수정
-                    </span>
-                    <span type="button" onClick={onCrewDelte}>
-                      삭제
-                    </span>
-                  </TextButton>
-                  <h1>{crewDetail.data.name}</h1>
-                  <TextDetail>
-                    <Text>
-                      <p>참여자</p> <p>{crewDetail.data.crewNum}명</p>
-                    </Text>
-                    <Text>
-                      <p>크루소개</p>
-                      <p>{crewDetail.data.content}</p>
-                    </Text>
-                  </TextDetail>
-                </TextBox>
-                <ButtonBox>
-                  <button
-                    onClick={() => {
-                      dispatch(joinCrew(crew.id));
-                    }}
-                  >
-                    참가하기
-                  </button>
-                  <button>신청현황</button>
-                </ButtonBox>
-              </ContentBox>
-            </ThumbnailContentBox>
-            <TabButton>
-              <span type="button" onClick={handleIntro}>
-                소개
-              </span>
-              <span type="button" onClick={handleMember}>
-                참여멤버
-              </span>
-              <span type="button" onClick={handleNotice}>
-                모임공지
-              </span>
-              <span type="button" onClick={handlePhotos}>
-                사진첩
-              </span>
-            </TabButton>
-          </ThumbnailContainer>
-          <TabContainer>
-            {introVisible && (
-              <CrewIntro
-                content={crewDetail.data.content}
-                adminNickname={crew.memberList[0].nickname}
-                adminContent={crew.memberList[0].content}
-              />
-            )}
-            {memberVisible && <CrewMember members={[crew.memberList]} />}
-            {noticeVisible && <CrewNotice notice={crew.noticeList} />}
-            {photosVisible && <CrewPhotos />}
-          </TabContainer>
-        </Warp>
-      </div>
-    );
-  } else {
-    return null;
-  }
+  return (
+    <div>
+      <Navbar />
+      <Warp>
+        <ThumbnailContainer>
+          <ThumbnailContentBox>
+            <ImgBox>
+              <HeartIcon type="button">
+                <Heart
+                  width="50px"
+                  height="50px"
+                  fill="#000000"
+                  onClick={handleHeartFill}
+                  opacity={heartFillClick ? "80%" : "30%"}
+                />
+              </HeartIcon>
+              <img src={crewDetail?.data?.imgUrl} />
+            </ImgBox>
+            <ContentBox>
+              <TextBox>
+                <TextButton>
+                  <span type="button" onClick={onCrewEdit}>
+                    수정
+                  </span>
+                  <span type="button" onClick={onCrewDelte}>
+                    삭제
+                  </span>
+                </TextButton>
+                <h1>{crewDetail?.data?.name}</h1>
+                <TextDetail>
+                  <Text>
+                    <p>참여자</p> <p>{crewDetail?.data?.crewNum}명</p>
+                  </Text>
+                  <Text>
+                    <p>크루소개</p>
+                    <p>{crewDetail?.data?.content}</p>
+                  </Text>
+                </TextDetail>
+              </TextBox>
+              <ButtonBox>
+                <button
+                  onClick={() => {
+                    dispatch(joinCrew(crew?.id));
+                  }}
+                >
+                  참가하기
+                </button>
+                <button>신청현황</button>
+              </ButtonBox>
+            </ContentBox>
+          </ThumbnailContentBox>
+          <TabButton>
+            <span type="button" onClick={handleIntro}>
+              소개
+            </span>
+            <span type="button" onClick={handleMember}>
+              참여멤버
+            </span>
+            <span type="button" onClick={handleNotice}>
+              모임공지
+            </span>
+            <span type="button" onClick={handlePhotos}>
+              사진첩
+            </span>
+          </TabButton>
+        </ThumbnailContainer>
+        <TabContainer>
+          {introVisible && (
+            <CrewIntro
+              content={crewDetail?.data?.content}
+              adminNickname={crew?.memberList[0]?.nickname}
+              adminContent={crew?.memberList[0]?.content}
+            />
+          )}
+          {memberVisible && <CrewMember members={[crew?.memberList]} />}
+          {noticeVisible && <CrewNotice notice={crew?.noticeList} />}
+          {photosVisible && <CrewPhotos />}
+        </TabContainer>
+      </Warp>
+    </div>
+  );
 };
 
 export default CrewDetail;
