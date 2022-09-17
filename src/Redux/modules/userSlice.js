@@ -56,14 +56,14 @@ export const login = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await axios
-        .post(`http://3.35.22.118/members/login`, payload)
+        .post(`https://01192mg.shop/members/login`, payload)
         .then((response) => {
           console.log(response);
           window.localStorage.setItem(
             "access_token",
             response.headers.access_token
           );
-          window.location.replace("/");
+          console.log(response);
         });
       return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
@@ -98,7 +98,7 @@ export const kakaoLogin = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await axios
-        .get(`http://3.39.237.124/oauth/kakao/callback?code=${payload}`)
+        .get(`https://01192mg.shop/oauth/kakao/callback?code=${payload}`)
         .then((response) => {
           console.log(response);
           window.localStorage.setItem(
@@ -133,35 +133,13 @@ export const kakaoLoginSlice = createSlice({
   },
 });
 
-//유저 크루 좋아요
-// export const likeCrew = createAsyncThunk(
-//   "post/like-crew",
-//   async (payload, thunkAPI) => {
-//     console.log(payload);
-//     try {
-//       const data = await axios
-//         .post(`https://3.35.22.118/like-crews/${payload}`, {
-//           headers: {
-//             "Content-Type": "application/json",
-//             Authorization: window.localStorage.getItem("access_token"),
-//           },
-//         })
-//         .then((response) => {
-//           console.log(response);
-//         });
-//       return thunkAPI.fulfillWithValue(data.data);
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error);
-//     }
-//   }
-// );
-
+//크루 좋아요
 export const likeCrew = createAsyncThunk(
   "post/like-crew",
   async (payload, thunkAPI) => {
     try {
       const response = await axios
-        .post(`http://3.35.22.118/like-crews/${payload}`, {
+        .delete(`https://01192mg.shop/like-crews/${payload}`, null, {
           headers: {
             Authorization: window.localStorage.getItem("access_token"),
           },
@@ -169,7 +147,31 @@ export const likeCrew = createAsyncThunk(
         .then((response) => {
           console.log(response);
         });
-      // window.location.replace("/crews");
+      window.alert("좋아요 완료");
+      console.log(response.data);
+      return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.data);
+    }
+  }
+);
+
+//크루 좋아요취소
+export const unLikeCrew = createAsyncThunk(
+  "post/like-crew",
+  async (payload, thunkAPI) => {
+    try {
+      const response = await axios
+        .post(`https://01192mg.shop/like-crews/${payload}`, null, {
+          headers: {
+            Authorization: window.localStorage.getItem("access_token"),
+          },
+        })
+        .then((response) => {
+          console.log(response);
+        });
+      window.alert("좋아요 취소 완료");
+      console.log(response.data);
       return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.data);
