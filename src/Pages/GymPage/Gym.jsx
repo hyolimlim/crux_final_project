@@ -4,13 +4,14 @@ import 디폴트짐 from "../../Image/인기 클라이밍짐.png"
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { __getGyms } from '../../Redux/modules/gymSlice';
-import KakaoMap from './components/KakaoMap';
 import Loading from "../../Shared/Loading.js"
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../Shared/Navbar'
 import GymHeader from './components/GymHeader';
 import axios from 'axios';
-import { Map, MapMarker } from 'react-kakao-maps-sdk'
+import { Map, MapMarker, CustomOverlayMap } from 'react-kakao-maps-sdk'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 
 const Gym = () => {
@@ -129,6 +130,9 @@ const Gym = () => {
       }
     console.log(gyms)
 
+// 마커 마우스 호버 이벤트
+      const [isopen, setIsopen] = useState(false)
+
 
 if(state.isLoading) {
   return(<Loading />)
@@ -145,8 +149,8 @@ if(state.isLoading) {
                   <h1 style={{width:'38rem', margin:'0 35.2rem 0 0'}}>클라이밍짐 후기</h1>
                  
                   <S_input onChange={(e)=>{ setSearch(e.target.value) }} value={search}/> 
-                  <img src={돋보기} type="button" onClick={onclickSearchGym}
-                  style={{width:'3rem', height:'3rem', margin:'1.1rem 0 0 107rem', position:'absolute'}} />
+                  <FontAwesomeIcon icon={faMagnifyingGlass} size="3x" color='black' onClick={onclickSearchGym} style={{position:'absolute', margin:'2rem 0 0 108rem'}} type="button"/> 
+                  
               </div>
 
               <div style={{width:'120rem', margin:'6.5rem auto 0 auto', display:'flex'}}>
@@ -165,30 +169,49 @@ if(state.isLoading) {
 
 
                 {/* 카카오 Map 입니다 */}
+                
                 <Map
                     center={ state.center }
                     style={{ width: "134rem", height: "110rem" }}
                     level={7}
                 >
-                    <MapMarker position={state.center}>
-                    <div style={{ padding: "5px", color: "black", textAlign:'center', backgroundColor:"aquamarine", width:'178%' }}>현재위치!</div>
+                    
+                    <MapMarker position={state.center} 
+                    image={{size:{width: 100, height: 80}, src:"http://simpleicon.com/wp-content/uploads/map-marker-5.png"}}  
+                    >
                     </MapMarker>
 
                     {
                         gyms?.map((val, i) => (
+                          <>
                             <MapMarker 
                             key={`${val.name}-${val.lat}`}
                             position={{
                                 lat: val.lat,
                                 lng: val.lon
                             }}
-                            image={{size:{width: 24, height: 35}, src:"https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"}}
+                            image={{size:{width: 40, height: 60}, src:"https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"}}
                             title={val.name}
+                            // clickable={true} onClick={()=>setIsopen(!isopen)}
                             >
-                            <div style={{ padding: "5px", color: "black", textAlign:'center' }}>{val.name}</div>
                             </MapMarker>
+
+                              <CustomOverlayMap
+                              position={{lat: val.lat,lng: val.lon}}
+                              yAnchor={1}
+                            >
+                              <Wrap>
+                                <GymName>{val.name}</GymName>
+                                <GymAddress>{val.location}</GymAddress>
+                                <a href="https://map.kakao.com/link/map/11394059" target="_blank"rel="noreferrer">
+                                  <span className="title">길찾기</span>
+                                </a>
+                              </Wrap>
+                            </CustomOverlayMap>
+                          </>
                         ))
                     }
+                    
 
                 </Map>
 
@@ -228,12 +251,25 @@ if(state.isLoading) {
         </div>
     );
 }
+const Wrap = styled.div`
+border:1px solid gray;
+width:10rem;
+height: 3rem;
+margin: 0 0 0 0;
+`
 
+const GymName = styled.div`
+
+`
+
+const GymAddress = styled.div`
+
+`
 
 const S_input = styled.input`
 width: 39rem;
 height: 5rem;
-
+margin: 1rem 0 0 0;
 font-size: 1.4rem;
 padding: 0 0 0 1rem;
 border: 1px solid #CCCCCC;
@@ -252,6 +288,5 @@ color: #ffffff;
 border: 1px solid #CCCCCC;
 overflow: auto;
 `
-
 
 export default Gym;
