@@ -8,9 +8,11 @@ import Register from "../../Register/Register";
 const Navbar = () => {
 
   const userToken = window.localStorage.getItem("access_token")
+  const userId = window.localStorage.getItem("userId")
   // console.log(userToken)
   const removeToken = () => {
      localStorage.removeItem("access_token")
+     localStorage.removeItem("userId")
      alert('로그아웃 되었습니다.')
      navigate('/')
     //  window.location.reload('/')
@@ -77,7 +79,7 @@ const Navbar = () => {
             userToken !== null ?
             <>
               <h4 type="button"
-              onClick={()=>{}}
+              onClick={()=>{navigate(`/members/${userId}`)}}
               style={{ fontWeight: "500", marginLeft: "47rem" }}
               >
                 MYPAGE

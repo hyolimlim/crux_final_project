@@ -63,6 +63,7 @@ export const login = createAsyncThunk(
             "access_token",
             response.headers.access_token
           );
+          window.localStorage.setItem("userId", response.data.data.id)
           window.location.reload();
         });
       return thunkAPI.fulfillWithValue(response.data);

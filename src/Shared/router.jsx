@@ -8,6 +8,7 @@ import GymDetail from "../Pages/GymDetailPage/GymDetail";
 import KakaoLogin from "../Pages/Login/KakaoLogin";
 import CreateCrew from "../Pages/CrewPage/CreateCrew";
 import CrewEdit from "../Pages/CrewPage/CrewEdit";
+import Mypage from "../Pages/MyPage/Mypage";
 
 const Router = () => {
   return (
@@ -22,6 +23,7 @@ const Router = () => {
           <Route path="/kakaoLogin" element={<KakaoLogin />} />
           <Route path="/createcrew" element={<CreateCrew />} />
           <Route path="/crewedit/:id" element={<CrewEdit />} />
+          <Route path={"/members/:memberId"} element={<Mypage />}/>
         </Routes>
       </Container>
     </Warp>

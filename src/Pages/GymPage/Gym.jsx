@@ -231,7 +231,7 @@ if(state.isLoading) {
                         {
                             gyms?.map((gym, i)=>{
                                 return(
-                                    <div key={i} style={{display:'flex', margin:'2rem auto', width:'50rem', height:'17rem', borderBottom:'1px solid #262626'}} 
+                                    <div key={gym.id} style={{display:'flex', margin:'2rem auto', width:'50rem', height:'17rem', borderBottom:'1px solid #262626'}} 
                                     onClick={()=>{ navigate(`/gyms/${gym.id}`) }}>
                                         <img src={디폴트짐} alt='' style={{width:'15rem', height:'15rem'}}/>
                                         <div style={{width:'35rem', padding:'1rem'}}>
