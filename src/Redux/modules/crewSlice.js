@@ -19,7 +19,7 @@ export const createCrew = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await axios
-        .post(`http://3.35.22.118/crews`, payload, {
+        .post(`${BASE_URL}/crews`, payload, {
           headers: {
             Authorization: window.localStorage.getItem("access_token"),
           },
@@ -42,7 +42,7 @@ export const editCrew = createAsyncThunk(
     try {
       const response = await axios
         .put(
-          `http://3.35.22.118/crews/${payload.id}`,
+          `${BASE_URL}/crews/${payload.id}`,
           {
             name: payload.name,
             content: payload.content,
@@ -71,7 +71,7 @@ export const deleteCrew = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await axios
-        .delete(`http://3.35.22.118/crews/${payload}`, {
+        .delete(`${BASE_URL}/crews/${payload}`, {
           headers: {
             Authorization: window.localStorage.getItem("access_token"),
           },
@@ -92,8 +92,8 @@ export const getCrewDetail = createAsyncThunk(
   "getCrewDetail",
   async (payload, thunkAPI) => {
     try {
-      const data = await axios.get(`http://3.35.22.118/crews/${payload}`);
-      console.log(data.data);
+      const data = await axios.get(`${BASE_URL}/crews/${payload}`);
+      // console.log(data.data);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
@@ -107,7 +107,7 @@ export const joinCrew = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const data = await axios
-        .post(`https://3.35.22.118/crews-members/${payload}`, {
+        .post(`${BASE_URL}/crews/${payload}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: window.localStorage.getItem("access_token"),

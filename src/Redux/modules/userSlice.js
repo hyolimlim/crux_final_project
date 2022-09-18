@@ -19,7 +19,7 @@ export const signup = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await axios.post(
-        `http://3.35.22.118/members/signup`,
+        `${BASE_URL}/members/signup`,
         payload
       );
       window.alert("회원가입 성공");
@@ -56,13 +56,14 @@ export const login = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await axios
-        .post(`http://3.35.22.118/members/login`, payload)
+        .post(`${BASE_URL}/members/login`, payload)
         .then((response) => {
           console.log(response);
           window.localStorage.setItem(
             "access_token",
             response.headers.access_token
           );
+          window.localStorage.setItem("userId", response.data.data.id)
           window.location.reload();
         });
       return thunkAPI.fulfillWithValue(response.data);
@@ -98,7 +99,7 @@ export const kakaoLogin = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await axios
-        .get(`http://3.39.237.124/oauth/kakao/callback?code=${payload}`)
+        .get(`${BASE_URL}/oauth/kakao/callback?code=${payload}`)
         .then((response) => {
           console.log(response);
           window.localStorage.setItem(
@@ -140,7 +141,7 @@ export const likeCrew = createAsyncThunk(
     console.log(payload);
     try {
       const data = await axios
-        .post(`https://3.35.22.118/like-crews/${payload}`, {
+        .post(`${BASE_URL}/like-crews/${payload}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: window.localStorage.getItem("access_token"),

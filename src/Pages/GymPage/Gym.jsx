@@ -15,6 +15,7 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 
 const Gym = () => {
+    const BASE_URL = "https://01192mg.shop"
 
     const [location, setLocation] = useState('내')
 
@@ -35,7 +36,7 @@ const Gym = () => {
     errMsg: null,
     isLoading: true,
   })
-  console.log(state.center)
+  // console.log(state.center)
 
 
   useEffect(()=>{
@@ -44,9 +45,9 @@ const Gym = () => {
         async (position) => {
           const lat = position.coords.latitude
           const lng = position.coords.longitude
-          await axios.get(`http://3.35.22.118/gyms?page=0&size=10&lon=${lng}&lat=${lat}`)
+          await axios.get(`${BASE_URL}/gyms?page=0&size=10&lon=${lng}&lat=${lat}`)
         .then((res) => {
-            console.log(res.data.data)
+            // console.log(res.data.data)
             setGyms(res.data.data)
         })
         .catch((err) => {
@@ -117,9 +118,9 @@ const Gym = () => {
     }
 
     const searchGym = async() => {
-        await axios.get(`http://3.35.22.118/gyms/search?page=0&size=5&query=${search}`)
+        await axios.get(`${BASE_URL}/gyms/search?page=0&size=5&query=${search}`)
         .then((res) => {
-            console.log(res.data.data)
+            // console.log(res.data.data)
             setGyms(res.data.data)
             setLocation(search)
             setSearch('')
@@ -128,7 +129,7 @@ const Gym = () => {
             console.log(err)
         })
       }
-    console.log(gyms)
+    // console.log(gyms)
 
 // 마커 마우스 호버 이벤트
       const [isopen, setIsopen] = useState(false)
@@ -182,9 +183,9 @@ if(state.isLoading) {
                     </MapMarker>
 
                     {
-                        gyms?.map((val, i) => (
+                        gyms?.map((val, i) => ( 
                           <>
-                            <MapMarker 
+                            <MapMarker onClick={()=>setIsopen(!isopen)}
                             key={`${val.name}-${val.lat}`}
                             position={{
                                 lat: val.lat,
@@ -192,10 +193,11 @@ if(state.isLoading) {
                             }}
                             image={{size:{width: 40, height: 60}, src:"https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"}}
                             title={val.name}
-                            // clickable={true} onClick={()=>setIsopen(!isopen)}
+                            clickable={true} 
                             >
                             </MapMarker>
 
+                              {isopen && (
                               <CustomOverlayMap
                               position={{lat: val.lat,lng: val.lon}}
                               yAnchor={1}
@@ -203,11 +205,13 @@ if(state.isLoading) {
                               <Wrap>
                                 <GymName>{val.name}</GymName>
                                 <GymAddress>{val.location}</GymAddress>
-                                <a href="https://map.kakao.com/link/map/11394059" target="_blank"rel="noreferrer">
+                                <a href={`https://map.kakao.com/link/to/HelloWorld!,${val.lat},${val.lon}`} target="_blank"rel="noreferrer">
                                   <span className="title">길찾기</span>
                                 </a>
                               </Wrap>
                             </CustomOverlayMap>
+                            )}
+
                           </>
                         ))
                     }
@@ -227,14 +231,15 @@ if(state.isLoading) {
                         {
                             gyms?.map((gym, i)=>{
                                 return(
-                                    <div key={i} style={{display:'flex', margin:'2rem auto', width:'50rem', height:'17rem', borderBottom:'1px solid #262626'}} 
+                                    <div key={gym.id} style={{display:'flex', margin:'2rem auto', width:'50rem', height:'17rem', borderBottom:'1px solid #262626'}} 
                                     onClick={()=>{ navigate(`/gyms/${gym.id}`) }}>
                                         <img src={디폴트짐} alt='' style={{width:'15rem', height:'15rem'}}/>
                                         <div style={{width:'35rem', padding:'1rem'}}>
                                             <h3 style={{margin:'0 0 0 0'}}>{gym.name}</h3>
                                             <p style={{margin:'2rem 0 0 0'}}>{gym.location}</p>
                                             <p style={{margin:'1rem 0 0 0'}}>{gym.phone}</p>
-                                            <p style={{margin:'1rem 0 0 0'}}>✨ {gym.avgScore}</p>
+                                            <p style={{margin:'1rem 0 0 0'}}>✨ {Number(gym.avgScore).toFixed(2)}</p>
+                                            
                                         </div>
                                     </div>
                                 );
@@ -252,18 +257,26 @@ if(state.isLoading) {
     );
 }
 const Wrap = styled.div`
-border:1px solid gray;
-width:10rem;
-height: 3rem;
-margin: 0 0 0 0;
+    border: 1px solid gray;
+    border-radius: 1px;
+    height: 6rem;
+    text-align: center;
+    margin: -126px 0 0 -8px;
+    background-color: white;
 `
 
 const GymName = styled.div`
+font-size: 14px;
+width:100%;
+height: 2rem;
+padding: 2px 0 0 0;
+border-bottom: #ebebeb;
+background-color: #eeeeee;
 
 `
 
 const GymAddress = styled.div`
-
+font-size: 11px;
 `
 
 const S_input = styled.input`

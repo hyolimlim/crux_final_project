@@ -7,9 +7,11 @@ import Legister from "../Pages/Register/Register";
 
 const Navbar = () => {
   const userToken = window.localStorage.getItem("access_token")
-  console.log(userToken)
+  const userId = window.localStorage.getItem("userId")
+  // console.log(userToken)
   const removeToken = () => {
      localStorage.removeItem("access_token")
+     localStorage.removeItem("userId")
      alert('로그아웃 되었습니다.')
      window.location.reload()
   }
@@ -74,7 +76,7 @@ const Navbar = () => {
           {
             userToken !== null ? 
             <>
-            <h4 type="button" >MYPAGE</h4>
+            <h4 type="button" onClick={()=>{navigate(`/members/${userId}`)}}>MYPAGE</h4>
             <h4 style={{ position: "relative", left: "2.5rem" }} type="button" 
               onClick={removeToken}>LOGOUT</h4> 
             </> 

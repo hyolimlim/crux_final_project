@@ -30,7 +30,7 @@ const CrewDetail = () => {
 
   //크루 가입신청
   const handleJoin = () => {
-    console.log(crew.id);
+    // console.log(crew.id);
     dispatch(joinCrew(crew.id));
   };
 

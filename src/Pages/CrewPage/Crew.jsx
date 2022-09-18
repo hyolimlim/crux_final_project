@@ -15,6 +15,7 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 
 const Crew = () => {
+    const BASE_URL = "https://01192mg.shop"
     
     // const SERVERT = process.env.REACT_APP_SERVER_T;
     // const BASE_URL = SERVERT;
@@ -62,9 +63,9 @@ const Crew = () => {
         
     // if(choicePopularCrew){
         setLoad(true); //로딩 시작
-        await axios.get(`https://01192mg.shop/crews/popular?page=0&size=30`)
+        await axios.get(`${BASE_URL}/crews/popular?page=0&size=30`)
         .then((res) => {
-            console.log(res.data.data.content) 
+            // console.log(res.data.data.content) 
             setList(prev => [...prev, ...res.data.data.content])
             setNewlist([])
         })
@@ -94,9 +95,9 @@ const Crew = () => {
 
     const newCrew = useCallback(async() => {
             setLoad(true); //로딩 시작
-            await axios.get(`https://01192mg.shop/crews?page=0&size=30`)
+            await axios.get(`${BASE_URL}/crews?page=0&size=30`)
             .then((res) => {
-                console.log(res.data.data.content) 
+                // console.log(res.data.data.content) 
                 setNewlist(prev => [...prev, ...res.data.data.content])
             })
             .catch((err) => {
@@ -115,7 +116,7 @@ const Crew = () => {
 
     const searchCrew = useCallback(async() => {
         setLoad(true); //로딩 시작
-        await axios.get(`https://01192mg.shop/crews/search?query=${search}`)
+        await axios.get(`${BASE_URL}/crews/search?query=${search}`)
         .then((res) => {
             if(list.length !== 0) {
                 setList(res.data.data)
@@ -141,7 +142,7 @@ const Crew = () => {
             {/* 검색 박스 */}
                 <div style={{width:'120rem', margin:'0 auto', height:'8rem'}}>
                     <S_search placeholder='검색어를 입력해 주세요' onChange={(e)=> setSearch(e.target.value)} value={search}/>
-                    <FontAwesomeIcon icon={faMagnifyingGlass} size="3x" color='black' onClick={onclickSearchCrew} style={{position:'absolute', margin:'3rem 2rem 0 0', left:'115rem'}} type="button"/>
+                    <FontAwesomeIcon icon={faMagnifyingGlass} size="3x" color='black' onClick={onclickSearchCrew} style={{position:'absolute', margin:'3rem 1rem 0 -4.5rem'}} type="button"/>
                         
                 </div>
                 <div style={{width:'120rem', margin:'7.5rem auto 0 auto'}}>

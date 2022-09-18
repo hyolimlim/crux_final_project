@@ -4,7 +4,7 @@ import Loading from "../../../Shared/Loading";
 
 const Review = ({gym}) => {
 
-console.log(gym.reviews)
+// console.log(gym.reviews)
 
 if(gym === undefined) {
     return( <Loading/>)
