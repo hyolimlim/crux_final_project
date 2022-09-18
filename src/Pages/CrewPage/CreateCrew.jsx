@@ -28,6 +28,7 @@ const CreateCrew = () => {
   const [imgUrl, setImgUrl] = useState(null);
   const imgRef = useRef();
 
+  //이미지 미리보기
   const onChangeImg = (e) => {
     const reader = new FileReader();
     const file = imgRef.current.files[0];
@@ -54,8 +55,8 @@ const CreateCrew = () => {
   const uploadFB = async (e) => {
     // console.log(e.target.files);
     const upload_file = await uploadBytes(
-      ref(storage, `images/${e.target.files[0].name}`),
-      e.target.files[0]
+      ref(storage, `images/${e.target.file.name}`),
+      e.target.files
     );
     // console.log(upload_file);
 

@@ -6,12 +6,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Navbar from "../../Shared/Navbar";
 import { storage } from "../../Shared/firebase";
-import { createCrew } from "../../Redux/modules/crewSlice";
+import { editCrew } from "../../Redux/modules/crewSlice";
 
 const CrewEdit = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { state } = useLocation();
+
   //location sate로 받아온 값에서 value추출
   const { id, name, content, imgURL } = state;
   // console.log(state);
@@ -31,7 +32,7 @@ const CrewEdit = () => {
       content: data.content,
       imgUrl: imgUrl,
     };
-    dispatch(createCrew(payload));
+    dispatch(editCrew(payload));
   };
 
   const [imgUrl, setImgUrl] = useState(imgURL);

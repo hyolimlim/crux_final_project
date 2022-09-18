@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import {
+import crewSlice, {
   getCrewDetail,
   joinCrew,
   deleteCrew,
@@ -27,8 +27,6 @@ const CrewDetail = () => {
 
   const crewDetail = useSelector((state) => state.crews.crewDetail);
   const crew = crewDetail.data;
-  // console.log(crew);
-  // console.log(crew.memberList[0]);
 
   //크루 가입신청
   const handleJoin = () => {
@@ -95,7 +93,7 @@ const CrewDetail = () => {
     setPhotosVisible(true);
   };
 
-  //하트클릭이벤트
+  //하트클릭이벤트 | 만약 하트fill 또는 어쩌고가 true면,
   const [heartFillClick, setHeartFillClick] = useState(false);
 
   //클릭하면 하트필 true로 만들어둠
@@ -145,7 +143,13 @@ const CrewDetail = () => {
                   </TextDetail>
                 </TextBox>
                 <ButtonBox>
-                  <button onClick={handleJoin}>참가하기</button>
+                  <button
+                    onClick={() => {
+                      dispatch(joinCrew(crew.id));
+                    }}
+                  >
+                    참가하기
+                  </button>
                   <button>신청현황</button>
                 </ButtonBox>
               </ContentBox>
@@ -173,7 +177,7 @@ const CrewDetail = () => {
                 adminContent={crew.memberList[0].content}
               />
             )}
-            {memberVisible && <CrewMember members={crew.memberList} />}
+            {memberVisible && <CrewMember members={[crew.memberList]} />}
             {noticeVisible && <CrewNotice notice={crew.noticeList} />}
             {photosVisible && <CrewPhotos />}
           </TabContainer>

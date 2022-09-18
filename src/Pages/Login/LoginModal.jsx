@@ -71,10 +71,10 @@ function LoginModal({ onClose }) {
               },
             })}
           />
-          <Checkbox>
+          {/* <Checkbox>
             <input type="checkbox" />
             <label>로그인 상태 유지</label>
-          </Checkbox>
+          </Checkbox> */}
         </Input>
         <Linkbox>
           <a href="/register">회원가입</a>
@@ -111,7 +111,7 @@ const Background = styled.div`
 const Modal = styled.form`
   width: 500px;
   height: 635px;
-  background-color: #ffffff;
+  background-color: #141414;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -125,7 +125,7 @@ const Login = styled.p`
   font-weight: 700;
   font-size: 2.75rem;
   letter-spacing: -0.05em;
-  color: #000000;
+  color: #ffffff;
 `;
 
 const Input = styled.div`
@@ -134,7 +134,6 @@ const Input = styled.div`
     height: 35px;
     outline: none;
     border: none;
-    border-bottom: solid 1px #cccccc;
     font-family: "Spoqa Han Sans Neo";
     font-style: normal;
     font-size: 1.25rem;
@@ -142,6 +141,8 @@ const Input = styled.div`
     letter-spacing: -0.05em;
     margin: 0;
     padding: 0;
+    color: #333333;
+    background-color: #262626;
     &:nth-child(1) {
       margin-top: 45px;
     }
@@ -182,7 +183,7 @@ const Linkbox = styled.div`
     font-size: 1.25rem
     letter-spacing: -0.05em;
     text-decoration-line:none;
-    color: #000000;
+    color: #666666;
     &:first-child {
       position: absolute;
       bottom: 163px;
@@ -205,17 +206,19 @@ const Buttonbox = styled.div`
     font-style: normal;
     font-weight: 400;
     font-size: 1.25rem;
-    color: #ffffff;
+    color: #141414;
     letter-spacing: -0.05em;
     &:first-child {
       position: absolute;
       top: 367px;
       left: 45px;
+      background-color: #ffb800;
     }
     &:last-child {
       position: absolute;
       top: 510px;
       left: 45px;
+      background-color: #fae100;
     }
   }
 `;
@@ -235,7 +238,7 @@ const Xbtn = styled.button`
     content: "";
     height: 25px;
     width: 1px;
-    background-color: #000000;
+    background-color: #ffffff;
   }
   ::before {
     transform: rotate(45deg);

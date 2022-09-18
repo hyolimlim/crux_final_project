@@ -27,7 +27,7 @@ export const createCrew = createAsyncThunk(
         .then((response) => {
           console.log(response);
         });
-      window.location.replace("/crews");
+      // window.location.replace("/crews");
       return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.data);
@@ -60,7 +60,6 @@ export const editCrew = createAsyncThunk(
       window.location.replace("/crews");
       return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
-      window.alert("권한이 없습니다.");
       return thunkAPI.rejectWithValue(error.data);
     }
   }
@@ -120,6 +119,88 @@ export const joinCrew = createAsyncThunk(
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+//여기서부터는 엑스트라리듀서 등록안함
+
+//크루 공지사항 수정
+export const editCrewNotice = createAsyncThunk(
+  "put/editCrew",
+  async (payload, thunkAPI) => {
+    try {
+      const response = await axios
+        .put(
+          `http://3.35.22.118/crews/${payload.id}`,
+          {
+            name: payload.name,
+            content: payload.content,
+            imgUrl: payload.imgUrl,
+          },
+          {
+            headers: {
+              Authorization: window.localStorage.getItem("access_token"),
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response);
+        });
+      window.location.replace("/crews");
+      return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.data);
+    }
+  }
+);
+
+//크루 공지사항 삭제
+export const deleteCrewNotice = createAsyncThunk(
+  "delete/CrewNotice",
+  async (payload, thunkAPI) => {
+    try {
+      const response = await axios
+        .delete(`http://3.35.22.118/crews/${payload}`, {
+          headers: {
+            Authorization: window.localStorage.getItem("access_token"),
+          },
+        })
+        .then((response) => {
+          console.log(response);
+        });
+      window.location.replace("/crews");
+      return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.data);
+    }
+  }
+);
+
+//크루 사진 등록
+export const addCrewPhoto = createAsyncThunk(
+  "add/CrewPhoto",
+  async (payload, thunkAPI) => {
+    try {
+      const response = await axios
+        .post(
+          `http://3.35.22.118/crews/${payload.id}`,
+          {
+            imgList: payload.imgUrl,
+          },
+          {
+            headers: {
+              Authorization: window.localStorage.getItem("access_token"),
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response);
+        });
+      window.location.replace("/crews");
+      return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.data);
     }
   }
 );
