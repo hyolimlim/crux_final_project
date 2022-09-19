@@ -32,7 +32,7 @@ const CreateCrew = () => {
   const onChangeImg = (e) => {
     const reader = new FileReader();
     const file = imgRef.current.files[0];
-    console.log(file);
+    // console.log(file);
     reader.readAsDataURL(file);
     reader.onloadend = () => {
       setImgUrl(reader.result);
@@ -54,16 +54,16 @@ const CreateCrew = () => {
 
   //upload_file.ref로 파일 url가져옴
   const uploadFB = async (e) => {
-    console.log(e.target.files);
+    // console.log(e.target.files);
     const upload_file = await uploadBytes(
       ref(storage, `images/${e.target.files.name}`),
       e.target.files
     );
-    console.log(upload_file);
+    // console.log(upload_file);
 
     //upload_file.ref로 파일 url가져옴
     const file_url = await getDownloadURL(upload_file.ref);
-    console.log(file_url);
+    // console.log(file_url);
     setFileUrl(file_url);
   };
 

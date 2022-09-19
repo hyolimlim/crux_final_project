@@ -6,6 +6,16 @@ import LoginModal from "../Pages/Login/LoginModal";
 import Legister from "../Pages/Register/Register";
 
 const Navbar = () => {
+  const userToken = window.localStorage.getItem("access_token")
+  const userId = window.localStorage.getItem("userId")
+  // console.log(userToken)
+  const removeToken = () => {
+     localStorage.removeItem("access_token")
+     localStorage.removeItem("userId")
+     alert('로그아웃 되었습니다.')
+     window.location.reload()
+  }
+
   const navigate = useNavigate();
 
   const [loginVisible, setLoginVisible] = useState(false);
@@ -62,15 +72,31 @@ const Navbar = () => {
           클라이밍짐 후기
         </h3>
         <div style={{ display: "flex", position: "relative", left: "60rem" }}>
-          <h4 type="button" onClick={handleLoginModal}>
-            LOGIN
-          </h4>
-          <h4
-            style={{ position: "relative", left: "2.5rem" }}
-            onClick={handleRegisterModal}
-          >
-            REGISTER
-          </h4>
+          
+          {
+            userToken !== null ? 
+            <>
+            <h4 type="button" onClick={()=>{navigate(`/members/${userId}`)}}>MYPAGE</h4>
+            <h4 style={{ position: "relative", left: "2.5rem" }} type="button" 
+              onClick={removeToken}>LOGOUT</h4> 
+            </> 
+
+            :
+
+            <>
+              <h4 type="button" onClick={handleLoginModal}>
+              LOGIN
+              </h4>
+              <h4
+              style={{ position: "relative", left: "2.5rem" }}
+              onClick={handleRegisterModal}
+              >
+              REGISTER
+              </h4>
+          </>
+          }
+          
+          
         </div>
       </NavContent>
     </NavContainer>

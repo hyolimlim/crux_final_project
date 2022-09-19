@@ -6,6 +6,18 @@ import LoginModal from "../../Login/LoginModal";
 import Register from "../../Register/Register";
 
 const Navbar = () => {
+
+  const userToken = window.localStorage.getItem("access_token")
+  const userId = window.localStorage.getItem("userId")
+  // console.log(userToken)
+  const removeToken = () => {
+     localStorage.removeItem("access_token")
+     localStorage.removeItem("userId")
+     alert('로그아웃 되었습니다.')
+     navigate('/')
+    //  window.location.reload('/')
+  }
+
   const navigate = useNavigate();
 
   const [loginVisible, setLoginVisible] = useState(false);
@@ -63,21 +75,46 @@ const Navbar = () => {
           클라이밍짐 후기
         </h3>
         <div style={{ display: "flex" }}>
-          <h4
-            type="button"
-            onClick={handleLoginModal}
-            style={{ fontWeight: "500", marginLeft: "47rem" }}
-          >
-            LOGIN
-          </h4>
+          {
+            userToken !== null ?
+            <>
+              <h4 type="button"
+              onClick={()=>{navigate(`/members/${userId}`)}}
+              style={{ fontWeight: "500", marginLeft: "47rem" }}
+              >
+                MYPAGE
+              </h4>
 
-          <h4
-            type="button"
-            onClick={handleRegisterModal}
-            style={{ fontWeight: "500", marginLeft: "2.5rem" }}
-          >
-            REGISTER
-          </h4>
+              <h4
+                type="button"
+                onClick={removeToken}
+                style={{ fontWeight: "500", marginLeft: "2.5rem" }}
+              >
+                LOGOUT
+              </h4>
+            </>
+
+            :
+
+            <>
+              <h4
+                type="button"
+                onClick={handleLoginModal}
+                style={{ fontWeight: "500", marginLeft: "47rem" }}
+              >
+                LOGIN
+              </h4>
+
+              <h4
+                type="button"
+                onClick={handleRegisterModal}
+                style={{ fontWeight: "500", marginLeft: "2.5rem" }}
+              >
+                REGISTER
+              </h4>
+            </>
+          }
+          
         </div>
       </NavContent>
     </NavContainer>

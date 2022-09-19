@@ -5,14 +5,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { __getCrew } from "../../Redux/modules/crewSlice";
 import Loading from "../../Shared/Loading";
 import { useNavigate } from "react-router-dom";
-import 검색아이콘 from "../../Image/검색 아이콘.png"
 import axios from 'axios';
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useInView } from 'react-intersection-observer';
 import React from 'react';
 import {FontHightlight, FontHightlight2} from './components/FontHightlight.js';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+
 
 const Crew = () => {
+    const BASE_URL = "https://01192mg.shop"
     
     // const SERVERT = process.env.REACT_APP_SERVER_T;
     // const BASE_URL = SERVERT;
@@ -60,9 +63,9 @@ const Crew = () => {
         
     // if(choicePopularCrew){
         setLoad(true); //로딩 시작
-        await axios.get(`https://01192mg.shop/crews/popular?page=0&size=30`)
+        await axios.get(`${BASE_URL}/crews/popular?page=0&size=30`)
         .then((res) => {
-            console.log(res.data.data.content) 
+            // console.log(res.data.data.content) 
             setList(prev => [...prev, ...res.data.data.content])
             setNewlist([])
         })
@@ -92,9 +95,9 @@ const Crew = () => {
 
     const newCrew = useCallback(async() => {
             setLoad(true); //로딩 시작
-            await axios.get(`https://01192mg.shop/crews?page=0&size=30`)
+            await axios.get(`${BASE_URL}/crews?page=0&size=30`)
             .then((res) => {
-                console.log(res.data.data.content) 
+                // console.log(res.data.data.content) 
                 setNewlist(prev => [...prev, ...res.data.data.content])
             })
             .catch((err) => {
@@ -113,7 +116,7 @@ const Crew = () => {
 
     const searchCrew = useCallback(async() => {
         setLoad(true); //로딩 시작
-        await axios.get(`https://01192mg.shop/crews/search?query=${search}`)
+        await axios.get(`${BASE_URL}/crews/search?query=${search}`)
         .then((res) => {
             if(list.length !== 0) {
                 setList(res.data.data)
@@ -139,8 +142,8 @@ const Crew = () => {
             {/* 검색 박스 */}
                 <div style={{width:'120rem', margin:'0 auto', height:'8rem'}}>
                     <S_search placeholder='검색어를 입력해 주세요' onChange={(e)=> setSearch(e.target.value)} value={search}/>
-                    <img src={검색아이콘} type="button" style={{width:'3rem', height:'3rem', margin:'0 0 0 -5rem'}} 
-                        onClick={onclickSearchCrew}/>
+                    <FontAwesomeIcon icon={faMagnifyingGlass} size="3x" color='black' onClick={onclickSearchCrew} style={{position:'absolute', margin:'3rem 1rem 0 -4.5rem'}} type="button"/>
+                        
                 </div>
                 <div style={{width:'120rem', margin:'7.5rem auto 0 auto'}}>
                     

@@ -19,7 +19,7 @@ export const signup = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await axios.post(
-        `http://3.35.22.118/members/signup`,
+        `${BASE_URL}/members/signup`,
         payload
       );
       window.alert("회원가입 성공");
@@ -63,7 +63,8 @@ export const login = createAsyncThunk(
             "access_token",
             response.headers.access_token
           );
-          console.log(response);
+          window.localStorage.setItem("userId", response.data.data.id)
+          window.location.reload();
         });
       return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {

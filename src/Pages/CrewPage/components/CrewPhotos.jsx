@@ -58,9 +58,13 @@ const Container = styled.div`
   column-gap: 27px;
   > div {
     :first-child {
+<<<<<<< HEAD
+      background-color: #262626;
+=======
       align-items: center;
       justify-content: center;
       position: relateive;
+>>>>>>> c8d2c01baf8aeeb9e10caba431602bc48668074a
     }
   }
   input {

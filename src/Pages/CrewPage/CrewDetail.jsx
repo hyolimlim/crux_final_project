@@ -31,8 +31,8 @@ const CrewDetail = () => {
 
   //크루 가입신청---> 이 부분
   const handleJoin = () => {
-    console.log(crew?.id);
-    dispatch(joinCrew(crew?.id));
+    // console.log(crew.id);
+    dispatch(joinCrew(crew.id))
   };
 
   //크루 삭제

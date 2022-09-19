@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { crewSlice } from "../modules/crewSlice";
 import { gymSlice } from "../modules/gymSlice";
 import { gymDetailSlice } from "../modules/gymDetilSlice";
+import { MyPageSlice } from "../modules/mypageSlice";
 import {
   loginSlice,
   kakaoLoginSlice,
@@ -18,6 +19,7 @@ const store = configureStore({
     kakaoLogin: kakaoLoginSlice.reducer,
     gyms: gymSlice.reducer,
     gymDetail: gymDetailSlice.reducer,
+    myPage: MyPageSlice.reducer, 
   },
 });
 

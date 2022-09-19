@@ -15,8 +15,8 @@ const CrewEdit = () => {
 
   //location sate로 받아온 값에서 value추출
   const { id, name, content, imgURL } = state;
-  console.log(state);
-  console.log(imgURL);
+  // console.log(state);
+  // console.log(imgURL);
 
   //받아온 값으로 기본값 설정
   const {
@@ -41,7 +41,7 @@ const CrewEdit = () => {
   const onChangeImg = (e) => {
     const reader = new FileReader();
     const file = imgRef.current.files[0];
-    console.log(file);
+    // console.log(file);
     reader.readAsDataURL(file);
     reader.onloadend = () => {
       setImgUrl(reader.result);
@@ -62,15 +62,15 @@ const CrewEdit = () => {
   const storageRef = ref(storage);
 
   const uploadFB = async (e) => {
-    console.log(e.target.files);
+    // console.log(e.target.files);
     const upload_file = await uploadBytes(
       ref(storage, `images/${e.target.files[0].name}`),
       e.target.files[0]
     );
-    console.log(upload_file);
+    // console.log(upload_file);
 
     const file_url = await getDownloadURL(upload_file.ref);
-    console.log(file_url);
+    // console.log(file_url);
     setImgUrl(file_url);
   };
 
