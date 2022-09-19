@@ -305,13 +305,13 @@ export const addCrewPhoto = createAsyncThunk(
   }
 );
 
-//크루 사진 조회 --> 헤더 안넣으면 401에러/1.무한스크롤X
+//크루 사진 조회
 export const getCrewPhoto = createAsyncThunk(
   "get/CrewPhoto",
   async (payload, thunkAPI) => {
     try {
       const response = await axios.get(
-        `https://01192mg.shop/crews-posts/${payload}?lastPostId=12&size=10`,
+        `https://01192mg.shop/crew-posts/${payload}?page=0&size=10`,
         {
           headers: {
             Authorization: window.localStorage.getItem("access_token"),
