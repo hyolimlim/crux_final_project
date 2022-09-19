@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const SERVERH = process.env.REACT_APP_SERVER_H;
-const SERVERM = process.env.REACT_APP_SERVER_M;
+// const SERVERH = process.env.REACT_APP_SERVER_H;
+// const SERVERM = process.env.REACT_APP_SERVER_M;
 
-const BASE_URL = SERVERM;
+// const BASE_URL = SERVERM;
 
 const initialState = {
   user: [],
@@ -18,10 +18,14 @@ export const signup = createAsyncThunk(
   "/members/signup",
   async (payload, thunkAPI) => {
     try {
-      const response = await axios.post(
-        `${BASE_URL}/members/signup`,
-        payload
-      );
+      const response = await axios.post(`https://01192mg.shop/members/signup`, {
+        email: payload.email,
+        nickname: payload.nickname,
+        passward: payload.password,
+        content: payload.content,
+        imgUrl:
+          "https://firebasestorage.googleapis.com/v0/b/fir-ec6e2.appspot.com/o/images%2Fundefined?alt=media&token=ba20ef8c-11d5-44af-8838-8b6a1201f3ce",
+      });
       window.alert("회원가입 성공");
       window.location.replace("/");
       return response.data;
@@ -56,14 +60,14 @@ export const login = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await axios
-        .post(`${BASE_URL}/members/login`, payload)
+        .post(`https://01192mg.shop/members/login`, payload)
         .then((response) => {
           console.log(response);
           window.localStorage.setItem(
             "access_token",
             response.headers.access_token
           );
-          window.localStorage.setItem("userId", response.data.data.id)
+          window.localStorage.setItem("userId", response.data.data.id);
           window.location.reload();
         });
       return thunkAPI.fulfillWithValue(response.data);
@@ -99,7 +103,7 @@ export const kakaoLogin = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await axios
-        .get(`${BASE_URL}/oauth/kakao/callback?code=${payload}`)
+        .get(`https://01192mg.shop/oauth/kakao/callback?code=${payload}`)
         .then((response) => {
           console.log(response);
           window.localStorage.setItem(
@@ -134,25 +138,48 @@ export const kakaoLoginSlice = createSlice({
   },
 });
 
-//유저 크루 좋아요
+//크루 좋아요
 export const likeCrew = createAsyncThunk(
   "post/like-crew",
   async (payload, thunkAPI) => {
-    console.log(payload);
     try {
-      const data = await axios
-        .post(`${BASE_URL}/like-crews/${payload}`, {
+      const response = await axios
+        .delete(`https://01192mg.shop/like-crews/${payload}`, null, {
           headers: {
-            "Content-Type": "application/json",
             Authorization: window.localStorage.getItem("access_token"),
           },
         })
         .then((response) => {
           console.log(response);
         });
-      return thunkAPI.fulfillWithValue(data.data);
+      window.alert("좋아요 완료");
+      console.log(response.data);
+      return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
-      return thunkAPI.rejectWithValue(error);
+      return thunkAPI.rejectWithValue(error.data);
+    }
+  }
+);
+
+//크루 좋아요취소
+export const unLikeCrew = createAsyncThunk(
+  "post/like-crew",
+  async (payload, thunkAPI) => {
+    try {
+      const response = await axios
+        .post(`https://01192mg.shop/like-crews/${payload}`, null, {
+          headers: {
+            Authorization: window.localStorage.getItem("access_token"),
+          },
+        })
+        .then((response) => {
+          console.log(response);
+        });
+      window.alert("좋아요 취소 완료");
+      console.log(response.data);
+      return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.data);
     }
   }
 );

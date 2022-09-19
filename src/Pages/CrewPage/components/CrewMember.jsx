@@ -1,27 +1,48 @@
 import React from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
+import { expelCrew } from "../../../Redux/modules/crewSlice";
+import { useEffect } from "react";
 
 function CrewMember() {
-  const crewDetail = useSelector((state) => state.crews.crewDetail);
+  const crewDetail = useSelector((state) => state?.crews?.crewDetail);
   const members = crewDetail.data.memberList;
-  console.log(members);
+  const params = useParams().crewId;
+  const dispatch = useDispatch();
+
+  const handleExpel = (data) => {
+    const payload = {
+      memberId: data,
+      crewId: params,
+    };
+    console.log(payload);
+    dispatch(expelCrew(payload));
+  };
 
   return (
     <Container>
-      {members.map((member) => (
-        <IntroContent key={member.id}>
-          <HostDetailBox>
-            <img src={member.imgUrl}></img>
-            <HostDetail>
-              <p>{member.nickname}</p>
-              <div>
-                <p>{member.content}</p>
-              </div>
-            </HostDetail>
-          </HostDetailBox>
-        </IntroContent>
-      ))}
+      {members &&
+        members.map((member) => (
+          <IntroContent key={member.id}>
+            <HostDetailBox>
+              <img src={member.imgUrl}></img>
+              <HostDetail>
+                <p>{member.nickname}</p>
+                <div>
+                  <p>{member.content}</p>
+                </div>
+              </HostDetail>
+              <button
+                onClick={() => {
+                  handleExpel(member.id);
+                }}
+              >
+                추방
+              </button>
+            </HostDetailBox>
+          </IntroContent>
+        ))}
     </Container>
   );
 }
@@ -115,5 +136,12 @@ const HostDetailBox = styled.div`
     height: 140px;
     border-radius: 70%;
     overflow: hidden;
+  }
+  button {
+    width: 50px;
+    height: 30px;
+    border: none;
+    color: #cccccc;
+    background-color: transparent;
   }
 `;

@@ -34,8 +34,8 @@ function LoginModal({ onClose }) {
   useOutSideClick(modalRef, onClose);
 
   //카카오 로그인
-  const API = process.env.REACT_APP_KAKAO_API;
-  const URI = process.env.REACT_APP_KAKAO_REDIRECT_URI;
+  const API = `fc4d0e8fcfa775f07e83e04e62ddefd7`;
+  const URI = `https://youmadeit.shop/kakaologin`;
   const KAKAO_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${API}&redirect_uri=${URI}&response_type=code`;
 
   const handleKaKaoLogin = () => {
