@@ -23,7 +23,7 @@ const { isLoading, error, gymDetail } = useSelector((state) => state.gymDetail)
 // console.log(isLoading, error, gymDetail)
 
 const gym = gymDetail.data
-// console.log(gym)
+console.log(gym)
 
 // const gymDetil = useSelector((state)=> state)
 // console.log(gymDetil)

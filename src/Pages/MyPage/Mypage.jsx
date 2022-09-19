@@ -60,7 +60,7 @@ const [editMypage, setEditMypage] = useState(false)
 
                         {
                             myPage?.crewList.map((crew) => {
-                                return(<div type="button" onClick={()=>{navigate(`/crews/${crew.id}`)}}>&bull; &nbsp; {crew.name}</div>)
+                                return(<div key={crew.id} type="button" onClick={()=>{navigate(`/crews/${crew.id}`)}}>&bull; &nbsp; {crew.name}</div>)
                             })
                         }
                 
@@ -72,7 +72,7 @@ const [editMypage, setEditMypage] = useState(false)
                         
                         {
                             myPage?.gymList.map((gym) => {
-                                return(<div type="button" onClick={()=>{navigate(`/gyms/${gym.gymId}`)}}>&bull; &nbsp; {gym.name}</div>)
+                                return(<div key={gym.id} type="button" onClick={()=>{navigate(`/gyms/${gym.gymId}`)}}>&bull; &nbsp; {gym.name}</div>)
                             })
                         }
 

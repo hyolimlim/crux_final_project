@@ -24,7 +24,7 @@ const onclickLikeGym = () => {
 
 const likeGym = useCallback(async() => {
     // console.log(gym.id)
-    await axios.post(`${BASE_URL}/likegyms/${gym.id}`, null,{
+    await axios.post(`${BASE_URL}/likegyms/${gym.id}`, null ,{
         headers: {Authorization: window.localStorage.getItem("access_token")}})
     .then((res) => {
         // console.log(res.data)

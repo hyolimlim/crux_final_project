@@ -47,7 +47,7 @@ const Gym = () => {
           const lng = position.coords.longitude
           await axios.get(`${BASE_URL}/gyms?page=0&size=10&lon=${lng}&lat=${lat}`)
         .then((res) => {
-            // console.log(res.data.data)
+            console.log(res.data.data)
             setGyms(res.data.data)
         })
         .catch((err) => {
