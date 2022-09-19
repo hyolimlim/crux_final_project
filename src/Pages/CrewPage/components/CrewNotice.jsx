@@ -1,19 +1,69 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
+import { useForm } from "react-hook-form";
+import { useSelector, useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
+import {
+  createCrewNotice,
+  deleteCrewNotice,
+} from "../../../Redux/modules/crewSlice";
 
-function CrewNotice() {
+function CrewNotice({ notice }) {
+  const params = useParams().crewId;
+
+  const notices = notice;
+
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm();
+
+  const dispatch = useDispatch();
+
+  //공지사항 등록
+  const onSubmit = (data) => {
+    const payload = {
+      id: params,
+      content: data.content,
+    };
+    console.log(payload);
+    dispatch(createCrewNotice(payload), [dispatch]);
+  };
+
   return (
     <Container>
       <Intro>
         <IntroContent>
-          <TextButton>
-            <span type="button">수정</span>
-            <span type="button">삭제</span>
-          </TextButton>
-          <h2>공지사항</h2>
-          <p>공지사항입니다.</p>
+          <h2>공지사항 입력</h2>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <input {...register("content", { required: true })} />
+            <button type="submit" disabled={isSubmitting}>
+              입력
+            </button>
+          </form>
         </IntroContent>
       </Intro>
+      {notices &&
+        notices.map((notice) => (
+          <Intro key={notice.id}>
+            <IntroContent>
+              <TextButton>
+                <span type="button">수정</span>
+                <span
+                  type="button"
+                  onClick={() => {
+                    dispatch(deleteCrewNotice(notice.id));
+                  }}
+                >
+                  삭제
+                </span>
+              </TextButton>
+              <h2>공지사항</h2>
+              <p>{notice.content}</p>
+            </IntroContent>
+          </Intro>
+        ))}
     </Container>
   );
 }
@@ -25,6 +75,18 @@ const Intro = styled.div`
   height: 155px;
   background-color: #cccccc;
   padding: 40px 30px 40px 30px;
+  margin-bottom: 20px;
+  input {
+    width: 1000px;
+    height: 30px;
+    margin-top: 20px;
+    border: none;
+  }
+  button {
+    width: 140px;
+    height: 30px;
+    border: none;
+  }
 `;
 
 const IntroContent = styled.div`

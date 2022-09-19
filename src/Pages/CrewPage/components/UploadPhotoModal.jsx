@@ -30,6 +30,16 @@ function UploadPhotoModal({ onClose }) {
     dispatch(addCrewPhoto(payload));
   };
 
+  // 이거로도 바꿔서 해보기~
+  //   const handlePermit = (data) => {
+  //     const payload = {
+  //       memberId: data,
+  //       crewId: params,
+  //     };
+  //     console.log(payload);
+  //     dispatch(permitCrew(payload));
+  //   };
+
   // 파일 선택시 파일리스트 상태 변경해주는 함수
   const handleImageChange = (e) => {
     for (const image of e.target.files) {
@@ -116,6 +126,7 @@ const Modal = styled.div`
   align-items: center;
   padding: 65px 45px 65px 45px;
   position: relative;
+  margin-top: 200px;
 `;
 
 const Login = styled.p`

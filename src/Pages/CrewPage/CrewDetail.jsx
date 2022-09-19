@@ -14,6 +14,7 @@ import CrewIntro from "./components/CrewIntro";
 import CrewMember from "./components/CrewMember";
 import CrewNotice from "./components/CrewNotice";
 import CrewPhotos from "./components/CrewPhotos";
+import ApplicationListModal from "./components/ApplicationListModal";
 import { ReactComponent as Heart } from "../../Image/heart.svg";
 
 const CrewDetail = () => {
@@ -28,7 +29,7 @@ const CrewDetail = () => {
   const crewDetail = useSelector((state) => state?.crews?.crewDetail);
   const crew = crewDetail?.data;
 
-  //크루 가입신청
+  //크루 가입신청---> 이 부분
   const handleJoin = () => {
     console.log(crew?.id);
     dispatch(joinCrew(crew?.id));
@@ -43,7 +44,7 @@ const CrewDetail = () => {
     }
   };
 
-  //크루 수정-->누구나 다 수정할 수 있는거?
+  //크루 수정-->누구나 다 수정할 수 있는거?ㄴㄴ
   const onCrewEdit = () => {
     if (window.confirm("수정하시겠습니까?")) {
       navigate(`/crewedit/${params}`, {
@@ -93,6 +94,13 @@ const CrewDetail = () => {
     setPhotosVisible(true);
   };
 
+  //크루 신청 리스트 모달 띄우기
+  const [applicationModalVisible, setapplicationModalVisible] = useState(false);
+
+  const handleMadalClick = () => {
+    setapplicationModalVisible(!applicationModalVisible);
+  };
+
   //하트클릭이벤트 | 만약 하트fill 또는 어쩌고가 true면,
   const [heartFillClick, setHeartFillClick] = useState(false);
 
@@ -105,6 +113,9 @@ const CrewDetail = () => {
     <div>
       <Navbar />
       <Warp>
+        {applicationModalVisible && (
+          <ApplicationListModal onClose={handleMadalClick} />
+        )}
         <ThumbnailContainer>
           <ThumbnailContentBox>
             <ImgBox>
@@ -148,7 +159,7 @@ const CrewDetail = () => {
                 >
                   참가하기
                 </button>
-                <button>신청현황</button>
+                <button onClick={handleMadalClick}>신청현황</button>
               </ButtonBox>
             </ContentBox>
           </ThumbnailContentBox>
@@ -204,7 +215,8 @@ const ThumbnailContainer = styled.div`
 
 const TabContainer = styled.div`
   width: 1920px;
-  height: 864px;
+  min-height: 864px;
+  height: auto;
   background-color: #141414;
   display: flex;
   justify-content: center;
