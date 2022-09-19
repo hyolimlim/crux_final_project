@@ -28,11 +28,16 @@ const CrewDetail = () => {
 
   const crewDetail = useSelector((state) => state?.crews?.crewDetail);
   const crew = crewDetail?.data;
+  console.log(crew);
+
+  //호스트 확인
+  const hostId = crew?.memberList[0]?.id;
+  const userId = window.localStorage.getItem("userId");
 
   //크루 가입신청---> 이 부분
   const handleJoin = () => {
     // console.log(crew.id);
-    dispatch(joinCrew(crew.id))
+    dispatch(joinCrew(crew.id));
   };
 
   //크루 삭제
@@ -44,7 +49,7 @@ const CrewDetail = () => {
     }
   };
 
-  //크루 수정-->누구나 다 수정할 수 있는거?ㄴㄴ
+  //크루 수정
   const onCrewEdit = () => {
     if (window.confirm("수정하시겠습니까?")) {
       navigate(`/crewedit/${params}`, {
@@ -109,6 +114,7 @@ const CrewDetail = () => {
     setHeartFillClick(!heartFillClick);
     dispatch(likeCrew(crew?.id));
   };
+
   return (
     <div>
       <Navbar />
@@ -132,14 +138,16 @@ const CrewDetail = () => {
             </ImgBox>
             <ContentBox>
               <TextBox>
-                <TextButton>
-                  <span type="button" onClick={onCrewEdit}>
-                    수정
-                  </span>
-                  <span type="button" onClick={onCrewDelte}>
-                    삭제
-                  </span>
-                </TextButton>
+                {hostId === Number(userId) ? (
+                  <TextButton>
+                    <span type="button" onClick={onCrewEdit}>
+                      수정
+                    </span>
+                    <span type="button" onClick={onCrewDelte}>
+                      삭제
+                    </span>
+                  </TextButton>
+                ) : null}
                 <h1>{crewDetail?.data?.name}</h1>
                 <TextDetail>
                   <Text>
