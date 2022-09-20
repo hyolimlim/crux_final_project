@@ -56,8 +56,8 @@ const CreateCrew = () => {
   const uploadFB = async (e) => {
     // console.log(e.target.files);
     const upload_file = await uploadBytes(
-      ref(storage, `images/${e.target.files.name}`),
-      e.target.files
+      ref(storage, `images/${e.target.files[0].name}`),
+      e.target.files[0]
     );
     // console.log(upload_file);
 
@@ -87,7 +87,7 @@ const CreateCrew = () => {
             <ImgBox>
               <input
                 type="file"
-                accept=".jpg, .png"
+                accept="image/*"
                 ref={imgRef}
                 onChange={(e) => {
                   onChangeImg(e);

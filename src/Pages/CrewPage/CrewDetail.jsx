@@ -8,7 +8,7 @@ import crewSlice, {
   joinCrew,
   deleteCrew,
 } from "../../Redux/modules/crewSlice";
-import { likeCrew } from "../../Redux/modules/userSlice";
+import { likeCrew, withdrawCrew } from "../../Redux/modules/userSlice";
 import Navbar from "../../Shared/Navbar";
 import CrewIntro from "./components/CrewIntro";
 import CrewMember from "./components/CrewMember";
@@ -27,6 +27,7 @@ const CrewDetail = () => {
   }, [dispatch]);
 
   const crewDetail = useSelector((state) => state?.crews?.crewDetail);
+  console.log(crewDetail);
   const crew = crewDetail?.data;
   console.log(crew);
 
@@ -34,16 +35,28 @@ const CrewDetail = () => {
   const hostId = crew?.memberList[0]?.id;
   const userId = window.localStorage.getItem("userId");
 
-  //크루 가입신청---> 이 부분
-  const handleJoin = () => {
-    // console.log(crew.id);
-    dispatch(joinCrew(crew.id));
-  };
+  //크루 가입자 확인
+  const memberList = crew?.memberList;
+  const checkmember = memberList?.findIndex((x) => x?.id === Number(userId));
+  console.log(checkmember);
 
   //크루 삭제
   const onCrewDelte = () => {
     if (window.confirm("삭제하시겠습니까?")) {
       dispatch(deleteCrew(crew?.id));
+    } else {
+      return;
+    }
+  };
+
+  //크루 탈퇴
+  const handleWithDrawCrew = () => {
+    if (window.confirm("삭제하시겠습니까?")) {
+      const payload = {
+        id: params,
+        memberId: userId,
+      };
+      dispatch(withdrawCrew(payload));
     } else {
       return;
     }
@@ -159,16 +172,39 @@ const CrewDetail = () => {
                   </Text>
                 </TextDetail>
               </TextBox>
-              <ButtonBox>
-                <button
-                  onClick={() => {
-                    dispatch(joinCrew(crew?.id));
-                  }}
-                >
-                  참가하기
-                </button>
-                <button onClick={handleMadalClick}>신청현황</button>
-              </ButtonBox>
+              {checkmember < 0 ? (
+                <ButtonBox>
+                  <button
+                    onClick={() => {
+                      dispatch(joinCrew(crew?.id));
+                    }}
+                  >
+                    크루 가입
+                  </button>
+                </ButtonBox>
+              ) : checkmember === 0 ? (
+                <ButtonBox>
+                  <button
+                    onClick={() => {
+                      dispatch(joinCrew(crew?.id));
+                    }}
+                  >
+                    모임 공지
+                  </button>
+                  <button onClick={handleMadalClick}>신청 현황</button>
+                </ButtonBox>
+              ) : (
+                <ButtonBox>
+                  <button
+                    onClick={() => {
+                      dispatch(joinCrew(crew?.id));
+                    }}
+                  >
+                    모임 공지
+                  </button>
+                  <button onClick={handleWithDrawCrew}>크루 탈퇴</button>
+                </ButtonBox>
+              )}
             </ContentBox>
           </ThumbnailContentBox>
           <TabButton>

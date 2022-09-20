@@ -55,7 +55,11 @@ return(
 
     {/* review 영역 입니다 */}
         {
-            showReview === true ? <Review gym={gym}/> : null
+            showReview === false ? null : 
+            <>
+                <img style={{width:'2rem', height:'2rem', position:'absolute', margin:'-5rem 0 0 94rem'}} src="https://www.pngmart.com/files/15/Arrow-Down-PNG-Picture.png"/>
+                <Review gym={gym}/>
+            </>
         }
             
 

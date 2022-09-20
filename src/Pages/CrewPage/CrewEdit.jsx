@@ -103,7 +103,7 @@ const CrewEdit = () => {
             <ImgBox>
               <input
                 type="file"
-                accept=".jpg, .png"
+                accept="image/*"
                 ref={imgRef}
                 onChange={(e) => {
                   onChangeImg(e);

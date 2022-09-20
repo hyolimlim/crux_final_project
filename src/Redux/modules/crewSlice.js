@@ -8,6 +8,7 @@ import axios from "axios";
 const initialState = {
   crewDetail: [],
   crewApplication: [],
+  crewPhotos: [],
   isLoading: false,
   isSuccess: false,
   error: null,
@@ -21,11 +22,15 @@ export const createCrew = createAsyncThunk(
   "post/createCrew",
   async (payload, thunkAPI) => {
     try {
-      const response = await axios.post(`https://01192mg.shop/crews`, payload, {
-        headers: {
-          Authorization: window.localStorage.getItem("access_token"),
-        },
-      });
+      const response = await axios.post(
+        `http://sparta-tim.shop/crews`,
+        payload,
+        {
+          headers: {
+            Authorization: window.localStorage.getItem("access_token"),
+          },
+        }
+      );
       window.location.replace("/crews");
       return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
@@ -41,7 +46,7 @@ export const editCrew = createAsyncThunk(
     try {
       const response = await axios
         .put(
-          `https://01192mg.shop/crews/${payload.id}`,
+          `http://sparta-tim.shop/crews/${payload.id}`,
           {
             name: payload.name,
             content: payload.content,
@@ -70,7 +75,7 @@ export const deleteCrew = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await axios
-        .delete(`https://01192mg.shop/crews/${payload}`, {
+        .delete(`http://sparta-tim.shop/crews/${payload}`, {
           headers: {
             Authorization: window.localStorage.getItem("access_token"),
           },
@@ -91,7 +96,9 @@ export const getCrewDetail = createAsyncThunk(
   "getCrewDetail",
   async (payload, thunkAPI) => {
     try {
-      const response = await axios.get(`https://01192mg.shop/crews/${payload}`);
+      const response = await axios.get(
+        `http://sparta-tim.shop/crews/${payload}`
+      );
       console.log(response.data);
       return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
@@ -108,8 +115,8 @@ export const joinCrew = createAsyncThunk(
   "post/joinCrew",
   async (payload, thunkAPI) => {
     try {
-      const response = await axios      
-        .post(`http://54.180.31.108/crew-members/${payload}`, null, { //<--https://01192mg.shop 변경
+      const response = await axios
+        .post(`http://sparta-tim.shop/crew-members/${payload}`, null, {
           headers: {
             Authorization: window.localStorage.getItem("access_token"),
           },
@@ -130,7 +137,7 @@ export const getApplicationList = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const data = await axios.get(
-        `https://01192mg.shop/crew-members/${payload}`,
+        `http://sparta-tim.shop/crew-members/${payload}`,
         {
           headers: {
             Authorization: window.localStorage.getItem("access_token"),
@@ -152,7 +159,7 @@ export const permitCrew = createAsyncThunk(
     try {
       const response = await axios
         .post(
-          `https://01192mg.shop/crew-members/${payload.crewId}/${payload.memberId}?permit=true`,
+          `http://sparta-tim.shop/crew-members/${payload.crewId}/${payload.memberId}?permit=true`,
           null,
           {
             headers: {
@@ -177,7 +184,7 @@ export const expelCrew = createAsyncThunk(
     try {
       const response = await axios
         .delete(
-          `https://01192mg.shop/crew-members/${payload.crewId}/${payload.memberId}`,
+          `http://sparta-tim.shop/crew-members/${payload.crewId}/${payload.memberId}`,
           {
             headers: {
               Authorization: window.localStorage.getItem("access_token"),
@@ -395,6 +402,17 @@ export const crewSlice = createSlice({
       state.crewApplication = action.payload;
     },
     [getApplicationList.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    [getCrewPhoto.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [getCrewPhoto.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.crewPhotos = action.payload;
+    },
+    [getCrewPhoto.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },

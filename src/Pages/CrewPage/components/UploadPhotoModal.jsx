@@ -77,7 +77,7 @@ function UploadPhotoModal({ onClose }) {
     <Background>
       <Modal>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Login>사진 등록</Login>
+          <Title>사진 등록 (n/5)</Title>
           <Xbtn onClick={onClose}></Xbtn>
           <ImgBox type="button" onClick={onClickImg}>
             <input
@@ -90,7 +90,8 @@ function UploadPhotoModal({ onClose }) {
                 handleImageUpload(e, files);
               }}
             />
-            <PhotoButton></PhotoButton>
+            <PhotoButton />
+            <ImgPreviewBox></ImgPreviewBox>
           </ImgBox>
           <Buttonbox>
             <button type="submit" disabled={isSubmitting}>
@@ -105,10 +106,17 @@ function UploadPhotoModal({ onClose }) {
 
 export default UploadPhotoModal;
 
+const ImgPreviewBox = styled.div`
+  width: 410px;
+  height: 60px;
+  margin-top: 5px;
+  background-color: red;
+`;
+
 const Background = styled.div`
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.5);
   position: fixed;
   left: 0;
   top: 0;
@@ -124,12 +132,13 @@ const Modal = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
   padding: 65px 45px 65px 45px;
   position: relative;
   margin-top: 200px;
 `;
 
-const Login = styled.p`
+const Title = styled.p`
   font-family: "Spoqa Han Sans Neo";
   font-style: normal;
   font-weight: 700;
@@ -138,18 +147,6 @@ const Login = styled.p`
   color: #ffffff;
 `;
 
-const ImgText = styled.div`
-  width: 300px;
-  height: 300px;
-  position: relative;
-  p {
-    margin-top: 18px;
-    margin-left: 94px;
-    font-weight: 700;
-    font-size: 20px;
-    color: #666666;
-  }
-`;
 const PhotoButton = styled.div`
   background-color: gray;
   width: 410px;
@@ -158,11 +155,17 @@ const PhotoButton = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
 const ImgBox = styled.div`
   display: flex;
   positon: relative;
   background=color: red;
-  padding-top: 60px;
+  padding-top: 30px;
+  display: flex;
+  flex-direction: column;
+  input {
+    display: none;
+  }
 `;
 
 const Buttonbox = styled.div`
@@ -179,13 +182,7 @@ const Buttonbox = styled.div`
     letter-spacing: -0.05em;
     &:first-child {
       position: absolute;
-      top: 367px;
-      left: 45px;
-      background-color: #ffb800;
-    }
-    &:last-child {
-      position: absolute;
-      top: 510px;
+      top: 530px;
       left: 45px;
       background-color: #fae100;
     }
