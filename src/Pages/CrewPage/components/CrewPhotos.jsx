@@ -6,6 +6,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import React from "react";
 import styled from "styled-components";
 import UploadPhotoModal from "./UploadPhotoModal";
+import PhotoDetailModal from "./PhotoDetailModal";
 import { getCrewPhoto } from "../../../Redux/modules/crewSlice";
 
 function CrewPhotos() {
@@ -16,29 +17,48 @@ function CrewPhotos() {
     dispatch(getCrewPhoto(params));
   }, []);
 
-  const crewPhotos = useSelector((state) => state?.crews?.CrewPhotos);
-  const Photos = crewPhotos?.data;
+  const crewPhotos = useSelector((state) => state?.crews?.crewPhotos?.data);
+  console.log(crewPhotos);
+  // const Photos = crewPhotos?.data;
 
   //   const userData = useSelector((state) => state);
   //   console.log(userData);
 
-  //모달 띄우기
+  //업로드 모달 띄우기
   const [uploadModalVisible, setUploadModaVisible] = useState(false);
 
   const handleMadalClick = () => {
     setUploadModaVisible(!uploadModalVisible);
   };
+
+  //이미지 리스트 모달 띄우기-->모달에 postId전달.
+  const [photoDetailModalVisible, setImgListModaVisible] = useState(false);
+  const [photoId, setPhotoId] = useState([]);
+
+  const handleImgMadalClick = (data) => {
+    setImgListModaVisible(!photoDetailModalVisible);
+    setPhotoId(data);
+  };
+
   return (
     <Container>
       {uploadModalVisible && <UploadPhotoModal onClose={handleMadalClick} />}
-      <div>
-        <ImgText type="button">
-          <PhotoButton onClick={handleMadalClick}>
-            <Xbtn />
-            {/* <p>사진올리기</p> */}
-          </PhotoButton>
-        </ImgText>
-      </div>
+      {photoDetailModalVisible && (
+        <PhotoDetailModal onClose={handleImgMadalClick} photoId={photoId} />
+      )}
+      <ImgBox onClick={handleMadalClick}>사진 등록하기</ImgBox>
+      {crewPhotos &&
+        crewPhotos.map((photo) => (
+          <ImgBox
+            type="button"
+            key={photo.postId}
+            onClick={() => {
+              handleImgMadalClick(photo.imgList);
+            }}
+          >
+            <img src={photo.imgList[0]?.imgUrl}></img>
+          </ImgBox>
+        ))}
     </Container>
   );
 }
@@ -56,19 +76,15 @@ const Container = styled.div`
   grid-template-rows: 280px 280px 280px 280px;
   row-gap: 25px;
   column-gap: 27px;
-  > div {
-    :first-child {
-<<<<<<< HEAD
-      background-color: #262626;
-=======
-      align-items: center;
-      justify-content: center;
-      position: relateive;
->>>>>>> c8d2c01baf8aeeb9e10caba431602bc48668074a
-    }
-  }
-  input {
-    display: none;
+`;
+
+const ImgBox = styled.div`
+  width: 280px;
+  height: 280px;
+  background-color: black;
+  img {
+    width: 100%;
+    height: 100%;
   }
 `;
 
@@ -86,8 +102,8 @@ const ImgText = styled.div`
 `;
 const PhotoButton = styled.div`
   background-color: gray;
-  width: 200px;
-  height: 200px;
+  width: 280px;
+  height: 280px;
   display: flex;
   justify-content: center;
   align-items: center;

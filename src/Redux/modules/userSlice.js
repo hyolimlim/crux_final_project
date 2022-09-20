@@ -18,14 +18,17 @@ export const signup = createAsyncThunk(
   "/members/signup",
   async (payload, thunkAPI) => {
     try {
-      const response = await axios.post(`https://01192mg.shop/members/signup`, {
-        email: payload.email,
-        nickname: payload.nickname,
-        passward: payload.password,
-        content: payload.content,
-        imgUrl:
-          "https://firebasestorage.googleapis.com/v0/b/fir-ec6e2.appspot.com/o/images%2Fundefined?alt=media&token=ba20ef8c-11d5-44af-8838-8b6a1201f3ce",
-      });
+      const response = await axios.post(
+        `http://sparta-tim.shop/members/signup`,
+        {
+          email: payload.email,
+          nickname: payload.nickname,
+          passward: payload.password,
+          content: payload.content,
+          imgUrl:
+            "https://firebasestorage.googleapis.com/v0/b/fir-ec6e2.appspot.com/o/images%2Fundefined?alt=media&token=ba20ef8c-11d5-44af-8838-8b6a1201f3ce",
+        }
+      );
       window.alert("회원가입 성공");
       window.location.replace("/");
       return response.data;
@@ -60,7 +63,7 @@ export const login = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await axios
-        .post(`https://01192mg.shop/members/login`, payload)
+        .post(`http://sparta-tim.shop/members/login`, payload)
         .then((response) => {
           console.log(response);
           window.localStorage.setItem(
@@ -144,7 +147,7 @@ export const likeCrew = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await axios
-        .delete(`https://01192mg.shop/like-crews/${payload}`, null, {
+        .delete(`http://sparta-tim.shop/like-crews/${payload}`, null, {
           headers: {
             Authorization: window.localStorage.getItem("access_token"),
           },
@@ -167,7 +170,7 @@ export const unLikeCrew = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await axios
-        .post(`https://01192mg.shop/like-crews/${payload}`, null, {
+        .post(`http://sparta-tim.shop/like-crews/${payload}`, null, {
           headers: {
             Authorization: window.localStorage.getItem("access_token"),
           },
@@ -203,5 +206,27 @@ export const userSlice = createSlice({
     },
   },
 });
+
+//크루 탈퇴
+export const withdrawCrew = createAsyncThunk(
+  "delete/withdrawCrew",
+  async (payload, thunkAPI) => {
+    try {
+      const response = await axios
+        .delete(`http://sparta-tim.shop/crews/${payload.id}/members`, {
+          headers: {
+            Authorization: window.localStorage.getItem("access_token"),
+          },
+        })
+        .then((response) => {
+          console.log(response);
+        });
+      window.alert("탈퇴 완료");
+      return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.data);
+    }
+  }
+);
 
 export default { userSlice, signupSlice, loginSlice, kakaoLoginSlice }.reducer;
