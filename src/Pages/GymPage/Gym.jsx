@@ -15,7 +15,7 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 
 const Gym = () => {
-    const BASE_URL = "https://01192mg.shop"
+    const BASE_URL = "http://sparta-tim.shop"
 
     const [location, setLocation] = useState('내')
 
@@ -24,8 +24,6 @@ const Gym = () => {
     const [gyms, setGyms] = useState([]) 
 
 // 카카오 Map 입니다
-    const [markerOpen, setMarkerOpen] = useState([])
-  //개별 마커 열리고 내리는거 어떻게하지?? 배열 여러개 만들어서 boolean push 해주는식으로 하면되나?
 
   const [state, setState] = useState({
     center: {
@@ -47,7 +45,7 @@ const Gym = () => {
           const lng = position.coords.longitude
           await axios.get(`${BASE_URL}/gyms?page=0&size=10&lon=${lng}&lat=${lat}`)
         .then((res) => {
-            console.log(res.data.data)
+            // console.log(res.data.data)
             setGyms(res.data.data)
         })
         .catch((err) => {
@@ -120,7 +118,12 @@ const Gym = () => {
     const searchGym = async() => {
         await axios.get(`${BASE_URL}/gyms/search?page=0&size=5&query=${search}`)
         .then((res) => {
-            // console.log(res.data.data)
+          if(res.data.data.length !== 0) {
+
+              setState((prev) => ({
+                ...prev, center: {lat: res.data.data[0]?.lat, lng: res.data.data[0]?.lon}
+              }))
+            }
             setGyms(res.data.data)
             setLocation(search)
             setSearch('')
@@ -129,11 +132,13 @@ const Gym = () => {
             console.log(err)
         })
       }
-    // console.log(gyms)
+    
+      useEffect(()=>{
+        console.log(gyms)
+      },[searchGym])
 
 // 마커 마우스 호버 이벤트
       const [isopen, setIsopen] = useState(false)
-
 
 if(state.isLoading) {
   return(<Loading />)
@@ -227,8 +232,8 @@ if(state.isLoading) {
                         </div>
                         
                         <div>
-
-                        {
+                    { gyms?.length === 0 ?  <p style={{color:'#ffffff', width:'20rem', margin:'6rem 0 0 16rem', fontSize:'1.6rem'}}>검색 결과가 없습니다.</p> : 
+                        
                             gyms?.map((gym, i)=>{
                                 return(
                                     <div key={gym.id} style={{display:'flex', margin:'2rem auto', width:'50rem', height:'17rem', borderBottom:'1px solid #262626'}} 

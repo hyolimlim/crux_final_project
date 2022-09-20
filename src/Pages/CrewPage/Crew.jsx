@@ -15,7 +15,7 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 
 const Crew = () => {
-    const BASE_URL = "https://01192mg.shop"
+    const BASE_URL = "http://sparta-tim.shop"
     
     // const SERVERT = process.env.REACT_APP_SERVER_T;
     // const BASE_URL = SERVERT;

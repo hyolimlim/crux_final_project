@@ -63,7 +63,7 @@ const CreateCrew = () => {
 
     //upload_file.ref로 파일 url가져옴
     const file_url = await getDownloadURL(upload_file.ref);
-    // console.log(file_url);
+    console.log(file_url);
     setFileUrl(file_url);
   };
 

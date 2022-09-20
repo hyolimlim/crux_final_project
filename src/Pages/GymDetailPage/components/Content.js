@@ -1,18 +1,30 @@
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import 플러스기호 from "../../../Image/플러스 기호.png"
 import ModalReview from "./ModalReview";
 import ReviewSlider from "./ReviewSlider";
 import 클라이밍 from '../../../Image/인기 클라이밍짐.png'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import { faMarker, faStar } from "@fortawesome/free-solid-svg-icons";
+import {LikeHeart, LikedHeart } from "../../../Shared/components/LikeHeart";
+import { useDispatch, useSelector } from "react-redux";
+import { __getGymDetail } from "../../../Redux/modules/gymDetilSlice";
+import Loading from "../../../Shared/Loading";
 
 
 
-const Content = ({gym, setShowReview, showReview}) => {
-    const BASE_URL = 'https://01192mg.shop'
+
+const Content = ({setShowReview, showReview, setReload, reload}) => {
+    const BASE_URL = 'http://sparta-tim.shop'
+
+const params = useParams().gymId
+const dispatch = useDispatch()
+
+const { isLoading, error, gymDetail } = useSelector((state) => state.gymDetail)
+// console.log(isLoading, error, gymDetail)
+
+const gym = gymDetail.data
+// console.log(gym)
 
 const navigate = useNavigate()
 const [modal, setModal] = useState(false)
@@ -22,22 +34,31 @@ const onclickLikeGym = () => {
     likeGym();
 }
 
-const likeGym = useCallback(async() => {
+const likeGym = async() => {
     // console.log(gym.id)
-    await axios.post(`${BASE_URL}/likegyms/${gym.id}`, null ,{
+    await axios.post(`${BASE_URL}/gyms/${gym.id}/like`, null ,{
         headers: {Authorization: window.localStorage.getItem("access_token")}})
     .then((res) => {
-        // console.log(res.data)
         alert(res.data.data)
-        // window.location.reload(`/gyms/${gym.id}`)
-        navigate(`/gyms/${gym.id}`)
+        setTimeout(() => {
+            setReload(!reload)
+        }, 0);
     })
     .catch((err) => {
         console.log(err)
     })
-}, [onclickLikeGym])
+}
+
+useEffect(()=>{
+    dispatch(__getGymDetail(params))
+
+},[reload])
 
 
+if (gym === undefined) 
+return(
+    <Loading />
+) 
 
     return(
         <div style={{width:'192rem', height:'80rem', backgroundColor:'#141414', color:'#ffffff'}}>
@@ -46,23 +67,16 @@ const likeGym = useCallback(async() => {
                     
                     <img src={gym.reviews[0]?.reviewPhotoList[0]?.imgUrl !== undefined ? gym.reviews[0]?.reviewPhotoList[0]?.imgUrl : 클라이밍} 
                     style={{width:'100%', height:'100%'}}/>
-                
+                    <HeartIcon type="button" onClick={onclickLikeGym}>
+                        { gym?.likeGym === false ? 
+                            <LikeHeart /> : <LikedHeart /> }
+                    </HeartIcon>
                 </div>
 
-                <div style={{width:'50rem', height:'100%', margin:'8rem 0 0 0', padding:'4rem', backgroundColor:'#262626', color:'white'}}>
+                <div style={{width:'50rem', height:'100%', margin:'8rem 0 0 0', padding:'2rem 4rem 4rem 4rem', backgroundColor:'#262626', color:'white'}}>
                     
-                    <div style={{margin:'1rem 0 0 0', display:'flex'}}> <span style={{margin:'0 16rem 0 0'}}>🖤 즐겨찾기 한 짐 갯수가 들어와요</span>
-                        <div type='button' onClick={()=>{setModal(true)}}>
-                            <FontAwesomeIcon icon={faMarker} size="3x" color="#FFB800"/> 
-                            <div style={{margin:'0.7rem 0 0 0'}}>리뷰쓰기</div>
-                        </div>
-                        <div type='button' onClick={onclickLikeGym} style={{margin:'0 0 0 2rem'}}>
-                            <FontAwesomeIcon icon={faStar} size="3x" color="#FFB800"/>
-                            <div style={{margin:'0.7rem 0 0 0'}}>즐겨찾기</div>
-                        </div>
-                        
-                    </div>
-                    
+                    <div style={{margin:'0 0 0 0'}}> <span style={{margin:'0 16rem 0 0'}}>💛 30명 | 리뷰 {gym?.reviews.length}건 </span></div>
+                    <div style={{fontSize:'3.2rem', fontWeight:'700', margin:'2rem 0 0 0'}}>{gym?.name}</div>
                     <div style={{fontSize:'2rem', fontWeight:'700', margin:'2rem 0 0 0'}}>주소 <S_content> {gym.location} </S_content></div>
                     <div style={{fontSize:'2rem', fontWeight:'700', margin:'2rem 0 0 0'}}>전화번호 <S_content> {gym.phone} </S_content></div>
 
@@ -79,34 +93,61 @@ const likeGym = useCallback(async() => {
                                 <ReviewSlider reviews={gym.reviews}/>
                         }
                     </div>
-                    <div style={{margin:'8rem 0 0 0', color:'#FFB800', fontSize:'1.4rem'}} onClick={()=>{setShowReview(!showReview)}} type="button">
-                        리뷰 상세보기
+                    <div style={{display:'flex'}}>
+                        <ButtonBox onClick={()=>{setShowReview(!showReview)}}>
+                            <button>리뷰 상세보기</button>
+                        </ButtonBox>
+                        <ButtonBox onClick={()=>{setModal(true)}}>
+                            <button>후기 쓰기</button>
+                        </ButtonBox>
                     </div>
                 </div>
             </div>
 
     {/* 리뷰 작성 모달창입니다 */}
             {
-                modal && <ModalReview setModal={setModal} gym={gym}/>
+                modal && <ModalReview setModal={setModal} gym={gym} reload={reload} setReload={setReload}/>
             }
 
         </div>
     )
 }
 
-// const MainImg = styled.div`
-// width: 100%;
-// height: 100%;
-// background: url(${(props) => props.gymImg});
-// background-position: center;
-// background-size: cover;
-// background-repeat: no-repeat;
-// `
+const HeartIcon = styled.div`
+  position: absolute;
+  margin: -60rem 0rem 0 61rem;
+`;
 
 const S_content = styled.span`
 margin-left: 1rem;
 font-size: 2rem;
 font-weight: 400;
+`
+
+const ButtonBox = styled.div`
+  width: 18rem;
+  height: 4.5rem;
+  display: flex;
+  justify-content: space-between;
+  font-family: "Spoqa Han Sans Neo";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1.4rem;
+  letter-spacing: -0.05em;
+  margin: 2rem 0 0 2rem;
+  /* position: absolute; */
+  button {
+    width: 100%;
+    height: 100%;
+    border: none;
+    color: #666666;
+    background-color: #999999;
+    &:hover {
+      color: #262626;
+      background-color: #ffb800;
+      transition: 0.5s;
+    }
+  }
 `
 
 export default Content;

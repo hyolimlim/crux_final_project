@@ -5,128 +5,126 @@ import { Rating } from 'react-simple-star-rating'
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from 'react-router-dom';
 import 이미지업로드 from "../../../Image/이미지업로드.png"
+import 리뷰기본이미지 from '../../../Image/리뷰기본이미지.jpg'
 import { useRef } from "react";
 import { useCallback } from "react";
 import axios from "axios";
 
 
-const ModalReview = ({setModal, gym}) => {
-    const BASE_URL = "https://01192mg.shop"
+function ModalReview({ setModal, gym, reload, setReload }) {
+    const BASE_URL = "https://01192mg.shop";
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const closeModal = () => {
-        setModal(false)
-    }
+        setModal(false);
+    };
 
-// 별점 주기 <star rating> 라이브러리!
-
-    const [rating, setRating] = useState(0)
-    // console.log(rating)
+    // 별점 주기 <star rating> 라이브러리!
+    const [rating, setRating] = useState(5);
+    console.log(rating)
     const handleRating = (rate: number) => {
-        if(rate<20) {
-            setRating(0)
+        if (rate < 20) {
+            setRating(0);
         } else {
-            setRating(rate/20)
+            setRating(rate / 20);
         }
-    }
-    
-    useEffect(()=>{
-        
-    },[rating])
+    };
 
-// 이미지 업로드 <firebase> 라이브러리! 
+    useEffect(() => {
+    }, [rating]);
 
-const onsubmit = () => {
-    createReview();
-}
+    // 이미지 업로드 <firebase> 라이브러리! 
+    const onsubmit = () => {
+        createReview();
+    };
 
-const [content, setContent] = useState('')
+    const [content, setContent] = useState('');
+    const [fileUrl, setFileUrl] = useState('');
 
-const createReview = useCallback(async() => {
-    const payload = {
-        score: rating,
-        content: content,
-        reviewPhotoList: [{imgUrl: fileUrl}],
-      };
-    // console.log(gym.id)
-    // console.log(window.localStorage.getItem("access_token"))
-    await axios.post(`${BASE_URL}/reviews/${gym.id}`, payload, {
-        headers: {Authorization: window.localStorage.getItem("access_token")}})    
-        .then((res) => {
-        // console.log(res.data)
-        alert('리뷰 작성완료!')
-        window.location.reload(`/gyms/${gym.id}`)
-    })
-    .catch((err) => {
-        console.log(err)
-    })
-}, [onsubmit])
+    const storage = getStorage();
+    // const storageRef = ref(storage);
+    const uploadFB = async (e) => {
+        const upload_file = await uploadBytes(
+            ref(storage, `images/${e.target.files[0].name}`),
+            e.target.files[0]
+        );
 
-  const [fileUrl, setFileUrl] = useState('')
-  const [reload, setReload] = useState(false)
+        const file_url = await getDownloadURL(upload_file.ref);
+        setFileUrl(file_url);
+    };
 
-  const storage = getStorage();
-  const storageRef = ref(storage);
+    const createReview = useCallback(async () => {
+        if (content === '') {
+            alert('후기를 입력해주세요');
+        } else {
 
-  const uploadFB = async (e) => {
-    // console.log(e.target.files);
-    const upload_file = await uploadBytes(
-      ref(storage, `images/${e.target.files[0].name}`),
-      e.target.files[0]
-    );
-    // console.log(upload_file)
-
-    const file_url = await getDownloadURL(upload_file.ref)
-    // console.log(file_url)
-    setFileUrl(file_url)
-    // file_url !== '' ? setFileUrl(file_url) : setFileUrl(basicImg)
-    // 기본 이미지 줄 수 있나? 없음 말고..
-  }
+            const payload = {
+                score: rating,
+                content: content,
+                reviewPhotoList: fileUrl !== "" ? [{ imgUrl: fileUrl }] : [{ imgUrl: "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbtOY6e%2FbtrMC0zJgaN%2FE8MiRTJ9nXjXvMPO5q1gQK%2Fimg.jpg" }],
+            };
+            await axios.post(`${BASE_URL}/reviews/${gym.id}`, payload, {
+                headers: { Authorization: window.localStorage.getItem("access_token") }
+            })
+                .then((res) => {
+                    // console.log(res.data)
+                    alert('리뷰 작성완료!');
+                    setModal(false);
+                    setTimeout(() => {
+                        setReload(!reload)
+                    }, 0);
+                    
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+    }, [onsubmit]);
 
 
 
-    return(
+
+    return (
         <ModalPage onClick={closeModal}>
             <Container onClick={(e) => e.stopPropagation()}>
-                
-                <div style={{margin:'7% auto 0 auto', width:'90%'}}>
-                        <span style={{fontSize:'36px', fontWeight:'700'}}>엠투 클라이밍</span>
-                        <span style={{fontSize:'1.4rem', margin:'0 0 0 1rem'}}>에 대한 솔직한 리뷰를 작성해주세요</span>
-                    </div>
-                    
-                    <div style={{width:'90%', height:'200px', border:'1px solid black', margin:'3% auto'}}>
-                        <div style={{width:'100%', height:'50px', display:'flex',borderBottom:'1px solid black', padding:'5px 0 0 16px'}}>
-                            <div style={{margin:'0.9rem 1.5rem 0 0', fontSize:'1.4rem'}}>별점 남기기</div> 
-                            <div><Rating onClick={handleRating} ratingValue={rating}/></div>
-                        </div>
-                    <textarea placeholder='후기를 남겨주세요' style={{width:'100%', height: '74%', fontSize:'1.3rem', border:'none', padding:'3%'}}
-                        onChange={(e)=>{setContent(e.target.value)}}/>
-                    </div>
 
-                    <ImgPreview src={fileUrl !== '' ? fileUrl : 이미지업로드} />
+                <div style={{ margin: '7% auto 0 auto', width: '90%' }}>
+                    <span style={{ fontSize: '36px', fontWeight: '700' }}>엠투 클라이밍</span>
+                    <span style={{ fontSize: '1.4rem', margin: '0 0 0 1rem' }}>에 대한 솔직한 리뷰를 작성해주세요</span>
+                </div>
 
-                    <label>
-                        <input 
+                <div style={{ width: '90%', height: '200px', border: '1px solid black', margin: '3% auto' }}>
+                    <div style={{ width: '100%', height: '50px', display: 'flex', borderBottom: '1px solid black', padding: '5px 0 0 16px' }}>
+                        <div style={{ margin: '0.9rem 1.5rem 0 0', fontSize: '1.4rem' }}>별점 남기기</div>
+                        <div><Rating onClick={handleRating} ratingValue={rating} /></div>
+                    </div>
+                    <textarea placeholder='후기를 남겨주세요' style={{ width: '100%', height: '74%', fontSize: '1.3rem', border: 'none', padding: '3%' }}
+                        onChange={(e) => { setContent(e.target.value); } } />
+                </div>
+                <label>
+                    <input
                         encType="multipart/form-data"
                         accept='image/*'
                         type="file"
-                        style={{display:'none'}}
-                        onChange={uploadFB}
-                        />
+                        style={{ display: 'none' }}
+                        onChange={uploadFB} />
+                    <ImgPreview src={fileUrl !== '' ? fileUrl : 이미지업로드} type="button" />
+                    {fileUrl !== "" ? null :
+                        <>
+                            <ImgPreview src={리뷰기본이미지} style={{ margin: '-23px 0 0 9rem' }} />
+                            <div style={{ fontSize: '1rem', position: 'absolute', margin: '-2px 0 0 14.3rem' }}>리뷰 기본이미지입니다</div>
+                        </>}
 
-                        <UploadImg type="button">
-                                후기 사진 올리기
-                        </UploadImg>
-                    </label>
-                    <div style={{display:'flex', margin:'-6rem 0 0 31.8rem'}}>
-                        <S_btn style={{margin:'0 1rem 0 0'}} onClick={closeModal}>취소</S_btn>
-                        <S_btn onClick={onsubmit}>리뷰 올리기</S_btn>
-                    </div>
-                    
+                </label>
+                <div style={{ display: 'flex', margin: '-6rem 0 0 31.8rem' }}>
+                    <S_btn style={{ margin: '38px 1rem 0 0' }} onClick={closeModal}>취소</S_btn>
+                    <S_btn onClick={onsubmit}>리뷰 올리기</S_btn>
+                </div>
+
             </Container>
 
         </ModalPage>
-    )
+    );
 }
 
 const ModalPage = styled.div`
@@ -135,7 +133,7 @@ top: 0;
 left: 0;
 width: 100%;
 height: 100%;
-z-index: 998;
+z-index: 900;
 background-color: rgba(0, 0, 0, 0.4);
 color:black
 `
@@ -162,28 +160,17 @@ right: 10px;
 top: 10px;
 `
 
-const UploadImg = styled.div`
-width: 100px;
-background-color: #FFB800;
-color: white;
-border: none;
-border-radius: 5px;
-padding: 0.2rem 0.7rem;
-/* margin-top: 10px; */
-margin: -12px 0 0 6%;
-text-align: center;
-`
-
 
 const ImgPreview = styled.img`
 width: 5rem;
 height: 5rem;
-margin: 0 0 0 3rem;
+margin: -23px 0 0 3rem;
+position: absolute;
 `
 
 const S_btn = styled.button`
 width: 12rem;
-margin: 0 0 0 0;
+margin: 38px 0 0 0;
 height: 3rem;
 background-color: #ffb800;
 `
