@@ -5,7 +5,6 @@ import ModalPortal from "../../Login/MordalPortal";
 import LoginModal from "../../Login/LoginModal";
 import Register from "../../Register/Register";
 
-import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
 
 const Navbar = () => {
 
@@ -33,46 +32,6 @@ const Navbar = () => {
     setRegisterVisible(!registerVisible);
   };
 
-
-
-  
-//SSE 연결하기
-const EventSource = EventSourcePolyfill || NativeEventSource;  //eventsource 쓰려면 import 해야됨!
-
-const [listening, setListening] = useState(false);
-const [data, setData] = useState([]);
-const [value, setValue] = useState(null);
-const [meventSource, msetEventSource] = useState(undefined);
-
-
-useEffect(()=>{
-  
-  console.log("listening", listening);
-  let eventSource = null
-
-  if(!listening) {
-    eventSource = new EventSource('http://54.180.31.108/subscribe',
-    {headers: {Authorization: localStorage.getItem("access_token") }
-    }) 
-    
-    msetEventSource(eventSource)
-    console.log('eventSource', eventSource);
-
-    eventSource.onopen = event => {
-      console.log("커넥션 성공~~!!", event)
-    }
-
-    eventSource.onmessage = event => {
-      console.log("result", event.data);
-      setData(prev => [...prev, event.data]);
-      setValue(event.data)
-    }
-  }
-  return () => {
-    eventSource.close();
-    console.log("eventSource closed")
-  }
-}, [])
 
   return (
     <NavContainer>

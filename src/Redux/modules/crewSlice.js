@@ -108,8 +108,8 @@ export const joinCrew = createAsyncThunk(
   "post/joinCrew",
   async (payload, thunkAPI) => {
     try {
-      const response = await axios
-        .post(`https://01192mg.shop/crew-members/${payload}`, null, {
+      const response = await axios      
+        .post(`http://54.180.31.108/crew-members/${payload}`, null, { //<--https://01192mg.shop 변경
           headers: {
             Authorization: window.localStorage.getItem("access_token"),
           },
