@@ -1,11 +1,12 @@
 import styled from "styled-components";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { signup, Signup } from "../../Redux/modules/userSlice";
+import { signup } from "../../Redux/modules/userSlice";
 import RegisterValidation from "./registerValidation";
 import useOutSideClick from "../../Shared/hooks/useOutSideClick";
+import { faGrinStars } from "@fortawesome/free-solid-svg-icons";
 
 function Register({ onClose }) {
   const { schema } = RegisterValidation();
@@ -39,62 +40,50 @@ function Register({ onClose }) {
     dispatch(signup(payload));
   };
 
+  const [firstForm, setFirstForm] = useState(true);
+  const [secondForm, setSecondForm] = useState(false);
+  const [thirdForm, setThirddForm] = useState(false);
+
   return (
     <Background>
       <Modal ref={modalRef} onSubmit={handleSubmit(onSubmit)}>
         <Xbtn onClick={onClose}></Xbtn>
-        <SignupTitle>회원가입</SignupTitle>
-        <InputBox>
-          <input
-            type="text"
-            placeholder="email"
-            autoComplete="off"
-            maxLength="320"
-            {...register("email")}
-          />
-          <p>{errors.email?.message}</p>
-          <input
-            type="text"
-            placeholder="nickname"
-            autoComplete="off"
-            maxLength="10"
-            {...register("nickname")}
-          />
-          <p>{errors.nickname?.message}</p>
-          <input
-            type="text"
-            placeholder="password"
-            autoComplete="off"
-            {...register("password")}
-          />
-          <p>{errors.password?.message}</p>
-          <input
-            type="password"
-            placeholder="passwordConfirm"
-            autoComplete="off"
-            {...register("passwordConfirm")}
-          />
-          <p>{errors.passwordConfirm?.message}</p>
-          <input
-            type="text"
-            placeholder="content"
-            autoComplete="off"
-            {...register("content")}
-          />
-          <p>{errors.content?.message}</p>
-        </InputBox>
-        {/* <label>14세 이상입니다(필수)</label>
-        <p>동의</p>
-        <input type="checkbox" value="true" />
-        <label>사이트 이용약관(필수)</label>
-        <p>동의</p>
-        <input type="checkbox" value="true" />
-        <label>개인정보처리 방침(필수)</label>
-        <p>동의</p>
-        <input type="checkbox" /> */}
-        <SummitButton type="submit" disabled={isSubmitting}>
-          입력
-        </SummitButton>
+        <Title>회원가입</Title>
+        {firstForm && (
+          <>
+            <InputBox>
+              <input placeholder="이메일" />
+              <input placeholder="닉네임(특수문자 제외 2~10자)" />
+              <input placeholder="비밀번호(영문 대소문자, 숫자, 특수문자 포함)" />
+              <input placeholder="비밀번호 확인" />
+            </InputBox>
+            <SummitButton
+              type="submit"
+              onClick={() => {
+                setFirstForm(false);
+                setSecondForm(true);
+              }}
+            >
+              입력
+            </SummitButton>
+          </>
+        )}
+        {secondForm && (
+          <>
+            <TextBox>
+              <textarea placeholder="자기소개(150자 미만)" />
+            </TextBox>
+            <SummitButton
+              type="submit"
+              onClick={() => {
+                setFirstForm(false);
+                setSecondForm(true);
+              }}
+            >
+              입력
+            </SummitButton>
+          </>
+        )}
       </Modal>
     </Background>
   );
@@ -117,61 +106,76 @@ const Background = styled.div`
 
 const Modal = styled.form`
   width: 500px;
-  height: 635px;
-  background-color: #ffffff;
+  height: 610px;
+  background-color: #141414;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 65px 45px 65px 45px;
+  padding: 65px 50px 65px 50px;
   position: relative;
 `;
 
-const SignupTitle = styled.p`
+const Title = styled.p`
   font-family: "Spoqa Han Sans Neo";
   font-style: normal;
   font-weight: 700;
   font-size: 2.75rem;
   letter-spacing: -0.05em;
-  color: #000000;
+  color: #ffffff;
 `;
 
 const SummitButton = styled.button`
-  width: 410px;
+  width: 400px;
   height: 60px;
   border: none;
-  background-color: #cccccc;
+  margin-top: 30px;
+  background-color: #666666;
   font-family: "Spoqa Han Sans Neo";
   font-style: normal;
   font-weight: 400;
   font-size: 1.25rem;
   color: #ffffff;
   letter-spacing: -0.05em;
-  &:first-child {
-    position: absolute;
-    top: 367px;
-    left: 45px;
-  }
-  &:last-child {
-    position: absolute;
-    top: 510px;
-    left: 45px;
-  }
 `;
 
 const InputBox = styled.div`
+  width: 400px;
+  height: 275px;
+  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   input {
-    width: 410px;
-    height: 35px;
+    width: 400px;
+    height: 60px;
+    margin-bottom: 10px;
     outline: none;
     border: none;
-    border-bottom: solid 1px #cccccc;
+    background-color: #262626;
     font-family: "Spoqa Han Sans Neo";
     font-style: normal;
     font-size: 1.25rem;
     font-weight: 400;
+    color: #ffffff;
     letter-spacing: -0.05em;
-    margin: 0;
-    padding: 0;
+    padding: 20px 21px 21px 20px;
+    &:nth-child(2) {
+      margin-bottom: 15px;
+    }
+  }
+`;
+
+const TextBox = styled.div`
+  width: 400px;
+  height: 280px;
+  margin-top: 60px;
+  textarea {
+    width: 400px;
+    height: 280px;
+    background-color: #262626;
+    resize: none;
+    outline: none;
+    border: none;
   }
 `;
 
@@ -190,7 +194,7 @@ const Xbtn = styled.button`
     content: "";
     height: 25px;
     width: 1px;
-    background-color: #000000;
+    background-color: #ffffff;
   }
   ::before {
     transform: rotate(45deg);

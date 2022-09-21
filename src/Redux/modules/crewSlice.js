@@ -116,7 +116,7 @@ export const joinCrew = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await axios
-        .post(`http://sparta-tim.shop/crew-members/${payload}`, null, {
+        .post(`http://sparta-tim.shop/crews/${payload}/members`, null, {
           headers: {
             Authorization: window.localStorage.getItem("access_token"),
           },
@@ -137,7 +137,7 @@ export const getApplicationList = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const data = await axios.get(
-        `http://sparta-tim.shop/crew-members/${payload}`,
+        `http://sparta-tim.shop/crews/${payload}/members`,
         {
           headers: {
             Authorization: window.localStorage.getItem("access_token"),
@@ -159,7 +159,7 @@ export const permitCrew = createAsyncThunk(
     try {
       const response = await axios
         .post(
-          `http://sparta-tim.shop/crew-members/${payload.crewId}/${payload.memberId}?permit=true`,
+          `http://sparta-tim.shop/crews/${payload.crewId}/members/${payload.memberId}?permit=true`,
           null,
           {
             headers: {
@@ -184,7 +184,7 @@ export const expelCrew = createAsyncThunk(
     try {
       const response = await axios
         .delete(
-          `http://sparta-tim.shop/crew-members/${payload.crewId}/${payload.memberId}`,
+          `http://sparta-tim.shop/crews/${payload.crewId}/members/${payload.memberId}`,
           {
             headers: {
               Authorization: window.localStorage.getItem("access_token"),
@@ -211,7 +211,7 @@ export const createCrewNotice = createAsyncThunk(
     try {
       const response = await axios
         .post(
-          `https://01192mg.shop/notices/${payload.id}`,
+          `http://sparta-tim.shop/notices/${payload.id}`,
           { content: payload.content },
           {
             headers: {
@@ -236,7 +236,7 @@ export const editCrewNotice = createAsyncThunk(
     try {
       const response = await axios
         .put(
-          `https://01192mg.shop/notices/${payload.id}`,
+          `http://sparta-tim.shop/notices/${payload.id}`,
           {
             name: payload.name,
             content: payload.content,
@@ -265,7 +265,7 @@ export const deleteCrewNotice = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await axios
-        .delete(`https://01192mg.shop/notices/${payload}`, {
+        .delete(`http://sparta-tim.shop/notices/${payload}`, {
           headers: {
             Authorization: window.localStorage.getItem("access_token"),
           },
@@ -291,7 +291,7 @@ export const addCrewPhoto = createAsyncThunk(
     try {
       const response = await axios
         .post(
-          `https://01192mg.shop/crew-posts/${payload.id}`,
+          `http://sparta-tim.shop/crews/${payload.id}/posts`,
           {
             imgList: payload.imgUrl,
           },
@@ -318,7 +318,7 @@ export const getCrewPhoto = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await axios.get(
-        `https://01192mg.shop/crew-posts/${payload}?page=0&size=10`,
+        `http://sparta-tim.shop/crews/${payload}?page=0&size=10`,
         {
           headers: {
             Authorization: window.localStorage.getItem("access_token"),
