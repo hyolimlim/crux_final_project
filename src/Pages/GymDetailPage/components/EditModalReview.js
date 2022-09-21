@@ -9,14 +9,15 @@ import 리뷰기본이미지 from '../../../Image/리뷰기본이미지.jpg'
 import { useRef } from "react";
 import { useCallback } from "react";
 import axios from "axios";
+import Loading from '../../../Shared/Loading';
 
 
-function ModalReview({ setModal, gym, reload, setReload }) {
+function EditModalReview({ setEditModal, reviewId, gym, reload, setReload }) {
     const BASE_URL = "https://01192mg.shop";
 
-    const navigate = useNavigate();
+    console.log(reviewId)
     const closeModal = () => {
-        setModal(false);
+        setEditModal(false);
     };
 
     // 별점 주기 <star rating> 라이브러리!
@@ -35,7 +36,7 @@ function ModalReview({ setModal, gym, reload, setReload }) {
 
     // 이미지 업로드 <firebase> 라이브러리! 
     const onsubmit = () => {
-        createReview();
+        editReview();
     };
 
     const [content, setContent] = useState('');
@@ -53,7 +54,7 @@ function ModalReview({ setModal, gym, reload, setReload }) {
         setFileUrl(file_url);
     };
 
-    const createReview = useCallback(async () => {
+    const editReview = useCallback(async () => {
         if (content === '') {
             alert('후기를 입력해주세요');
         } else {
@@ -63,13 +64,13 @@ function ModalReview({ setModal, gym, reload, setReload }) {
                 content: content,
                 reviewPhotoList: fileUrl !== "" ? [{ imgUrl: fileUrl }] : [{ imgUrl: "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbtOY6e%2FbtrMC0zJgaN%2FE8MiRTJ9nXjXvMPO5q1gQK%2Fimg.jpg" }],
             };
-            await axios.post(`${BASE_URL}/reviews/${gym.id}`, payload, {
+            await axios.put(`${BASE_URL}/reviews/${reviewId}`, payload, {
                 headers: { Authorization: window.localStorage.getItem("access_token") }
             })
                 .then((res) => {
                     // console.log(res.data)
-                    alert('리뷰 작성완료!');
-                    setModal(false);
+                    alert('리뷰 수정완료!');
+                    setEditModal(false);
                     setTimeout(() => {
                         setReload(!reload)
                     }, 0);
@@ -82,7 +83,9 @@ function ModalReview({ setModal, gym, reload, setReload }) {
     }, [onsubmit]);
 
 
-
+if(gym === undefined) {
+    return( <Loading/>)
+}
 
     return (
         <ModalPage onClick={closeModal}>
@@ -118,7 +121,7 @@ function ModalReview({ setModal, gym, reload, setReload }) {
                 </label>
                 <div style={{ display: 'flex', margin: '-6rem 0 0 31.8rem' }}>
                     <S_btn style={{ margin: '38px 1rem 0 0' }} onClick={closeModal}>취소</S_btn>
-                    <S_btn onClick={onsubmit}>리뷰 올리기</S_btn>
+                    <S_btn onClick={onsubmit}>리뷰 수정하기</S_btn>
                 </div>
 
             </Container>
@@ -187,4 +190,4 @@ background-color: #ffb800;
 // `;
 
 
-export default ModalReview;
+export default EditModalReview;

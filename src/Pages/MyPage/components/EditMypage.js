@@ -47,6 +47,7 @@ const changeImage = async (e) => {
       
     }
     dispatch(__putMyPage(payload))
+    window.localStorage.setItem("nickname", editNickname);
     alert('프로필 편집완료')
     setEditMypage(false)
     navigate(`/members/${params}`)

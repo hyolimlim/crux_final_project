@@ -17,7 +17,7 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 const Gym = () => {
     const BASE_URL = "http://sparta-tim.shop"
 
-    const [location, setLocation] = useState('내')
+    const [location, setLocation] = useState('내 주변 클라이밍짐')
 
     const navigate = useNavigate()
     
@@ -36,7 +36,7 @@ const Gym = () => {
   })
   // console.log(state.center)
 
-
+// 현재위치 api 입니다
   useEffect(()=>{
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -78,41 +78,114 @@ const Gym = () => {
     }
   }, [])
 
-  const categorySeoul = () => {
+  
     //서울을 클릭하면 서울 특정 주소로 지도 중심을 이동시킨다
-    //서울을 클릭하면 '서울' 검색어를 api에 넣어 주변 클라이밍짐을 띄워준다
-    setState((prev) => ({
-      ...prev,
-      center: {
-        lat: 37.5665734,
-        lng: 126.978179,
-      }}))}
-  const categoryIncheon = () => {
-    setState((prev) => ({...prev,center: {lat: 37.4562557,lng: 126.7052062,}}))}
-  const categoryGg = () => {
-    setState((prev) => ({...prev,center: {lat: 37.38890932792951,lng: 127.46020321292248,}}))}
-  const categoryBusan = () => {
-    setState((prev) => ({
-      ...prev,
-      center: {
-        lat: 35.18387244538942,
-        lng: 129.07040917346342,
-      }}))}
-  const categoryJeju = () => {
-    setState((prev) => ({
-      ...prev,
-      center: {
-        lat: 33.397224597475834,
-        lng: 126.55475810720306,
-      }}))}
+    //서울 주변의 클라이밍짐을 띄워준다
+  const categorySeoul = async() => {
+    const lat = 37.5665734
+    const lng = 126.978179
+    await axios.get(`${BASE_URL}/gyms?page=0&size=10&lon=${lng}&lat=${lat}`)
+    .then((res) => {
+      setGyms(res.data.data)
+      setState((prev) => ({
+        ...prev,
+        center: {
+          lat: 37.5665734,
+          lng: 126.978179,
+      }}))
+    })
+      setLocation('서울 주변 클라이밍짐')
+    .catch((err) => {
+      console.log(err)
+    })
+  }
 
+  const categoryGg = async() => {
+    const lat = 37.28901245614252
+    const lng = 127.05346007678274
+    await axios.get(`${BASE_URL}/gyms?page=0&size=50&lon=${lng}&lat=${lat}`)
+    .then((res) => {
+      setGyms(res.data.data)
+      setState((prev) => ({
+        ...prev,
+        center: {
+          lat: 37.28901245614252,
+          lng: 127.05346007678274,
+      }}))
+    })
+    setLocation('경기 주변 클라이밍짐')
+    .catch((err) => {
+      console.log(err)
+    })
+  }
+
+  const categoryBs = async() => {
+    const lat = 35.1801639
+    const lng = 129.074660
+    await axios.get(`${BASE_URL}/gyms?page=0&size=10&lon=${lng}&lat=${lat}`)
+    .then((res) => {
+      setGyms(res.data.data)
+      setState((prev) => ({
+        ...prev,
+        center: {
+          lat: 35.1801639,
+          lng: 129.074660,
+      }}))
+    })
+    setLocation('부산 주변 클라이밍짐')
+    .catch((err) => {
+      console.log(err)
+    })
+  }
+
+  const categoryDg = async() => {
+    const lat = 35.8715288
+    const lng = 128.601501
+    await axios.get(`${BASE_URL}/gyms?page=0&size=10&lon=${lng}&lat=${lat}`)
+    .then((res) => {
+      setGyms(res.data.data)
+      setState((prev) => ({
+        ...prev,
+        center: {
+          lat: 35.8715288,
+          lng: 128.601501,
+      }}))
+      setLocation('대구 주변 클라이밍짐')
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  }
+
+  const categoryGj = async() => {
+    const lat = 35.160101970076916
+    const lng = 126.8516381907944
+    await axios.get(`${BASE_URL}/gyms?page=0&size=10&lon=${lng}&lat=${lat}`)
+    .then((res) => {
+      setGyms(res.data.data)
+      setState((prev) => ({
+        ...prev,
+        center: {
+          lat: 35.160101970076916,
+          lng: 126.8516381907944,
+      }}))
+    })
+    setLocation('광주 주변 클라이밍짐')
+    .catch((err) => {
+      console.log(err)
+    })
+  }
 
 
 //gym 검색 API 입니다~
     const [search, setSearch] = useState('')
 
     const onclickSearchGym = () => {
+      if(search === "") {
+        alert('한 글자 이상 입력해주세요')
+      } else {
         searchGym();
+      }
     }
 
     const searchGym = async() => {
@@ -125,7 +198,7 @@ const Gym = () => {
               }))
             }
             setGyms(res.data.data)
-            setLocation(search)
+            setLocation("검색어 '" + search + "'")
             setSearch('')
         })
         .catch((err) => {
@@ -161,10 +234,10 @@ if(state.isLoading) {
 
               <div style={{width:'120rem', margin:'6.5rem auto 0 auto', display:'flex'}}>
                   <S_category onClick={categorySeoul} type="button"><h3>서울</h3></S_category>
-                  <S_category onClick={categoryIncheon} type="button"><h3>인천</h3></S_category>
                   <S_category onClick={categoryGg} type="button"><h3>경기</h3></S_category>
-                  <S_category onClick={categoryBusan} type="button"><h3>부산</h3></S_category>
-                  <S_category onClick={categoryJeju} type="button"><h3>제주도</h3></S_category>
+                  <S_category onClick={categoryBs} type="button"><h3>부산</h3></S_category>
+                  <S_category onClick={categoryDg} type="button"><h3>대구</h3></S_category>
+                  <S_category onClick={categoryGj} type="button"><h3>광주</h3></S_category>
               </div>
               
             </div>
@@ -179,12 +252,10 @@ if(state.isLoading) {
                 <Map
                     center={ state.center }
                     style={{ width: "134rem", height: "110rem" }}
-                    level={7}
+                    level={5}
                 >
                     
-                    <MapMarker position={state.center} 
-                    image={{size:{width: 100, height: 80}, src:"http://simpleicon.com/wp-content/uploads/map-marker-5.png"}}  
-                    >
+                    <MapMarker position={state.center}>
                     </MapMarker>
 
                     {
@@ -228,7 +299,7 @@ if(state.isLoading) {
                 <GymContainer>
                     <div>
                         <div style={{width:'100%', height:'9.5rem', borderBottom:'1px solid #ffffff',padding:'3.5rem 3.5rem 3rem 3.5rem'}}>
-                            <h3 style={{fontWeight:'700'}}>{location} 주변 클라이밍짐</h3>
+                            <h3 style={{fontWeight:'700'}}>{location}</h3>
                         </div>
                         
                         <div>
