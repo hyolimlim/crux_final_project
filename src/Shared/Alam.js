@@ -1,42 +1,62 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
-
+import Loading from "../Shared/Loading"
 
 const Alam = () => {
 
 
 //SSE 연결하기
 const EventSource = EventSourcePolyfill || NativeEventSource;  //eventsource 쓰려면 import 해야됨!
-const token = localStorage.getItem("access_token")
 
+const [listening, setListening] = useState(false);
 const [alam, setAlam] = useState([])
+const [value, setValue] = useState(null)
+const [meventSource, msetEventSource] = useState(undefined);
+
 const [showAlam, setShowAlam] = useState(false)
 
-useEffect(()=>{
+let sse = undefined;
 
-  if(token) {
-    // const sse = new EventSource('http://54.180.31.108/subscribe',
-    // {headers: {Authorization: localStorage.getItem("access_token") }
-    // }) 
-    // console.log('sse', sse);
-    // sse.onopen = event => {
-    //   console.log("커넥션 성공~~!!", event)
-    // }
+// useEffect(()=>{
+//   if(!listening) {
+//     sse = new EventSource('http://54.180.31.108/subscribe',     //구독
+//     {headers: {Authorization: localStorage.getItem("access_token") }
+//     })
+//     msetEventSource(sse)
 
-    // sse.addEventListener('sse', (e) => {
-    //     // console.log(e.data)         
-    //     setAlam(prev => [...prev, e.data])
-    //     // setAlam(e.data)
-    //     }
-    // )
+//     sse.onopen = event => {
+//       console.log("연결완료")
+//     }
+//     sse.onmessage = event => {
+//       console.log(event.data)
+      
+//       const sseData = JSON.parse(event.data) 
+//       setAlam(prev => [...prev, sseData])
+//     }
 
-    // sse.addEventListener('error', (e) => {
-    //     if (e) { console.log(e) }
-    // })
-  }
-  // console.log(alam)
-}, [token])
+//     sse.onerror = event => {
+//       setListening(true)
+//     }
+
+
+// // addEventListener 데이터 캐치 성공
+//     sse.addEventListener('sse', (e) => {
+//         if(e.data.startsWith('{')) {
+//           console.log(JSON.parse(e.data).content)
+
+//           setAlam(prev => [...prev, JSON.parse(e.data).content])
+//         }}
+//     )
+
+//     // sse.addEventListener('error', (e) => {
+//     //     if (e) { console.log(e) }
+//     // })
+//   }
+//   return () => {
+//     sse.close();
+//   }
+// }, [])
 
 
 
@@ -48,14 +68,15 @@ useEffect(()=>{
           { showAlam &&
           <AlamBox>
             {
-              alam?.length === 0 ? <p>아직 알람이 없습니다</p> :
-                alam?.map((list, i) => {
-                  return (
-                    <div key={i}>
-                        {list}
-                    </div>
-                  )
-                })
+              alam === undefined ? <Loading /> :
+                alam?.length === 0 ? <p>아직 알람이 없습니다</p> : 
+                  alam?.map((list, i) => {
+                    return (
+                      <div key={i}>
+                          {list}
+                      </div>
+                    )
+                  })
             }
           </AlamBox>
         }

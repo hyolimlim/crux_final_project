@@ -27,9 +27,9 @@ const CrewDetail = () => {
   }, [dispatch]);
 
   const crewDetail = useSelector((state) => state?.crews?.crewDetail);
-  console.log(crewDetail);
+  // console.log(crewDetail);
   const crew = crewDetail?.data;
-  console.log(crew);
+  // console.log(crew);
 
   //호스트 확인
   const hostId = crew?.memberList[0]?.id;
@@ -38,7 +38,7 @@ const CrewDetail = () => {
   //크루 가입자 확인
   const memberList = crew?.memberList;
   const checkmember = memberList?.findIndex((x) => x?.id === Number(userId));
-  console.log(checkmember);
+  // console.log(checkmember);
 
   //크루 삭제
   const onCrewDelte = () => {

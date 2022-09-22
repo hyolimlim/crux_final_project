@@ -99,7 +99,7 @@ export const getCrewDetail = createAsyncThunk(
       const response = await axios.get(
         `http://sparta-tim.shop/crews/${payload}`
       );
-      console.log(response.data);
+      // console.log(response.data);
       return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -122,7 +122,7 @@ export const joinCrew = createAsyncThunk(
           },
         })
         .then((response) => {
-          console.log(response);
+          // console.log(response);
         });
       return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
