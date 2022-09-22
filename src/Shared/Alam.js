@@ -1,11 +1,23 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
+import { __getAlam, __readAlam, __deleteAlam, __deleteAlams, __NreadAlam } from "../Redux/modules/notification";
 import Loading from "../Shared/Loading"
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Alam = () => {
 
+const {isLoading, error, alams} = useSelector((state) => state.alams)
+const Alam = alams?.data
+console.log(Alam)
 
+const {isLoading2, error2, NreadAlams} = useSelector((state) => state.NreadAlams)
+const NreadAlam = NreadAlams.data
+console.log(NreadAlam)
+
+const navigate = useNavigate()
+const dispatch = useDispatch()
 //SSE 연결하기
 const EventSource = EventSourcePolyfill || NativeEventSource;  //eventsource 쓰려면 import 해야됨!
 
@@ -18,46 +30,50 @@ const [showAlam, setShowAlam] = useState(false)
 
 let sse = undefined;
 
-// useEffect(()=>{
-//   if(!listening) {
-//     sse = new EventSource('http://54.180.31.108/subscribe',     //구독
-//     {headers: {Authorization: localStorage.getItem("access_token") }
-//     })
-//     msetEventSource(sse)
+useEffect(()=>{
+  if(!listening) {
+    sse = new EventSource('http://54.180.31.108/subscribe',     //구독
+    {headers: {Authorization: localStorage.getItem("access_token") }
+    })
 
-//     sse.onopen = event => {
-//       console.log("연결완료")
-//     }
-//     sse.onmessage = event => {
-//       console.log(event.data)
-      
-//       const sseData = JSON.parse(event.data) 
-//       setAlam(prev => [...prev, sseData])
-//     }
+    sse.onopen = event => {
+      console.log("연결완료")
+    }
 
-//     sse.onerror = event => {
-//       setListening(true)
-//     }
+    sse.addEventListener('sse', (e) => {
+        if(e.data.startsWith('{')) {
+          console.log(JSON.parse(e.data))
 
+          setAlam(prev => [...prev, JSON.parse(e.data).content])
+        }}
+    )
 
-// // addEventListener 데이터 캐치 성공
-//     sse.addEventListener('sse', (e) => {
-//         if(e.data.startsWith('{')) {
-//           console.log(JSON.parse(e.data).content)
+    sse.onerror = event => {
+      sse.close();
+    }
+    setListening(true);
+  }
+  return () => {
+    sse.close();
+  }
+}, [])
 
-//           setAlam(prev => [...prev, JSON.parse(e.data).content])
-//         }}
-//     )
+useEffect(()=>{
+  dispatch(__getAlam())
+  dispatch(__NreadAlam())
+},[alam])
 
-//     // sse.addEventListener('error', (e) => {
-//     //     if (e) { console.log(e) }
-//     // })
-//   }
-//   return () => {
-//     sse.close();
-//   }
-// }, [])
+const onclickReadAlam = (notificationId) => {
+  dispatch(__readAlam(notificationId))
+}
 
+const onclickDeleteAlam = (notificationId) => {
+  dispatch(__deleteAlam(notificationId))
+}
+
+const onclickDeleteAlams = () => {
+  dispatch(__deleteAlams())
+}
 
 
     return (
@@ -68,15 +84,25 @@ let sse = undefined;
           { showAlam &&
           <AlamBox>
             {
-              alam === undefined ? <Loading /> :
-                alam?.length === 0 ? <p>아직 알람이 없습니다</p> : 
-                  alam?.map((list, i) => {
+              isLoading ? <Loading /> :
+                Alam?.length === 0 ? <p>아직 알람이 없습니다</p> : 
+                  
+                <>
+                  <button onClick={onclickDeleteAlams}>전체 삭제</button>
+                  {
+
+                  Alam?.map((alam) => {
                     return (
-                      <div key={i}>
-                          {list}
-                      </div>
+                      <>
+                      { alam.status === true ? 
+                        (<div key={alam.id} style={{opacity:'0.5'}}>{alam.content} <button onClick={(e)=>{ e.stopPropagation();onclickDeleteAlam(alam.id)}}>삭제</button></div>)
+                          : (<div key={alam.id} onClick={(e)=>{ e.stopPropagation(); onclickReadAlam(alam.id)}}>{alam.content} <button onClick={(e)=>{ e.stopPropagation(); onclickDeleteAlam(alam.id)}}>삭제</button></div>)
+                      }
+                      </>
                     )
                   })
+                  }
+                </>
             }
           </AlamBox>
         }

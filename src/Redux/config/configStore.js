@@ -3,6 +3,8 @@ import { crewSlice } from "../modules/crewSlice";
 import { gymSlice } from "../modules/gymSlice";
 import { gymDetailSlice } from "../modules/gymDetilSlice";
 import { MyPageSlice } from "../modules/mypageSlice";
+import { alamSlice } from "../modules/notification";
+import { NreadAlamSlice } from "../modules/notification";
 import {
   loginSlice,
   kakaoLoginSlice,
@@ -20,6 +22,8 @@ const store = configureStore({
     gyms: gymSlice.reducer,
     gymDetail: gymDetailSlice.reducer,
     myPage: MyPageSlice.reducer, 
+    alams: alamSlice.reducer, 
+    NreadAlams: NreadAlamSlice.reducer,
   },
 });
 
