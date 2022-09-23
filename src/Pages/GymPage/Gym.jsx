@@ -84,7 +84,49 @@ const Gym = () => {
     //서울을 클릭하면 서울 특정 주소로 지도 중심을 이동시킨다
     //서울 주변의 클라이밍짐을 띄워준다
   const onclickCategorySeoul = () => {
-
+    categorySeoul(); 
+    setLocation('서울 주변 클라이밍짐')
+    setPlusMy(false)
+    setPlusGg(false)
+    setPlusBs(false)
+    setPlusDg(false)
+    setPlusGj(false)
+  }
+  const onclickCategoryGg = () => {
+    categoryGg(); 
+    setLocation('경기 주변 클라이밍짐')
+    setPlusMy(false)
+    setPlusSeoul(false)
+    setPlusBs(false)
+    setPlusDg(false)
+    setPlusGj(false)
+  }
+  const onclickCategoryBs = () => {
+    categoryBs(); 
+    setLocation('부산 주변 클라이밍짐')
+    setPlusMy(false)
+    setPlusSeoul(false)
+    setPlusGg(false)
+    setPlusDg(false)
+    setPlusGj(false)
+  }
+  const onclickCategoryDg = () => {
+    categoryDg(); 
+    setLocation('대구 주변 클라이밍짐')
+    setPlusMy(false)
+    setPlusSeoul(false)
+    setPlusGg(false)
+    setPlusBs(false)
+    setPlusGj(false)
+  }
+  const onclickCategoryGj = () => {
+    categoryGj(); 
+    setLocation('광주 주변 클라이밍짐')
+    setPlusMy(false)
+    setPlusSeoul(false)
+    setPlusGg(false)
+    setPlusBs(false)
+    setPlusDg(false)
   }
 
   const categorySeoul = async() => {
@@ -99,13 +141,7 @@ const Gym = () => {
           lat: 37.56682195018582,
           lng: 126.97865225946583,
       }}))
-      setLocation('서울 주변 클라이밍짐')
-      setPlusMy(false)
-      setPlusSeoul(true)
-      setPlusGg(false)
-      setPlusBs(false)
-      setPlusDg(false)
-      setPlusGj(false)
+    setPlusSeoul(!plusSeoul)
     })
     .catch((err) => {
       console.log(err)
@@ -124,13 +160,7 @@ const Gym = () => {
           lat: 37.23430874181801,
           lng: 127.20135714691537,
       }}))
-      setLocation('경기 주변 클라이밍짐')
-      setPlusMy(false)
-      setPlusSeoul(false)
-      setPlusGg(true)
-      setPlusBs(false)
-      setPlusDg(false)
-      setPlusGj(false)
+      setPlusGg(!plusGg)
     })
     .catch((err) => {
       console.log(err)
@@ -149,13 +179,7 @@ const Gym = () => {
           lat: 35.179735278020225,
           lng: 129.0750650311972,
       }}))
-      setLocation('부산 주변 클라이밍짐')
-      setPlusMy(false)
-      setPlusSeoul(false)
-      setPlusGg(false)
-      setPlusBs(true)
-      setPlusDg(false)
-      setPlusGj(false)
+      setPlusBs(!plusBs)
     })
     .catch((err) => {
       console.log(err)
@@ -174,13 +198,7 @@ const Gym = () => {
           lat: 35.87138346208865,
           lng: 128.60180223396753,
       }}))
-      setLocation('대구 주변 클라이밍짐')
-      setPlusMy(false)
-      setPlusSeoul(false)
-      setPlusGg(false)
-      setPlusBs(false)
-      setPlusDg(true)
-      setPlusGj(false)
+      setPlusDg(!plusDg)
     })
     .catch((err) => {
       console.log(err)
@@ -199,14 +217,8 @@ const Gym = () => {
           lat: 35.160101970076916,
           lng: 126.8516381907944,
       }}))
+      setPlusGj(!plusGj)
     })
-    setLocation('광주 주변 클라이밍짐')
-    setPlusMy(false)
-    setPlusSeoul(false)
-    setPlusGg(false)
-    setPlusBs(false)
-    setPlusDg(false)
-    setPlusGj(true)
     .catch((err) => {
       console.log(err)
     })
@@ -283,11 +295,11 @@ if(state.isLoading) {
               </div>
 
               <div style={{width:'120rem', margin:'6.5rem auto 0 auto', display:'flex'}}>
-                  <S_category onClick={categorySeoul} type="button"><h3>서울</h3></S_category>
-                  <S_category onClick={categoryGg} type="button"><h3>경기</h3></S_category>
-                  <S_category onClick={categoryBs} type="button"><h3>부산</h3></S_category>
-                  <S_category onClick={categoryDg} type="button"><h3>대구</h3></S_category>
-                  <S_category onClick={categoryGj} type="button"><h3>광주</h3></S_category>
+                  <S_category onClick={onclickCategorySeoul} type="button"><h3>서울</h3></S_category>
+                  <S_category onClick={onclickCategoryGg} type="button"><h3>경기</h3></S_category>
+                  <S_category onClick={onclickCategoryBs} type="button"><h3>부산</h3></S_category>
+                  <S_category onClick={onclickCategoryDg} type="button"><h3>대구</h3></S_category>
+                  <S_category onClick={onclickCategoryGj} type="button"><h3>광주</h3></S_category>
               </div>
               
             </div>
@@ -350,7 +362,7 @@ if(state.isLoading) {
                     <div style={{width:'100%', height:'9.5rem', borderBottom:'1px solid #ffffff',padding:'3.5rem 3.5rem 3rem 3.5rem'}}>
                         <span style={{fontWeight:'700', fontSize:'2rem'}}>{location}</span>
                         {
-                          plusMy ? <MoreGym onClick={()=>{setSizeMy(70)}} type="button"> 더 보기</MoreGym> :
+                          plusMy ? <MoreGym onClick={()=>{setSizeMy(70); setPlusMy(false)}} type="button"> 더 보기</MoreGym> :
                              plusSeoul ? <MoreGym onMouseOver={()=>{setSizeSeoul(80)}} onClick={categorySeoul} type="button"> 더 보기</MoreGym> :
                                 plusGg ? <MoreGym onMouseOver={()=>{setSizeGg(50)}} onClick={categoryGg} type="button"> 더 보기</MoreGym> :
                                   plusBs ? <MoreGym onMouseOver={()=>{setSizeBs(50)}} onClick={categoryBs} type="button"> 더 보기</MoreGym> :

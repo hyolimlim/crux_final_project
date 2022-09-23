@@ -10,8 +10,8 @@ const Alam = () => {
 
 const [reload, setReload] = useState(false)
 const {isLoading, error, alams} = useSelector((state) => state.alams)
-const Alam = alams?.data
-console.log(Alam)
+const alamList = alams?.data
+console.log(alamList)
 console.log(error)
 
 const {isLoading2, error2, NreadAlams} = useSelector((state) => state.NreadAlams)
@@ -73,6 +73,7 @@ useEffect(()=>{
 const onclickReadAlam = (notificationId) => {
   dispatch(__readAlam(notificationId))
   setReload(!reload)
+  console.log(notificationId)
 }
 
 const onclickDeleteAlam = (notificationId) => {
@@ -85,7 +86,7 @@ const onclickDeleteAlams = () => {
   setReload(!reload)
 }
 
-if (Alam === undefined) {
+if (alamList === undefined) {
   return null;
 }
 
@@ -94,29 +95,25 @@ if (Alam === undefined) {
         <div>
          <img style={{width:'2rem', margin:'0 3rem 0 0'}} src="https://previews.123rf.com/images/get4net/get4net1711/get4net171100677/89003028-%EC%A2%85-%EC%95%84%EC%9D%B4%EC%BD%98.jpg" 
           onClick={()=>setShowAlam(!showAlam)}/>
+          
           { showAlam &&
           <AlamBox>
             {
-              isLoading && isLoading2 ? <Loading /> :  
-                Alam?.length === 0 ? <p>아직 알람이 없습니다</p> : 
+              alamList?.length === 0 ? (<p>아직 알람이 없습니다</p>) : (
                   
                 <>
                   <button onClick={(e)=>{e.stopPropagation(); onclickDeleteAlams()}}>전체 삭제</button>
                   {
 
-                  Alam?.map((alam) => {
+                alamList?.map((alam) => {
                     return (
                       <>
-                      { alam.status === undefined ? null :
-                          alam?.status === true ? 
-                            (<div key={alam.id} style={{opacity:'0.5'}}>{alam.content} <button onClick={(e)=>{ e.stopPropagation();onclickDeleteAlam(alam.id)}}>삭제</button></div>)
-                              : (<div key={alam.id} onClick={(e)=>{ e.stopPropagation(); onclickReadAlam(alam.id)}}>{alam.content} <button onClick={(e)=>{ e.stopPropagation(); onclickDeleteAlam(alam.id)}}>삭제</button></div>)
-                      }
+                        {alam.content}
                       </>
                     )
                   })
                   }
-                </>
+                </>)
             }
           </AlamBox>
         }
@@ -135,6 +132,20 @@ background: #ffffff;
 color: #141414;
 overflow: auto;
 z-index: 999;
+`
+
+const List = styled.div`
+width: 23rem;
+height: 2.5rem;
+margin: 12px 0 0 0;
+width: 10rem;
+height: 1.5rem;
+cursor: pointer;
+padding-top: 1rem;
+counter-reset: #141414;
+overflow: hidden;
+white-space: nowrap;
+text-overflow: ellipsis;
 `
 
 export default Alam;
