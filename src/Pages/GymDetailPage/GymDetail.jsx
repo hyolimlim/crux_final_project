@@ -13,10 +13,9 @@ import { useEffect } from "react";
 const GymDetail = () => {
 
 const [showReview, setShowReview] = useState(false)
-
+const [reload, setReload] = useState(false)
 const params = useParams().gymId
 // console.log(params)
-
 const dispatch = useDispatch()
 
 const { isLoading, error, gymDetail } = useSelector((state) => state.gymDetail)
@@ -31,7 +30,7 @@ const gym = gymDetail.data
 useEffect(()=>{
     dispatch(__getGymDetail(params))
 
-},[])
+},[reload])
 
 if (gym === undefined) 
 return(
@@ -52,11 +51,15 @@ return(
             </div>
 
     {/* content 영역 입니다 */}
-            <Content gym={gym} setShowReview={setShowReview} showReview={showReview}/>
+            <Content gym={gym} setShowReview={setShowReview} showReview={showReview} setReload={setReload} reload={reload}/>
 
     {/* review 영역 입니다 */}
         {
-            showReview === true ? <Review gym={gym}/> : null
+            showReview === false ? null : 
+            <>
+                <img style={{width:'2rem', height:'2rem', position:'absolute', margin:'-5rem 0 0 94rem'}} src="https://www.pngmart.com/files/15/Arrow-Down-PNG-Picture.png"/>
+                <Review gym={gym} setReload={setReload} reload={reload}/>
+            </>
         }
             
 

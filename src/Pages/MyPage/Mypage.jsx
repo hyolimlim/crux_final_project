@@ -24,15 +24,12 @@ console.log(myPage)
 const params = useParams().memberId
 // console.log(params)
 
-useEffect(()=>{
-    dispatch(__getMyPage(params))
-},[])
-
-
 //프로필 편집 버튼을 누르면 편집모드로 변경합니다.
 const [editMypage, setEditMypage] = useState(false)
 
-
+useEffect(()=>{
+    dispatch(__getMyPage(params))
+},[editMypage])
 
     return(
         <>
@@ -47,7 +44,7 @@ const [editMypage, setEditMypage] = useState(false)
                 <Container>
                 
                 <Flex1>
-                    <ProfileImg src={myPage?.imgUrl !== null ? myPage?.imgUrl : 사용자기본이미지}/>
+                    <ProfileImg src={myPage?.imgUrl !== "" ? myPage?.imgUrl : 사용자기본이미지}/>
                         
                     <ProfileNickname>{myPage?.nickname}</ProfileNickname>
                     <ProfileContent>{myPage?.content}</ProfileContent>
@@ -60,7 +57,7 @@ const [editMypage, setEditMypage] = useState(false)
 
                         {
                             myPage?.crewList.map((crew) => {
-                                return(<div type="button" onClick={()=>{navigate(`/crews/${crew.id}`)}}>&bull; &nbsp; {crew.name}</div>)
+                                return(<div key={crew.id} type="button" onClick={()=>{navigate(`/crews/${crew.id}`)}}>&bull; &nbsp; {crew.name}</div>)
                             })
                         }
                 
@@ -72,7 +69,7 @@ const [editMypage, setEditMypage] = useState(false)
                         
                         {
                             myPage?.gymList.map((gym) => {
-                                return(<div type="button" onClick={()=>{navigate(`/gyms/${gym.gymId}`)}}>&bull; &nbsp; {gym.name}</div>)
+                                return(<div key={gym.id} type="button" onClick={()=>{navigate(`/gyms/${gym.gymId}`)}}>&bull; &nbsp; {gym.name}</div>)
                             })
                         }
 
@@ -146,6 +143,7 @@ color: #FFFFFF;
 width: 60rem;
 height: 10rem;
 margin: 1.5rem 75.7rem 0rem 7rem;
+overflow: auto;
 `
 const LikeGymTitle = styled.div`
 color: #666666;
@@ -157,6 +155,7 @@ color: #FFFFFF;
 width: 60rem;
 height: 29rem;
 margin: 1.5rem 75.7rem 0 7rem;
+overflow: auto;
 `
 
 const ButtonBox = styled.div`

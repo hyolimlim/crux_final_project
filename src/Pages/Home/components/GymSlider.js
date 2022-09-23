@@ -4,11 +4,12 @@ import Slider from "react-slick";
 import styled from "styled-components";
 import 슬라이더왼쪽버튼 from "../../../Image/btn_left.png"
 import 슬라이더오른쪽버튼 from "../../../Image/btn_right.png"
+import 기본클라이밍짐 from "../../../Image/인기 클라이밍짐.png"
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const SliderGym = () => {
-
-    const [gyms] = useState([0,1,2])
+const SliderGym = ({ gyms }) => {
+    const navigate = useNavigate()
 
     const settings = {
         dots: false,
@@ -39,11 +40,13 @@ const SliderGym = () => {
         {/* Gym 슬라이드 */}
 
             {
-                gyms.map((gym,i)=>{
+                gyms?.map((gym,i)=>{
                     return(
                         <div key={i}>
-                            <img src="https://cdn.c1news.kr/news/photo/202208/11752_16956_25.jpg" alt="" 
-                                    style={{width:'630px', height:'630px', margin:'0 2%', position:'relative'}}/>
+                            <div style={{color:'#ffffff', fontSize:'2rem', margin:'0 0 8px 15px'}}>{gym.name} (평점: {Number(gym.avgScore).toFixed(2)}점)</div>
+                            <img src={gym.imgUrl !== null ? gym.imgUrl : 기본클라이밍짐} alt="" 
+                                 style={{width:'630px', height:'630px', margin:'0 2%', position:'relative'}}
+                                    onClick={()=>{navigate(`/gyms/${gym.id}`)}}/>
                         </div>
                     )
                 })

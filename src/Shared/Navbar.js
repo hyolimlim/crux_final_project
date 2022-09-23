@@ -4,6 +4,7 @@ import { useState } from "react";
 import ModalPortal from "../Pages/Login/MordalPortal";
 import LoginModal from "../Pages/Login/LoginModal";
 import Legister from "../Pages/Register/Register";
+import Alam from "./Alam";
 
 const Navbar = () => {
   const userToken = window.localStorage.getItem("access_token")
@@ -76,6 +77,7 @@ const Navbar = () => {
           {
             userToken !== null ? 
             <>
+            <Alam />
             <h4 type="button" onClick={()=>{navigate(`/members/${userId}`)}}>MYPAGE</h4>
             <h4 style={{ position: "relative", left: "2.5rem" }} type="button" 
               onClick={removeToken}>LOGOUT</h4> 

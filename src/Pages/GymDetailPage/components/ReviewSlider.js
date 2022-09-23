@@ -38,7 +38,7 @@ return(
             [...reviews]?.reverse().map((review, i) => {
                 return(
                     <div key={i} >
-                        <img src={review.reviewPhotoList[0].imgUrl} style={{width:'45rem', height:'25rem'}}/>
+                        <img src={review?.reviewPhotoList[0]?.imgUrl} style={{ width:'38rem', height:'25rem', opacity:'0.8'}}/>
                     </div>
                 )
             })
@@ -71,7 +71,7 @@ width: 30px;
 height: 30px;
 position: absolute;
 /* right: 16px; */
-z-index: 999;
+z-index: 100;
 margin: 32% 10% 0 0;
 /* text-align: right; */
 line-height: 30px;
@@ -82,7 +82,7 @@ width: 30px;
 height: 30px;
 position: absolute;
 /* left: 16px; */
-z-index: 999;
+z-index: 100;
 margin: 32% 0 0 14%;
 /* text-align: left; */
 line-height: 30px;
