@@ -1,15 +1,29 @@
+import { useEffect } from "react";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { __getCrew, __getGym } from "../../../Redux/modules/homeSlice";
+import Loading from "../../../Shared/Loading"
+import 인기크루 from "../../../Image/인기크루.png"
 
 
 
 const CrewArea = () => {
 
-    const [crewList, setCrewList] = useState([1,2,3,4])
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const {isLoading, error, getCrew} = useSelector((state)=>state.getCrew)
     
-    
+    const crews = getCrew?.data?.content
+    // console.log(crews)
 
-    return(
+    useEffect(()=>{
+        dispatch(__getCrew())
+    },[])
+
+
+return(
         <div style={{width:'1920px',height:'600px', backgroundColor:'#111', margin:'0 auto'}}>
             <div style={{width:'1210px', height:'70px', fontSize:'34px', margin:'0 auto', color:'white'}}>
                 <span style={{margin:'0 50px 0 0'}}>인기 크루</span>
@@ -17,22 +31,23 @@ const CrewArea = () => {
             </div>
             <div style={{width:'1210px', height:'250px', margin:'0 auto', display:'flex'}}>
             {
-                crewList.map((crew,i)=>{
-                    return(
-                            <div key={i} style={{width:'274px', height:'400px', margin:'0 3%'}}>
-                                <img src="https://cdn-pro-web-209-212-godomall.spdycdn.net/malb2b1_godomall_com/data/goods/21/01/02/19184/19184_detail_038.jpg" alt="" 
-                                style={{width:'250px', height:'250px', margin:'0 10px', borderRadius:'60%'}}/>
-                                <div>
-                                    <Snumber>{i+1}</Snumber>
-                                    <div style={{textAlign:'center'}}>
-                                        <div style={{color:'white', margin:'0 0 14px 0'}}>더클라임 양재점</div>
-                                        <div style={{color:'white'}}>좋아요 30개</div>
+                isLoading ? <Loading /> :
+                    crews?.map((crew,i)=>{
+                        return(
+                                <div key={crew.id} style={{width:'274px', height:'400px', margin:'0 3%'}}>
+                                    <img src={인기크루} alt="" style={{width:'250px', height:'250px', margin:'0 10px', borderRadius:'60%'}}
+                                        onClick={()=>{navigate(`/crews/${crew.id}`)}}/>
+                                    <div>
+                                        <Snumber>{i+1}</Snumber>
+                                        <div style={{textAlign:'center'}}>
+                                            <div style={{color:'white', margin:'0 0 14px 0'}}>{crew?.name}</div>
+                                            <div style={{color:'white'}}>좋아요 {crew?.likeNum}개</div>
+                                        </div>
                                     </div>
+                                    
                                 </div>
-                                
-                            </div>
-                    )
-                })
+                        )
+                    })
             }
             </div>
         </div>

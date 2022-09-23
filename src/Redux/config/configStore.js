@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { getCrewSlice, getGymSlice } from "../modules/homeSlice";
 import { crewSlice } from "../modules/crewSlice";
-import { gymSlice } from "../modules/gymSlice";
 import { gymDetailSlice } from "../modules/gymDetilSlice";
 import { MyPageSlice } from "../modules/mypageSlice";
 import { alamSlice } from "../modules/notification";
@@ -14,12 +14,13 @@ import {
 
 const store = configureStore({
   reducer: {
+    getCrew: getCrewSlice.reducer,
+    getGym: getGymSlice.reducer,
     user: userSlice.reducer,
     crews: crewSlice.reducer,
     login: loginSlice.reducer,
     signup: signupSlice.reducer,
     kakaoLogin: kakaoLoginSlice.reducer,
-    gyms: gymSlice.reducer,
     gymDetail: gymDetailSlice.reducer,
     myPage: MyPageSlice.reducer, 
     alams: alamSlice.reducer, 

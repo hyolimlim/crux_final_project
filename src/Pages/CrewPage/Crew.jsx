@@ -80,7 +80,6 @@ const Crew = () => {
 
           {choicePopularCrew === true ? (<PopularCrew searchData={searchData}/>) : (<NewCrew searchData={searchData}/>)}
 
-              
     </div>
   );
 };

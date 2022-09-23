@@ -16,12 +16,12 @@ const PopularCrew = ({searchData}) => {
     const navigate = useNavigate();
   
     const [list, setList] = useState([]);
-    // console.log(list)
+    console.log(list)
     
   
     // 무한스크롤 적용하기
       const [page, setPage] = useState(0); //현재 페이지
-      // console.log(page)
+      console.log(page)
       const obsRef = useRef(null); 	//observer Element
   
       const [load, setLoad] = useState(false); //로딩 스피너
@@ -69,7 +69,6 @@ return (
     <div
         style={{
           width: "192rem",
-          height: "100%",
           backgroundColor: "#141414",
           color: "#999999",
           // overflow: "auto",
@@ -78,10 +77,9 @@ return (
         <Container
           style={{
             width: "120rem",
-            height: "134rem",
+            height: "100%",
             margin: "0 auto",
             padding: "0",
-            backgroundColor: "#141414",
           }}
         >
           <Row md={3} style={{ margin: "0 auto", padding: "1rem 0 0 0" }}>
@@ -148,7 +146,9 @@ return (
         }
 
             { load && <Loading />}
-            <div ref={obsRef} style={{height:'100px', backgroundColor:"yellow"}}> TARGET 부분 </div>
+                        
+            <div ref={obsRef} ></div>
+          
           </Row>
         </Container>
       </div>

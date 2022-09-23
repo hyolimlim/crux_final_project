@@ -8,13 +8,16 @@ import { useNavigate } from "react-router-dom";
 
 const Alam = () => {
 
+const [reload, setReload] = useState(false)
 const {isLoading, error, alams} = useSelector((state) => state.alams)
 const Alam = alams?.data
 console.log(Alam)
+console.log(error)
 
 const {isLoading2, error2, NreadAlams} = useSelector((state) => state.NreadAlams)
 const NreadAlam = NreadAlams.data
 console.log(NreadAlam)
+console.log(error2)
 
 const navigate = useNavigate()
 const dispatch = useDispatch()
@@ -60,21 +63,31 @@ useEffect(()=>{
 
 useEffect(()=>{
   dispatch(__getAlam())
-  dispatch(__NreadAlam())
 },[alam])
+
+useEffect(()=>{
+  dispatch(__getAlam())
+  dispatch(__NreadAlam())
+},[reload])
 
 const onclickReadAlam = (notificationId) => {
   dispatch(__readAlam(notificationId))
+  setReload(!reload)
 }
 
 const onclickDeleteAlam = (notificationId) => {
   dispatch(__deleteAlam(notificationId))
+  setReload(!reload)
 }
 
 const onclickDeleteAlams = () => {
   dispatch(__deleteAlams())
+  setReload(!reload)
 }
 
+if (Alam === undefined) {
+  return null;
+}
 
     return (
         <>
@@ -84,19 +97,20 @@ const onclickDeleteAlams = () => {
           { showAlam &&
           <AlamBox>
             {
-              isLoading ? <Loading /> :
+              isLoading && isLoading2 ? <Loading /> :  
                 Alam?.length === 0 ? <p>아직 알람이 없습니다</p> : 
                   
                 <>
-                  <button onClick={onclickDeleteAlams}>전체 삭제</button>
+                  <button onClick={(e)=>{e.stopPropagation(); onclickDeleteAlams()}}>전체 삭제</button>
                   {
 
                   Alam?.map((alam) => {
                     return (
                       <>
-                      { alam.status === true ? 
-                        (<div key={alam.id} style={{opacity:'0.5'}}>{alam.content} <button onClick={(e)=>{ e.stopPropagation();onclickDeleteAlam(alam.id)}}>삭제</button></div>)
-                          : (<div key={alam.id} onClick={(e)=>{ e.stopPropagation(); onclickReadAlam(alam.id)}}>{alam.content} <button onClick={(e)=>{ e.stopPropagation(); onclickDeleteAlam(alam.id)}}>삭제</button></div>)
+                      { alam.status === undefined ? null :
+                          alam?.status === true ? 
+                            (<div key={alam.id} style={{opacity:'0.5'}}>{alam.content} <button onClick={(e)=>{ e.stopPropagation();onclickDeleteAlam(alam.id)}}>삭제</button></div>)
+                              : (<div key={alam.id} onClick={(e)=>{ e.stopPropagation(); onclickReadAlam(alam.id)}}>{alam.content} <button onClick={(e)=>{ e.stopPropagation(); onclickDeleteAlam(alam.id)}}>삭제</button></div>)
                       }
                       </>
                     )
