@@ -27,7 +27,7 @@ function CrewNotice({ notice }) {
       id: params,
       content: data.content,
     };
-    console.log(payload);
+    // console.log(payload);
     dispatch(createCrewNotice(payload), [dispatch]);
   };
 

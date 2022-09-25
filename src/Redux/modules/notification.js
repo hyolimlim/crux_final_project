@@ -10,6 +10,7 @@ export const __getAlam = createAsyncThunk(
         try {
             const data = await axios.get(`${BASE_URL}/notifications`,
             { headers: {Authorization: window.localStorage.getItem("access_token")}})
+            console.log(data.data)
             return thunkAPI.fulfillWithValue(data.data)
         } catch (error) {
             return thunkAPI.rejectWithValue(error)
@@ -75,7 +76,7 @@ export const __NreadAlam = createAsyncThunk(
         try {
             const data = await axios.get(`${BASE_URL}/notifications/count`,
             { headers: {Authorization: window.localStorage.getItem("access_token")}})
-            console.log(data.data)
+            // console.log(data.data)
             return thunkAPI.fulfillWithValue(data.data)
         } catch (error) {
             return thunkAPI.rejectWithValue(error)
@@ -97,6 +98,9 @@ export const NreadAlamSlice = createSlice({
     reducers: {
         _minusAlam(state, action) {
             state.NreadAlams.data.count -= action.payload
+        },
+        _plusAlam(state, action) {
+            state.NreadAlams.data.count += action.payload
         }
     },
     extraReducers: {
@@ -114,7 +118,7 @@ export const NreadAlamSlice = createSlice({
     }
 })
 
-export const { _minusAlam } = NreadAlamSlice.actions
+export const { _minusAlam, _plusAlam } = NreadAlamSlice.actions
 // export const __deleteAlam = createAsyncThunk(
 //     'deleteAlam',
 //     async (notificationId, thunkAPI) => {

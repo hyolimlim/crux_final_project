@@ -83,7 +83,7 @@ const Navbar = () => {
 
 const NavContainer = styled.div`
   display: flex;
-  background-color: #141414;
+  background-color: #000000;
 `;
 
 const NavContent = styled.div`

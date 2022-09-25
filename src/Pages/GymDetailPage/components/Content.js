@@ -61,9 +61,9 @@ return(
 ) 
 
     return(
-        <div style={{width:'192rem', height:'80rem', backgroundColor:'#141414', color:'#ffffff'}}>
-            <div style={{width:'120rem', height:'64rem', margin:'auto', display:'flex'}}>
-                <div style={{width:'70rem', height:'100%', margin:'8rem 0 0 0'}}>
+        <div style={{width:'192rem', height:'81.5rem', backgroundColor:'#262626', color:'#cccccc'}}>
+            <div style={{width:'192rem', height:'81.5rem', margin:'auto', display:'flex', justifyContent:'center'}}>
+                <div style={{width:'60rem', height:'60rem', margin:'10rem 0 0 0'}}>
                     
                     <img src={gym.reviews[0]?.reviewPhotoList[0]?.imgUrl !== undefined ? gym.reviews[0]?.reviewPhotoList[0]?.imgUrl : 클라이밍} 
                     style={{width:'100%', height:'100%'}}/>
@@ -73,16 +73,20 @@ return(
                     </HeartIcon>
                 </div>
 
-                <div style={{width:'50rem', height:'100%', margin:'8rem 0 0 0', padding:'2rem 4rem 4rem 4rem', backgroundColor:'#262626', color:'white'}}>
+                <div style={{width:'60rem', height:'60rem', margin:'10rem 0 0 0', padding:'0rem 4rem 4rem 4rem', backgroundColor:'#262626', color:'#666666'}}>
                     
-                    <div style={{margin:'0 0 0 0'}}> <span style={{margin:'0 16rem 0 0'}}>💛 30명 | 리뷰 {gym?.reviews.length}건 </span></div>
-                    <div style={{fontSize:'3.2rem', fontWeight:'700', margin:'2rem 0 0 0'}}>{gym?.name}</div>
-                    <div style={{fontSize:'2rem', fontWeight:'700', margin:'2rem 0 0 0'}}>주소 <S_content> {gym.location} </S_content></div>
-                    <div style={{fontSize:'2rem', fontWeight:'700', margin:'2rem 0 0 0'}}>전화번호 <S_content> {gym.phone} </S_content></div>
-
+                    <div style={{margin:'0 0 0 0', color:'#999999'}}> <span style={{margin:'0 16rem 0 0'}}>💛 {gym.likeNum}명 | 리뷰 {gym?.reviews.length}건 </span></div>
+                    <div style={{fontSize:'3.2rem', fontWeight:'700', color:'#ffffff',margin:'1rem 0 0 0'}}>{gym?.name}</div>
+                    <S_title> 주소 <S_content> {gym.location} </S_content></S_title>
+                    <S_title>전화번호 <S_content> {gym.phone} </S_content></S_title>
+                    
+                    <S_title> 평점 <span style={{color:'#cccccc'}}>{Number(gym?.avgScore).toFixed(2)}</span> 
+                            
+                    </S_title>
+                    
                     <div style={{fontSize:'2rem', fontWeight:'700', margin:'3rem 0 0 0'}}>방문객 포토리뷰</div>
 
-                    <div style={{width:'90%', height:'22rem', margin:'3rem auto'}}>
+                    <div style={{width:'38rem', height:'25rem', margin:'2rem 0 0 0'}}>
                         {
                             gym?.reviews.length === 0 ? 
                             
@@ -97,7 +101,7 @@ return(
                         <ButtonBox onClick={()=>{setShowReview(!showReview)}}>
                             <button>리뷰 상세보기</button>
                         </ButtonBox>
-                        <ButtonBox onClick={()=>{setModal(true)}}>
+                        <ButtonBox onClick={()=>{setModal(true)}} style={{margin:'2rem 0 0 2rem'}}>
                             <button>후기 쓰기</button>
                         </ButtonBox>
                     </div>
@@ -115,13 +119,19 @@ return(
 
 const HeartIcon = styled.div`
   position: absolute;
-  margin: -60rem 0rem 0 61rem;
+  margin: -57rem 0rem 0 52rem;
 `;
+const S_title = styled.div`
+font-size: 2rem;
+font-weight: 400;
+margin: 1.4rem 0 0 0;
+`
 
 const S_content = styled.span`
 margin-left: 1rem;
 font-size: 2rem;
 font-weight: 400;
+color: #cccccc;
 `
 
 const ButtonBox = styled.div`
@@ -134,7 +144,7 @@ const ButtonBox = styled.div`
   font-weight: 500;
   font-size: 1.4rem;
   letter-spacing: -0.05em;
-  margin: 2rem 0 0 2rem;
+  margin: 2rem 0 0 0rem;
   /* position: absolute; */
   button {
     width: 100%;

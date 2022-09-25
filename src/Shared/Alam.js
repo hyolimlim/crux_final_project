@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
-import { __getAlam, _readAlam, _addAlam, _deleteAlam, _deleteAlams, __NreadAlam, _minusAlam } from "../Redux/modules/notification";
+import { __getAlam, _readAlam, _addAlam, _deleteAlam, _deleteAlams, __NreadAlam, _minusAlam, _plusAlam } from "../Redux/modules/notification";
 import Loading from "../Shared/Loading"
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -11,10 +11,10 @@ const Alam = () => {
 const BASE_URL = "http://sparta-tim.shop";
 const [reload, setReload] = useState(false)
 const {isLoading, error, alams} = useSelector((state) => state.alams)
-console.log(alams)
+// console.log(alams)
 
 const {isLoading2, error2, NreadAlams} = useSelector((state) => state.NreadAlams)
-console.log(NreadAlams.data)
+// console.log(NreadAlams.data)
 // console.log(error2)
 
 const navigate = useNavigate()
@@ -38,7 +38,7 @@ useEffect(()=>{
     })
 
     sse.onopen = event => {
-      // console.log("연결완료")
+      console.log("연결완료")
     }
 
     sse.addEventListener('sse', (e) => {
@@ -46,18 +46,23 @@ useEffect(()=>{
           console.log(JSON.parse(e.data))
 
           dispatch(_addAlam(JSON.parse(e.data)))
+          dispatch(_plusAlam(1))
           // setAlam(prev => [...prev, JSON.parse(e.data).content])
         }}
     )
 
     sse.onerror = event => {
+      console.log(event.target.readyState);
+      if (event.target.readyState === EventSource.CLOSED) {
+        console.log("eventsource closed (" + event.target.readyState + ")");
+      }
       sse.close();
-    }
+    };
     setListening(true);
   }
-  // return () => {
-  //   sse.close();
-  // }
+  return () => {
+    sse.close();
+  }
 }, [])
 
 useEffect(()=>{
@@ -66,7 +71,7 @@ useEffect(()=>{
 },[])
 
 const onclickReadAlam = (notificationId) => {
-  // readAlam(notificationId)
+  readAlam(notificationId)
   dispatch(_readAlam(notificationId))
 
   const a = alams.data.findIndex((v) => v.id === notificationId)
@@ -76,7 +81,7 @@ const onclickReadAlam = (notificationId) => {
 }
 
 const onclickDeleteAlam = (notificationId) => {
-  // deleteAlam(notificationId)
+  deleteAlam(notificationId)
   dispatch(_deleteAlam(notificationId))
 
   const a = alams.data.findIndex((v) => v.id === notificationId)
@@ -86,7 +91,7 @@ const onclickDeleteAlam = (notificationId) => {
 }
 
 const onclickDeleteAlams = () => {
-  // deleteAlams()
+  deleteAlams()
   dispatch(_deleteAlams())
   dispatch(_minusAlam(NreadAlams.data.count))
 }
@@ -145,17 +150,17 @@ const deleteAlams = async () => {
                   {
                       alams?.data.map((alam) => {
                     return (
-                      <>
+                      <div key={alam.id}>
                         {!alam.status ? 
-                          (<AlamContent onClick={(e)=>{e.stopPropagation(); onclickReadAlam(alam.id)}} key={alam.id}>
+                          (<AlamContent onClick={(e)=>{e.stopPropagation(); onclickReadAlam(alam.id)}} >
                             {alam.content} <button onClick={(e)=>{e.stopPropagation(); onclickDeleteAlam(alam.id)}}>삭제</button> 
                           </AlamContent>)
                          :
-                         (<ReadAlamContent key={alam.id}>
+                         (<ReadAlamContent >
                             {alam.content} <button onClick={(e)=>{e.stopPropagation(); onclickDeleteAlam(alam.id)}}>삭제</button> 
                           </ReadAlamContent>)
                         }
-                      </>
+                      </div>
                     )})
                   }
 

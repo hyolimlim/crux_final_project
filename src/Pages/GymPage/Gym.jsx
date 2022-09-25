@@ -284,26 +284,26 @@ if(state.isLoading) {
 
             <Navbar />
 
-            <div style={{width:'192rem', height:'26rem', padding:'8rem 0 0 0', backgroundColor:'#262626', color:'#ffffff'}}>
-                
-              <div style={{width:'120rem', margin:'0 auto 0 auto', display:'flex'}}>
+            <div style={{width:'192rem', height:'33rem', padding:'8rem 0 0 0', backgroundColor:'#141414', color:'#ffffff'}}>
+              
+              <div style={{width:'120rem', margin:'0 auto 0 auto'}}>
                   <h1 style={{width:'38rem', margin:'0 35.2rem 0 0'}}>클라이밍짐 후기</h1>
                  
-                  <S_input onChange={(e)=>{ setSearch(e.target.value) }} value={search}/> 
-                  <FontAwesomeIcon icon={faMagnifyingGlass} size="3x" color='black' onClick={onclickSearchGym} style={{position:'absolute', margin:'2rem 0 0 108rem'}} type="button"/> 
+                  <S_input onChange={(e)=>{ setSearch(e.target.value) }} value={search} placeholder="검색어를 입력해 주세요"/> 
+                  <FontAwesomeIcon icon={faMagnifyingGlass} size="3x" color='white' onClick={onclickSearchGym} style={{position:'absolute', margin:'4.5rem 0 0 -5rem'}} type="button"/> 
                   
               </div>
 
-              <div style={{width:'120rem', margin:'6.5rem auto 0 auto', display:'flex'}}>
+              <div style={{width:'120rem', margin:'4rem auto 0 auto', display:'flex'}}>
                   <S_category onClick={onclickCategorySeoul} type="button"><h3>서울</h3></S_category>
                   <S_category onClick={onclickCategoryGg} type="button"><h3>경기</h3></S_category>
                   <S_category onClick={onclickCategoryBs} type="button"><h3>부산</h3></S_category>
                   <S_category onClick={onclickCategoryDg} type="button"><h3>대구</h3></S_category>
                   <S_category onClick={onclickCategoryGj} type="button"><h3>광주</h3></S_category>
               </div>
-              
+
             </div>
-            
+            <div style={{width:'192rem', height:'6rem', backgroundColor:'#000000'}}></div>
 
             {/* 내 주변 클라이밍 짐 Area입니다 */}
             <div style={{display:'flex', justifyContent:'center'}}>
@@ -313,7 +313,7 @@ if(state.isLoading) {
                 
                 <Map
                     center={ state.center }
-                    style={{ width: "134rem", height: "110rem" }}
+                    style={{ width: "134rem", height: "97rem" }}
                     level={5}
                 >
                     
@@ -359,7 +359,7 @@ if(state.isLoading) {
 
 
                 <GymContainer>
-                    <div style={{width:'100%', height:'9.5rem', borderBottom:'1px solid #ffffff',padding:'3.5rem 3.5rem 3rem 3.5rem'}}>
+                    <div style={{width:'100%', height:'9.5rem', borderBottom:'1px solid #666',padding:'3.5rem 3.5rem 3rem 3.5rem'}}>
                         <span style={{fontWeight:'700', fontSize:'2rem'}}>{location}</span>
                         {
                           plusMy ? <MoreGym onClick={()=>{setSizeMy(70); setPlusMy(false)}} type="button"> 더 보기</MoreGym> :
@@ -404,31 +404,36 @@ font-size: 11px;
 `
 
 const S_input = styled.input`
-width: 39rem;
-height: 5rem;
-margin: 1rem 0 0 0;
+width: 60rem;
+height: 6rem;
+margin: 3rem auto;
+border: none;
 font-size: 1.4rem;
-padding: 0 0 0 1rem;
-border: 1px solid #CCCCCC;
-`
+font-weight: 400;
+padding: 0 0 0 2rem;
+background-color: #333;
+color: #666666;
+  `
 
 const S_category = styled.div`
 margin: 0 4rem 0 0;
+padding: 0 0 1rem 0;
+border-bottom: 1px solid #999;
 `
 
 const GymContainer = styled.div`
 width: 58rem;
-height: 110rem;
+height: 97rem;
 
 background-color: #141414;
 color: #ffffff;
-border: 1px solid #CCCCCC;
-overflow: auto;
+border-top: 1px solid #ccc;
+overflow: auto ;
 `
 
 const MoreGym = styled.span`
 font-size: 1.4rem;
-border-bottom: 1px solid #ffffff;
+border-bottom: 1px solid #cccccc;
 margin: 0 0 0 15px;
 opacity: 0.8;
 `

@@ -82,12 +82,21 @@ const editProfile = async (payload) => {
                                         style={{ display: 'none' }}
                                         onChange={changeImage}
                                     />
-                                    <FontAwesomeIcon icon={faGear} size="4x" color='#666666' style={{margin:'-12rem 0 0 67rem', position:"absolute"}} type="button"/>
+                                    <FontAwesomeIcon icon={faGear} size="4x" color='#666666' style={{margin:'-7rem 0 0 7rem', position:"absolute"}} type="button"/>
                                 </label>
 
 
                     <ProfileNickname placeholder={myPage?.nickname} onChange={(e)=>{setEditNickname(e.target.value)}}/>
-                    <ProfileContent placeholder={myPage?.content} onChange={(e)=>{setEditContent(e.target.value)}}/>
+                    
+                    <div style={{display:'flex'}}>
+                        <ButtonBox>
+                            <button onClick={EditDone}>수정완료</button>
+                        </ButtonBox>
+                        {/* <ButtonBox onClick={()=>{setEditMypage(false)}}>
+                            <button>취소</button>
+                        </ButtonBox> */}
+                    </div>
+
                 </Flex1>
 
                 <Flex2>
@@ -97,7 +106,7 @@ const editProfile = async (payload) => {
 
                         {
                             myPage?.crewList.map((crew) => {
-                                return(<div>&bull; &nbsp; {crew.name}</div>)
+                                return(<div key={crew.id}>&bull; &nbsp; {crew.name}</div>)
                             })
                         }
                 
@@ -109,20 +118,17 @@ const editProfile = async (payload) => {
                         
                         {
                             myPage?.gymList.map((gym) => {
-                                return(<div>&bull; &nbsp; {gym.name}</div>)
+                                return(<div key={gym.id}>&bull; &nbsp; {gym.name}</div>)
                             })
                         }
 
                     </LikeGymContent>
 
-                    <div style={{display:'flex'}}>
-                    <ButtonBox>
-                        <button onClick={EditDone}>수정완료</button>
-                    </ButtonBox>
-                    <ButtonBox onClick={()=>{setEditMypage(false)}}>
-                        <button>취소</button>
-                    </ButtonBox>
+                    <div style={{color:'#666666', margin:'0 0 1.5rem 7rem', fontSize:'2rem', fontWeight:'400'}}>
+                        소개글
                     </div>
+
+                    <ProfileContent placeholder={myPage?.content} onChange={(e)=>{setEditContent(e.target.value)}}/>
 
                 </Flex2>
 
@@ -144,67 +150,34 @@ color: #ffffff;
 font-size: 2rem;
 display: flex;
 `
-
 const Flex1 = styled.div`
-width: 88.4rem;
+width: 75rem;
 height: 100%;
 border-right: 1px solid #393939;
+display: flex;
+flex-direction: column;
+align-items: center;
+padding: 0 0 0 30rem;
 `
 const ProfileImg = styled.img`
-width: 40rem;
-height: 40rem;
-margin: 0 12.4rem 0rem 36rem;
+width: 25rem;
+height: 25rem;
 border-radius: 60%;
 `
 
-
 const ProfileNickname = styled.input`
-width: 40rem;
-margin: 0 12.4rem 6rem 36rem;
+width: 30rem;
 text-align: center;
 font-size: 3.6rem;
+margin: 5rem 0 0 0;
+color: #cccccc;
+background-color: #333333;
+border: none;
 `
-const ProfileContent =styled.textarea`
-width: 40rem;
-margin: 0 12.4rem 6rem 36rem;
-text-align: center;
-font-size: 2.4rem;
-`
-
-const Flex2 =styled.div`
-width: 103.6rem;
-height: 100%;
-`
-
-const JoinCrewTitle = styled.div`
-color: #666666;
-width: 12rem;
-margin: 1rem 85.7rem 1.5rem 7rem ;
-`
-
-const JoinCrewContent = styled.div`
-color: #FFFFFF;
-width: 60rem;
-height: 10rem;
-margin: 1.5rem 75.7rem 0rem 7rem;
-overflow: auto;
-`
-const LikeGymTitle = styled.div`
-color: #666666;
-width: 20rem;
-margin: 5rem 85.7rem 1.5rem 7rem ;
-`
-const LikeGymContent = styled.div`
-color: #FFFFFF;
-width: 60rem;
-height: 29rem;
-margin: 1.5rem 75.7rem 0 7rem;
-overflow: auto;
-`
-
 const ButtonBox = styled.div`
-  width: 27.5rem;
+  width: 30rem;
   height: 60px;
+  margin: 4rem 0 0 0;
   display: flex;
   justify-content: space-between;
   font-family: "Spoqa Han Sans Neo";
@@ -212,7 +185,6 @@ const ButtonBox = styled.div`
   font-weight: 500;
   font-size: 20px;
   letter-spacing: -0.05em;
-  margin: 0 0 0 7rem;
   button {
     width: 100%;
     height: 60px;
@@ -226,6 +198,44 @@ const ButtonBox = styled.div`
     }
   }
 `;
-        
+const ProfileContent =styled.textarea`
+width: 83rem;
+margin: 0 0 0 7rem;
+font-size: 2rem;
+font-weight: 500;
+color: #cccccc;
+background-color: #333333;
+border: none;
+`
+
+const Flex2 =styled.div`
+width: 103.6rem;
+height: 100%;
+`
+const JoinCrewTitle = styled.div`
+color: #666666;
+width: 12rem;
+margin: 1rem 85.7rem 1.5rem 7rem ;
+`
+
+const JoinCrewContent = styled.div`
+color: #FFFFFF;
+width: 83rem;
+height: 9rem;
+margin: 1.5rem 75.7rem 0rem 7rem;
+overflow: auto;
+`
+const LikeGymTitle = styled.div`
+color: #666666;
+width: 20rem;
+margin: 5rem 85.7rem 1.5rem 7rem ;
+`
+const LikeGymContent = styled.div`
+color: #FFFFFF;
+width: 83rem;
+height: 15rem;
+margin: 1.5rem 75.7rem 0 7rem;
+overflow: auto;
+`
 
 export default EditMypage;

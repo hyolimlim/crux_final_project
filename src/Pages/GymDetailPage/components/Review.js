@@ -37,38 +37,40 @@ if(gym === undefined) {
 }
 
     return(
-        <div style={{width:'192rem', backgroundColor:'#141414', height:'115rem'}}>
-            <div style={{width:'120rem', margin:'0 auto', padding:'3rem 0 0 0', background:'#262626', color:'#ffffff', height:'107rem', overflow:'auto'}}>
+        <div style={{width:'192rem', backgroundColor:'#141414'}}>
+            <div style={{width:'120rem', margin:'0 auto', padding:'3rem 0 0 0', color:'#999999'}}>
                 
                 {
                     gym.reviews?.map((review,i) => {
                         return(
-                            <div key={i} style={{width:'90%', padding:'1rem', margin:'0 auto',display:'flex', borderBottom:'1px solid gray'}}>
-                                <div style={{width:'10%', height:'100%', margin:'2rem 0 0 0'}}>
-                                    <div style={{display:'flex', justifyContent:'center'}}><img src={review.imgUrl !== null ? review.imgUrl : 사용자이미지} style={{width:'5rem', height:'5rem', borderRadius:'60%'}}/></div>
-                                    <div style={{textAlign:'center', margin:'7px 0 0 0'}}>{review.nickname}</div>
+                            <div key={i} style={{margin:'0 auto',display:'flex', padding:'5rem 0 0 0',borderBottom:'1px solid #202020'}}>
+                                <div style={{width:'11rem', height:'100%'}}>
+                                    <div><img src={review.imgUrl !== null ? review.imgUrl : 사용자이미지} style={{width:'8rem', height:'8rem', borderRadius:'60%'}}/></div>
+                                    
                                 </div>
-                                <div style={{width:'66%', height:'100%', padding:'1rem', fontSize:'1.4rem'}}>
-                                    <div style={{opacity:'0.5'}}>{review.createdAt?.substr(0,10)}</div>
-                                    <div>{review.content}</div>
-                                    <img src={review.reviewPhotoList[0]?.imgUrl} style={{width:'7rem', height:'7rem', margin:'1rem 0 0 0'}}/>
-                                </div>
-                                <div style={{width:'16%', hieght:'100%', padding:'3rem 0 0 1rem' }}>
+
+                                <div style={{width:'44rem', height:'100%', padding:'1rem', fontSize:'1.4rem'}}>
+                                    <div style={{margin:'0 0 0 0', color:'#ffffff'}}>{review.nickname}
+                                        <span style={{opacity:'0.5', margin:'0 0 0 2rem'}}>{review.createdAt?.substr(0,10)}</span>
+                                    </div>
                                 
-                                {
+                                <div style={{height:'4rem', margin:'0.5rem 0 0 0'}}>
+                                    {
                                     review.score === 1 ? <Star />
                                      : review.score === 2 ? <Star2 />
                                         : review.score === 3 ? <Star3 />
                                             : review.score === 4 ? <Star4 />
                                                 : review.score === 5 ? <Star5 />
                                                     : ''
-                                }
-
+                                    }
+                                </div>
+                                    <div style={{margin:'0.5rem 0 0 0'}}>{review.content}</div>
+                                    <img src={review.reviewPhotoList[0]?.imgUrl} style={{width:'12rem', height:'12rem', margin:'1.4rem 1rem 0 0'}}/>
                                 </div>
 
                                 {
                                     review?.memberId !== userId ? null : 
-                                        <div style={{margin:'1rem 0 0 3rem'}}>
+                                        <div style={{margin:'1rem 0 0 58rem'}}>
                                             <span onClick={()=>{setEditModal(true); setReviewId(review.id); console.log(review.memberId)}} >수정</span> &nbsp;|&nbsp; 
                                             <span onClick={()=>{onclickDelReview(review.id); console.log(review.id)}} type="button">삭제</span>
                                         </div>

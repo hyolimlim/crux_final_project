@@ -93,12 +93,12 @@ function ModalReview({ setModal, gym, reload, setReload }) {
                     <span style={{ fontSize: '1.4rem', margin: '0 0 0 1rem' }}>에 대한 솔직한 리뷰를 작성해주세요</span>
                 </div>
 
-                <div style={{ width: '90%', height: '200px', border: '1px solid black', margin: '3% auto' }}>
-                    <div style={{ width: '100%', height: '50px', display: 'flex', borderBottom: '1px solid black', padding: '5px 0 0 16px' }}>
+                <div style={{ width: '90%', height: '200px', margin: '3% auto' }}>
+                    <div style={{ width: '100%', height: '50px', display: 'flex', borderBottom: '1px solid #666666', padding: '5px 0 0 16px', backgroundColor:'#333333', color:'#999999' }}>
                         <div style={{ margin: '0.9rem 1.5rem 0 0', fontSize: '1.4rem' }}>별점 남기기</div>
                         <div><Rating onClick={handleRating} ratingValue={rating} /></div>
                     </div>
-                    <textarea placeholder='후기를 남겨주세요' style={{ width: '100%', height: '74%', fontSize: '1.3rem', border: 'none', padding: '3%' }}
+                    <S_textarea placeholder='후기를 남겨주세요' style={{ width: '100%', height: '74%', fontSize: '1.3rem', border: 'none', padding: '3%' }}
                         onChange={(e) => { setContent(e.target.value); } } />
                 </div>
                 <label>
@@ -139,8 +139,8 @@ color:black
 `
 
 const Container = styled.div`
-width: 600px;
-height: 400px;
+width: 110rem;
+height: 62rem;
 
 z-index: 999;
 
@@ -149,9 +149,12 @@ top: 50%;
 left: 50%;
 transform: translate(-50%, -50%);
 
-background-color: white;
-border: 1px solid black;
-border-radius: 8px;
+background-color: #262626;
+color: #ffffff;
+`
+const S_textarea = styled.textarea`
+background-color: #333333;
+color: #999999;
 `
 
 const CloseButton = styled.button`
