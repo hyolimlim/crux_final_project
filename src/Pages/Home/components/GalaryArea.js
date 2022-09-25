@@ -10,7 +10,7 @@ const GalaryArea = () => {
         <div style={{width:'1920px', height:'1180px', backgroundColor:'#111'}}>
             <Title>갤러리</Title>
 
-            <div style={{width:'1206px', height:'804px', margin:'0 20% 0 20%' }}>
+            <div style={{width:'1206px', height:'804px', margin:'30px auto 0 auto' }}>
                 
                 {
                     galaryImgs.map((galaryImg,i)=>{
@@ -31,16 +31,12 @@ const GalaryArea = () => {
 }
 
 const Title = styled.div`
-width: 1200px;
+width: 1206px;
 /* height: 60px; */
-margin: 0 15% 0px 15%;
-padding: 4%;
-font-family: SpoqaHanSansNeo;
+margin: 0 auto 0px auto;
+padding: 140px 0 0 0;
 font-size: 48px;
-font-weight: bold;
-font-stretch: normal;
-font-style: normal;
-line-height: normal;
+font-weight: 700;
 letter-spacing: -2.4px;
 text-align: left;
 color: #fff;

@@ -6,9 +6,10 @@ import { useDispatch } from "react-redux";
 import { useState } from "react";
 import EditModalReview from "./EditModalReview";
 import { useEffect } from "react";
+import axios from "axios";
 
 const Review = ({gym, reload, setReload}) => {
-
+const BASE_URL = "http://sparta-tim.shop";
 const [editModal, setEditModal] = useState(false) 
 const [reviewId, setReviewId] = useState('')
 
@@ -17,14 +18,19 @@ console.log(userId)
 const dispatch = useDispatch()
 
 const onclickDelReview = (reviewId) => {
-    dispatch(__delReview(reviewId))
-    setReload(!reload)
+    delReview(reviewId);
 }
 
-useEffect(() => {
-    console.log(gym)
-}, [reload]);
-
+const delReview = async (reviewId) => {
+    await axios.delete(`${BASE_URL}/reviews/${reviewId}`,
+        { headers: {Authorization: window.localStorage.getItem("access_token")}})
+      .then((res) => {
+        setReload(!reload)
+      })
+      .catch((err) => {
+        console.log(err);
+      }) 
+}
 
 if(gym === undefined) {
     return( <Loading/>)

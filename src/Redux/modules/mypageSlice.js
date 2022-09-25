@@ -18,20 +18,6 @@ export const __getMyPage = createAsyncThunk(
     }
 )
 
-export const __putMyPage = createAsyncThunk(
-    'putMyPage',
-    async (payload, thunkAPI) => {
-        try {
-            console.log(payload)
-            const data = await axios.put(`${BASE_URL}/members`, payload ,
-                {headers: {Authorization: window.localStorage.getItem("access_token"),},})
-                console.log(data.data)
-                return thunkAPI.fulfillWithValue(data.data)
-        } catch (error) {
-            return thunkAPI.rejectWithValue(error)
-        }
-    }
-)
 
 export const MyPageSlice = createSlice({
     name: 'MyPage',

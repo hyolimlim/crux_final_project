@@ -24,17 +24,18 @@ const CrewArea = () => {
 
 
 return(
-        <div style={{width:'1920px',height:'600px', backgroundColor:'#111', margin:'0 auto'}}>
-            <div style={{width:'1210px', height:'70px', fontSize:'34px', margin:'0 auto', color:'white'}}>
-                <span style={{margin:'0 50px 0 0'}}>인기 크루</span>
+        <div style={{width:'1920px',height:'560px', backgroundColor:'#111', margin:'0 auto'}}>
+            <div style={{width:'1220px', fontSize:'32px', margin:'0 auto', color:'white'}}>
+                <span style={{margin:'0 0 0 0', fontWeight:'bold'}}>인기 크루</span>
+                <span style={{margin:'0 25px 0 25px', opacity:"0.15"}}>|</span>
                 <span>신규 크루</span>
             </div>
-            <div style={{width:'1210px', height:'250px', margin:'0 auto', display:'flex'}}>
+            <div style={{width:'1210px', margin:'12px 360px 0 350px', display:'flex'}}>
             {
                 isLoading ? <Loading /> :
                     crews?.map((crew,i)=>{
                         return(
-                                <div key={crew.id} style={{width:'274px', height:'400px', margin:'0 3%'}}>
+                                <div key={crew.id} style={{width:'274px', height:'400px', margin:'0 70px 0 0'}}>
                                     <img src={인기크루} alt="" style={{width:'250px', height:'250px', margin:'0 10px', borderRadius:'60%'}}
                                         onClick={()=>{navigate(`/crews/${crew.id}`)}}/>
                                     <div>
@@ -67,7 +68,7 @@ line-height: normal;
 letter-spacing: -9px;
 text-align: left;
 color: #fff;
-margin: -104px 0 0 -22px;
+margin: -104px 0 0 -10px;
 `
 
 export default CrewArea;

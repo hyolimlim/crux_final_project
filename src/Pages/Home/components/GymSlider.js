@@ -78,7 +78,7 @@ height: 30px;
 position: absolute;
 /* right: 16px; */
 z-index: 99;
-margin: 0% 141% 0 0;
+margin: 0% 1500px 0 0;
 /* text-align: right; */
 line-height: 30px;
 `;
@@ -89,7 +89,7 @@ height: 30px;
 position: absolute;
 /* left: 16px; */
 z-index: 99;
-margin: 0 0 0 -48%;
+margin: 0 0 0 -470px;
 /* text-align: left; */
 line-height: 30px;
 `;

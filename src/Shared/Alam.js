@@ -1,23 +1,21 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
-import { __getAlam, __readAlam, __deleteAlam, __deleteAlams, __NreadAlam } from "../Redux/modules/notification";
+import { __getAlam, _readAlam, _addAlam, _deleteAlam, _deleteAlams, __NreadAlam, _minusAlam } from "../Redux/modules/notification";
 import Loading from "../Shared/Loading"
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Alam = () => {
-
+const BASE_URL = "http://sparta-tim.shop";
 const [reload, setReload] = useState(false)
 const {isLoading, error, alams} = useSelector((state) => state.alams)
-const alamList = alams?.data
-console.log(alamList)
-console.log(error)
+console.log(alams)
 
 const {isLoading2, error2, NreadAlams} = useSelector((state) => state.NreadAlams)
-const NreadAlam = NreadAlams.data
-console.log(NreadAlam)
-console.log(error2)
+console.log(NreadAlams.data)
+// console.log(error2)
 
 const navigate = useNavigate()
 const dispatch = useDispatch()
@@ -40,14 +38,15 @@ useEffect(()=>{
     })
 
     sse.onopen = event => {
-      console.log("연결완료")
+      // console.log("연결완료")
     }
 
     sse.addEventListener('sse', (e) => {
         if(e.data.startsWith('{')) {
           console.log(JSON.parse(e.data))
 
-          setAlam(prev => [...prev, JSON.parse(e.data).content])
+          dispatch(_addAlam(JSON.parse(e.data)))
+          // setAlam(prev => [...prev, JSON.parse(e.data).content])
         }}
     )
 
@@ -56,65 +55,112 @@ useEffect(()=>{
     }
     setListening(true);
   }
-  return () => {
-    sse.close();
-  }
+  // return () => {
+  //   sse.close();
+  // }
 }, [])
 
 useEffect(()=>{
   dispatch(__getAlam())
-},[alam])
-
-useEffect(()=>{
-  dispatch(__getAlam())
   dispatch(__NreadAlam())
-},[reload])
+},[])
 
 const onclickReadAlam = (notificationId) => {
-  dispatch(__readAlam(notificationId))
-  setReload(!reload)
-  console.log(notificationId)
+  // readAlam(notificationId)
+  dispatch(_readAlam(notificationId))
+
+  const a = alams.data.findIndex((v) => v.id === notificationId)
+  if (!alams.data[a].status) {
+    dispatch(_minusAlam(1))
+  }
 }
 
 const onclickDeleteAlam = (notificationId) => {
-  dispatch(__deleteAlam(notificationId))
-  setReload(!reload)
+  // deleteAlam(notificationId)
+  dispatch(_deleteAlam(notificationId))
+
+  const a = alams.data.findIndex((v) => v.id === notificationId)
+  if (!alams.data[a].status) {
+    dispatch(_minusAlam(1))
+  }
 }
 
 const onclickDeleteAlams = () => {
-  dispatch(__deleteAlams())
-  setReload(!reload)
+  // deleteAlams()
+  dispatch(_deleteAlams())
+  dispatch(_minusAlam(NreadAlams.data.count))
 }
 
-if (alamList === undefined) {
-  return null;
+const readAlam = async (notificationId) => {
+  await axios.post(`${BASE_URL}/notifications/${notificationId}`, null,
+          { headers: {Authorization: window.localStorage.getItem("access_token")}})
+    .then((res) => {
+      console.log(res)
+    })
+    .catch((err) => {
+      console.log(err);
+    }) 
+}
+const deleteAlam = async (notificationId) => {
+  await axios.delete(`${BASE_URL}/notifications/${notificationId}`,
+          { headers: {Authorization: window.localStorage.getItem("access_token")}})
+    .then((res) => {
+      console.log(res)
+    })
+    .catch((err) => {
+      console.log(err);
+    }) 
+}
+const deleteAlams = async () => {
+  await axios.delete(`${BASE_URL}/notifications`,
+          { headers: {Authorization: window.localStorage.getItem("access_token")}})
+    .then((res) => {
+      console.log(res)
+    })
+    .catch((err) => {
+      console.log(err);
+    }) 
 }
 
     return (
         <>
-        <div>
-         <img style={{width:'2rem', margin:'0 3rem 0 0'}} src="https://previews.123rf.com/images/get4net/get4net1711/get4net171100677/89003028-%EC%A2%85-%EC%95%84%EC%9D%B4%EC%BD%98.jpg" 
+        <div style={{position:'absolute', margin:'-28px 0 0 861px'}}>
+         <img style={{width:'3rem', margin:'0 3rem 0 0'}} src="https://previews.123rf.com/images/get4net/get4net1711/get4net171100677/89003028-%EC%A2%85-%EC%95%84%EC%9D%B4%EC%BD%98.jpg" 
           onClick={()=>setShowAlam(!showAlam)}/>
+            <div style={{width:'3rem', height:'3rem', backgroundColor:'white', borderRadius:'60%', position:'absolute', margin:'-48px 0 0 9px', textAlign:'center', padding:'7px 0 0 0'}}>
+             
+             { isLoading2 ? <Loading/> : NreadAlams.data.count}
+            
+            </div>
           
-          { showAlam &&
+      { showAlam &&
           <AlamBox>
-            {
-              alamList?.length === 0 ? (<p>아직 알람이 없습니다</p>) : (
+          {
+            isLoading ? <Loading /> :
+             alams?.data.length === 0 ? (<p>아직 알람이 없습니다</p>) : (
                   
                 <>
                   <button onClick={(e)=>{e.stopPropagation(); onclickDeleteAlams()}}>전체 삭제</button>
+                 
                   {
-
-                alamList?.map((alam) => {
+                      alams?.data.map((alam) => {
                     return (
                       <>
-                        {alam.content}
+                        {!alam.status ? 
+                          (<AlamContent onClick={(e)=>{e.stopPropagation(); onclickReadAlam(alam.id)}} key={alam.id}>
+                            {alam.content} <button onClick={(e)=>{e.stopPropagation(); onclickDeleteAlam(alam.id)}}>삭제</button> 
+                          </AlamContent>)
+                         :
+                         (<ReadAlamContent key={alam.id}>
+                            {alam.content} <button onClick={(e)=>{e.stopPropagation(); onclickDeleteAlam(alam.id)}}>삭제</button> 
+                          </ReadAlamContent>)
+                        }
                       </>
-                    )
-                  })
+                    )})
                   }
+
                 </>)
-            }
+          }
           </AlamBox>
         }
         </div>
@@ -134,18 +180,12 @@ overflow: auto;
 z-index: 999;
 `
 
-const List = styled.div`
-width: 23rem;
-height: 2.5rem;
-margin: 12px 0 0 0;
-width: 10rem;
-height: 1.5rem;
-cursor: pointer;
-padding-top: 1rem;
-counter-reset: #141414;
-overflow: hidden;
-white-space: nowrap;
-text-overflow: ellipsis;
+const AlamContent = styled.div`
+
+`
+
+const ReadAlamContent = styled.div`
+opacity: 0.3;
 `
 
 export default Alam;

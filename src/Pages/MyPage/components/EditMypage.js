@@ -6,14 +6,14 @@ import { useCallback } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import styled from "styled-components"
 import 사용자기본이미지 from "../../../Image/사용자기본이미지.jpg"
-import { __putMyPage } from '../../../Redux/modules/mypageSlice';
 import { useDispatch } from 'react-redux';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import { faGear } from "@fortawesome/free-solid-svg-icons";
+import axios from 'axios';
 
 
 const EditMypage = ({myPage, setEditMypage}) => {
-
+const BASE_URL = "http://sparta-tim.shop";
 const navigate = useNavigate()
 const dispatch = useDispatch()
 const params = useParams().memberId
@@ -31,7 +31,7 @@ const changeImage = async (e) => {
     );
     const file_url = await getDownloadURL(upload_file.ref)
     setFileUrl(file_url)
-  }
+}
   
   const EditDone = () => {
     if (editContent==='') {
@@ -46,12 +46,22 @@ const changeImage = async (e) => {
         imgUrl: fileUrl,
       
     }
-    dispatch(__putMyPage(payload))
-    window.localStorage.setItem("nickname", editNickname);
-    alert('프로필 편집완료')
-    setEditMypage(false)
-    navigate(`/members/${params}`)
-  }}
+    editProfile(payload)
+}}
+
+const editProfile = async (payload) => {
+    await axios.put(`${BASE_URL}/members`, payload ,
+        {headers: {Authorization: window.localStorage.getItem("access_token"),},})
+    .then((res) => {
+        alert('프로필 편집완료')
+        setEditMypage(false)
+        navigate(`/members/${params}`)
+        window.localStorage.setItem("nickname", editNickname);
+    })
+    .catch((err) => {
+        console.log(err);
+    }) 
+}
 
 
     return(

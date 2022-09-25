@@ -17,23 +17,6 @@ export const __getGymDetail = createAsyncThunk(
     }
 )
 
-export const __delReview = createAsyncThunk(
-    'delReview',
-    async (reviewId, thunkAPI) => {
-        try {
-            console.log(reviewId)
-            const data = await axios.delete(`${BASE_URL}/reviews/${reviewId}`,
-            { headers: {Authorization: window.localStorage.getItem("access_token")}})
-            return thunkAPI.fulfillWithValue(data.data)
-        } catch (error) {
-            return thunkAPI.rejectWithValue(error)
-        }
-    }
-)
-
-
-
-
 export const gymDetailSlice = createSlice({
     name: 'gymDetail',
     initialState:{

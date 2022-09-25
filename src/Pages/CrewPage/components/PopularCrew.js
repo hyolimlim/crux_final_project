@@ -46,6 +46,7 @@ const PopularCrew = ({searchData}) => {
         if(!endRef.current && target.isIntersecting && preventRef.current){ //옵저버 중복 실행 방지
           preventRef.current = false; //옵저버 중복 실행 방지
           setPage(prev => prev+1 ); //페이지 값 증가
+          //setPage => setLastId 에 lastId max 받아다가  
         }
     })
 
@@ -54,7 +55,7 @@ const PopularCrew = ({searchData}) => {
         await axios.get(`${BASE_URL}/crews/popular?page=${page}&size=6`)
           .then((res) => {
             setList((prev) => [...prev, ...res.data.data.content]);
-            // setNewlist([]);
+            
             preventRef.current = true;
           })
           .catch((err) => {
@@ -70,7 +71,7 @@ return (
         style={{
           width: "192rem",
           backgroundColor: "#141414",
-          color: "#999999",
+          color: "#999",
           // overflow: "auto",
         }}
       >
@@ -137,7 +138,9 @@ return (
                     <h3 style={{ margin: "2rem 0 0 0" }}>{val.name}</h3>
                     <p style={{ margin: "0.5rem 0 0 0" }}>{val.content}</p>
                     <p style={{ margin: "1rem 0 0 0" }}>
-                      🖤 50명 | 🙍‍♀️ {val.crewNum}
+                      🖤 {val.likeNum}명 
+                        <span style={{margin:'0 0.4rem 0 0.6rem'}}>|</span> 
+                      🙍‍♀️ {val.crewNum}명
                     </p>
                   </Col>
                 </React.Fragment>

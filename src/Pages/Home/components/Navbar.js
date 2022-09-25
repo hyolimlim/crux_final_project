@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import ModalPortal from "../../Login/MordalPortal";
 import LoginModal from "../../Login/LoginModal";
 import Register from "../../Register/Register";
+import Alam from '../../../Shared/Alam'
 
 
 const Navbar = () => {
@@ -40,84 +41,45 @@ const Navbar = () => {
         {registerVisible && <Register onClose={handleRegisterModal} />}
       </ModalPortal>
       <NavContent>
-        <h1
-          type="button"
-          onClick={() => {
-            navigate("/");
-          }}
-          style={{ fontWeight: "700" }}
-        >
+        <NavMain type="button" onClick={() => {navigate("/")}}>
           CRUX
-        </h1>
-        <h3
-          type="button"
-          onClick={() => {
-            navigate("/crews");
-          }}
-          style={{ fontWeight: "500", marginLeft: "6rem" }}
-        >
+        </NavMain>
+        <NavCrew type="button" onClick={() => {navigate("/crews")}}>
           크루 모임
-        </h3>
-        <h3
-          type="button"
-          style={{ fontWeight: "500", marginLeft: "4rem" }}
-          onClick={() => {
-            navigate("/createcrew");
-          }}
-        >
+        </NavCrew>
+        <NavCreateCrew type="button" onClick={() => {navigate("/createcrew")}}> 
           크루 생성
-        </h3>
-        <h3
-          type="button"
-          onClick={() => {
-            navigate("/gyms");
-          }}
-          style={{ fontWeight: "500", marginLeft: "4rem" }}
-        >
+        </NavCreateCrew>
+        <NavGym type="button" onClick={() => {navigate("/gyms")}}>
           클라이밍짐 후기
-        </h3>
-        <div style={{ display: "flex" }}>
+        </NavGym>
+          
           {
             userToken !== null ?
             <>
-              <h4 type="button"
-              onClick={()=>{navigate(`/members/${userId}`)}}
-              style={{ fontWeight: "500", marginLeft: "47rem" }}
-              >
+              <Alam />
+              <NavLogin type="button" onClick={()=>{navigate(`/members/${userId}`)}}>
                 MYPAGE
-              </h4>
+              </NavLogin>
 
-              <h4
-                type="button"
-                onClick={removeToken}
-                style={{ fontWeight: "500", marginLeft: "2.5rem" }}
-              >
+              <NavRegister type="button" onClick={removeToken} >
                 LOGOUT
-              </h4>
+              </NavRegister>
             </>
 
             :
 
             <>
-              <h4
-                type="button"
-                onClick={handleLoginModal}
-                style={{ fontWeight: "500", marginLeft: "47rem" }}
-              >
+              <NavLogin type="button" onClick={handleLoginModal}>
                 LOGIN
-              </h4>
+              </NavLogin>
 
-              <h4
-                type="button"
-                onClick={handleRegisterModal}
-                style={{ fontWeight: "500", marginLeft: "2.5rem" }}
-              >
+              <NavRegister type="button" onClick={handleRegisterModal}>
                 REGISTER
-              </h4>
+              </NavRegister>
             </>
           }
           
-        </div>
       </NavContent>
     </NavContainer>
   );
@@ -126,23 +88,60 @@ const Navbar = () => {
 const NavContainer = styled.div`
   display: flex;
   background-color: transparent;
-  z-index: 100;
+  z-index: 3;
   position: absolute;
   margin: 0;
   width: 192rem;
-  height: 18rem;
 `;
 
 const NavContent = styled.div`
   width: 120rem;
-  margin: 8rem 36rem;
-
-  display: flex;
-  flex-direction: row;
+  margin: 10rem 36rem 0 36rem;
   align-items: baseline;
-
   color: #ffffff;
-  /* top: 11rem; */
 `;
+
+const NavMain = styled.span`
+margin: 0 60px 0 0;
+font-family: GothamBold;
+font-size: 40px;
+font-weight: 700;
+letter-spacing: -2px;
+text-align: left;
+`
+
+const NavCrew = styled.span`
+margin: 0 40px 0 0;
+font-size: 20px;
+font-weight: 500;
+letter-spacing: -1px;
+text-align: left;
+`
+
+const NavCreateCrew = styled.span`
+margin: 0 40px 0 0;
+font-size: 20px;
+font-weight: 500;
+letter-spacing: -1px;
+text-align: left;
+`
+const NavGym = styled.span`
+margin: 0 0 0 0;
+font-size: 20px;
+font-weight: 500;
+letter-spacing: -1px;
+text-align: left;
+`
+
+const NavLogin = styled.span`
+margin: 0 25px 0 390px;
+font-size: 16px;
+font-weight: 500;
+`
+
+const NavRegister = styled.span`
+font-size: 16px;
+font-weight: 500;
+`
 
 export default Navbar;

@@ -15,7 +15,7 @@ const NavSlider = (props) => {
         fade: true,
         infinite: true,
         speed: 1000,
-        autoplay: true,
+        // autoplay: true,
         autoplaySpeed: 5000,
         pauseOnHover: true,
         nextArrow: (
@@ -39,9 +39,9 @@ return(
             <div>
                 <BGimg >
                 
-                <div style={{width:'1400px', height:'163px', fontSize:'48px', margin:'0% auto 0 auto', padding:'20% 0 0 0', color:'white'}}>클라이밍 상급자들을 위한 <br/>새로운 클라이밍 코스</div>
+                <div style={{width:'1200px', height:'163px', fontSize:'48px', margin:'0% auto 0 auto', padding:'20% 0 0 0'}}>클라이밍 상급자들을 위한 <br/>새로운 클라이밍 코스</div>
 
-                <div style={{width:'1400px', height:'300px', fontSize:'20px', margin:'0 auto', padding:'11% 0 0 0', color:'white'}}>상급자를 위한 새로운 코스를 원하신다면,<br/> 지금 바로 도전해보세요!</div>
+                <div style={{width:'1200px', height:'300px', fontSize:'20px', margin:'0 auto', padding:'11% 0 0 0'}}>상급자를 위한 새로운 코스를 원하신다면,<br/> 지금 바로 도전해보세요!</div>
             
                 </BGimg>
             </div>
@@ -50,9 +50,9 @@ return(
             <div>
                 <BGimg2 >
                 
-                <div style={{width:'1400px', height:'163px', fontSize:'48px', margin:'0 auto 0 auto', padding:'20% 0 0 0', color:'white'}}>클라이밍 상급자들을 위한 <br/>새로운 클라이밍 코스</div>
+                <div style={{width:'1200px', height:'163px', fontSize:'48px', margin:'0 auto 0 auto', padding:'20% 0 0 0'}}>클라이밍 상급자들을 위한 <br/>새로운 클라이밍 코스</div>
 
-                <div style={{width:'1400px', height:'300px', fontSize:'20px', margin:'0 auto', padding:'11% 0 0 0', color:'white'}}>상급자를 위한 새로운 코스를 원하신다면,<br/> 지금 바로 도전해보세요!</div>
+                <div style={{width:'1200px', height:'300px', fontSize:'20px', margin:'0 auto', padding:'11% 0 0 0'}}>상급자를 위한 새로운 코스를 원하신다면,<br/> 지금 바로 도전해보세요!</div>
             
                 </BGimg2>
             </div>
@@ -83,8 +83,8 @@ width: 30px;
 height: 30px;
 position: absolute;
 /* right: 16px; */
-z-index: 99;
-margin: 16% 80% 0 0;
+z-index: 4;
+margin: 30rem 147rem 0 0;
 /* text-align: right; */
 line-height: 30px;
 `;
@@ -94,8 +94,8 @@ width: 30px;
 height: 30px;
 position: absolute;
 /* left: 16px; */
-z-index: 99;
-margin: 16% 0 0 15%;
+z-index: 4;
+margin: 30rem 0 0 38rem;
 /* text-align: left; */
 line-height: 30px;
 `;

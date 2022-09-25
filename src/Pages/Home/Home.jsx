@@ -9,13 +9,13 @@ function Home() {
 
 
   return (
-    <div>
+    <div style={{width:'192rem', backgroundColor:'#111', margin:'0 auto', color:"#fff"}}>
       <Navbar />
 
       <NavSlider />
 
-      {/* 검은 화면입니다 */}
-      <div style={{width:'192rem', height:'100rem', backgroundColor:'#111', margin:'0 auto'}}></div>
+      {/*현재 검은 화면입니다 */}
+      <div style={{width:'192rem', height:'100rem', margin:'0 auto'}}></div>
 
       <CrewArea />
 
