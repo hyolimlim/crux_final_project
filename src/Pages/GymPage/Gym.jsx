@@ -1,9 +1,7 @@
 import styled from 'styled-components'
 import 돋보기 from '../../Image/검색 아이콘.png'
-import 디폴트짐 from "../../Image/인기 클라이밍짐.png"
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { __getGyms } from '../../Redux/modules/gymSlice';
 import Loading from "../../Shared/Loading.js"
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../Shared/Navbar'
@@ -11,21 +9,23 @@ import GymHeader from './components/GymHeader';
 import axios from 'axios';
 import { Map, MapMarker, CustomOverlayMap } from 'react-kakao-maps-sdk'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faL, faMagnifyingGlass, faPlus } from '@fortawesome/free-solid-svg-icons';
+import GymList from './components/GymList';
 
 
 const Gym = () => {
-    const BASE_URL = "https://01192mg.shop"
+    const BASE_URL = "http://sparta-tim.shop"
 
-    const [location, setLocation] = useState('내')
-
-    const navigate = useNavigate()
-    
+    const [location, setLocation] = useState('내 주변 클라이밍짐')
     const [gyms, setGyms] = useState([]) 
+    const [sizeMy, setSizeMy] = useState(10)
+    const [sizeSeoul, setSizeSeoul] = useState(10)
+    const [sizeGg, setSizeGg] = useState(25)
+    const [sizeBs, setSizeBs] = useState(10)
+    const [sizeDg, setSizeDg] = useState(10)
+    const [sizeGj, setSizeGj] = useState(10)
 
 // 카카오 Map 입니다
-    const [markerOpen, setMarkerOpen] = useState([])
-  //개별 마커 열리고 내리는거 어떻게하지?? 배열 여러개 만들어서 boolean push 해주는식으로 하면되나?
 
   const [state, setState] = useState({
     center: {
@@ -38,14 +38,14 @@ const Gym = () => {
   })
   // console.log(state.center)
 
-
+// 현재위치 api 입니다
   useEffect(()=>{
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           const lat = position.coords.latitude
           const lng = position.coords.longitude
-          await axios.get(`${BASE_URL}/gyms?page=0&size=10&lon=${lng}&lat=${lat}`)
+          await axios.get(`${BASE_URL}/gyms?page=0&size=${sizeMy}&lon=${lng}&lat=${lat}`)
         .then((res) => {
             // console.log(res.data.data)
             setGyms(res.data.data)
@@ -78,62 +78,202 @@ const Gym = () => {
         isLoading: false,
       }))
     }
-  }, [])
+  }, [sizeMy])
 
-  const categorySeoul = () => {
+  
     //서울을 클릭하면 서울 특정 주소로 지도 중심을 이동시킨다
-    //서울을 클릭하면 '서울' 검색어를 api에 넣어 주변 클라이밍짐을 띄워준다
-    setState((prev) => ({
-      ...prev,
-      center: {
-        lat: 37.5665734,
-        lng: 126.978179,
-      }}))}
-  const categoryIncheon = () => {
-    setState((prev) => ({...prev,center: {lat: 37.4562557,lng: 126.7052062,}}))}
-  const categoryGg = () => {
-    setState((prev) => ({...prev,center: {lat: 37.38890932792951,lng: 127.46020321292248,}}))}
-  const categoryBusan = () => {
-    setState((prev) => ({
-      ...prev,
-      center: {
-        lat: 35.18387244538942,
-        lng: 129.07040917346342,
-      }}))}
-  const categoryJeju = () => {
-    setState((prev) => ({
-      ...prev,
-      center: {
-        lat: 33.397224597475834,
-        lng: 126.55475810720306,
-      }}))}
+    //서울 주변의 클라이밍짐을 띄워준다
+  const onclickCategorySeoul = () => {
+    categorySeoul(); 
+    setLocation('서울 주변 클라이밍짐')
+    setPlusMy(false)
+    setPlusGg(false)
+    setPlusBs(false)
+    setPlusDg(false)
+    setPlusGj(false)
+  }
+  const onclickCategoryGg = () => {
+    categoryGg(); 
+    setLocation('경기 주변 클라이밍짐')
+    setPlusMy(false)
+    setPlusSeoul(false)
+    setPlusBs(false)
+    setPlusDg(false)
+    setPlusGj(false)
+  }
+  const onclickCategoryBs = () => {
+    categoryBs(); 
+    setLocation('부산 주변 클라이밍짐')
+    setPlusMy(false)
+    setPlusSeoul(false)
+    setPlusGg(false)
+    setPlusDg(false)
+    setPlusGj(false)
+  }
+  const onclickCategoryDg = () => {
+    categoryDg(); 
+    setLocation('대구 주변 클라이밍짐')
+    setPlusMy(false)
+    setPlusSeoul(false)
+    setPlusGg(false)
+    setPlusBs(false)
+    setPlusGj(false)
+  }
+  const onclickCategoryGj = () => {
+    categoryGj(); 
+    setLocation('광주 주변 클라이밍짐')
+    setPlusMy(false)
+    setPlusSeoul(false)
+    setPlusGg(false)
+    setPlusBs(false)
+    setPlusDg(false)
+  }
 
+  const categorySeoul = async() => {
+    const lat = 37.56682195018582
+    const lng = 126.97865225946583
+    await axios.get(`${BASE_URL}/gyms?page=0&size=${sizeSeoul}&lon=${lng}&lat=${lat}`)
+    .then((res) => {
+      setGyms(res.data.data)
+      setState((prev) => ({
+        ...prev,
+        center: {
+          lat: 37.56682195018582,
+          lng: 126.97865225946583,
+      }}))
+    setPlusSeoul(!plusSeoul)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  }
+
+  const categoryGg = async() => {
+    const lat = 37.23430874181801
+    const lng = 127.20135714691537
+    await axios.get(`${BASE_URL}/gyms?page=0&size=${sizeGg}&lon=${lng}&lat=${lat}`)
+    .then((res) => {
+      setGyms(res.data.data)
+      setState((prev) => ({
+        ...prev,
+        center: {
+          lat: 37.23430874181801,
+          lng: 127.20135714691537,
+      }}))
+      setPlusGg(!plusGg)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  }
+
+  const categoryBs = async() => {
+    const lat = 35.179735278020225
+    const lng = 129.0750650311972
+    await axios.get(`${BASE_URL}/gyms?page=0&size=${sizeBs}&lon=${lng}&lat=${lat}`)
+    .then((res) => {
+      setGyms(res.data.data)
+      setState((prev) => ({
+        ...prev,
+        center: {
+          lat: 35.179735278020225,
+          lng: 129.0750650311972,
+      }}))
+      setPlusBs(!plusBs)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  }
+
+  const categoryDg = async() => {
+    const lat = 35.87138346208865
+    const lng = 128.60180223396753
+    await axios.get(`${BASE_URL}/gyms?page=0&size=${sizeDg}&lon=${lng}&lat=${lat}`)
+    .then((res) => {
+      setGyms(res.data.data)
+      setState((prev) => ({
+        ...prev,
+        center: {
+          lat: 35.87138346208865,
+          lng: 128.60180223396753,
+      }}))
+      setPlusDg(!plusDg)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  }
+
+  const categoryGj = async() => {
+    const lat = 35.160101970076916
+    const lng = 126.8516381907944
+    await axios.get(`${BASE_URL}/gyms?page=0&size=${sizeGj}&lon=${lng}&lat=${lat}`)
+    .then((res) => {
+      setGyms(res.data.data)
+      setState((prev) => ({
+        ...prev,
+        center: {
+          lat: 35.160101970076916,
+          lng: 126.8516381907944,
+      }}))
+      setPlusGj(!plusGj)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  }
 
 
 //gym 검색 API 입니다~
     const [search, setSearch] = useState('')
 
     const onclickSearchGym = () => {
+      if(search === "") {
+        alert('한 글자 이상 입력해주세요')
+      } else {
         searchGym();
+      }
     }
 
     const searchGym = async() => {
-        await axios.get(`${BASE_URL}/gyms/search?page=0&size=5&query=${search}`)
+        await axios.get(`${BASE_URL}/gyms/search?page=0&size=100&query=${search}`)
         .then((res) => {
-            // console.log(res.data.data)
+          if(res.data.data.length !== 0) {
+
+              setState((prev) => ({
+                ...prev, center: {lat: res.data.data[0]?.lat, lng: res.data.data[0]?.lon}
+              }))
+            }
             setGyms(res.data.data)
-            setLocation(search)
+            setLocation("검색어 '" + search + "'")
             setSearch('')
+            setPlusMy(false)
+            setPlusSeoul(false)
+            setPlusGg(false)
+            setPlusBs(false)
+            setPlusDg(false)
+            setPlusGj(false)
         })
         .catch((err) => {
             console.log(err)
         })
       }
-    // console.log(gyms)
+    
+      useEffect(()=>{
+        console.log(gyms)
+      },[searchGym])
 
 // 마커 마우스 호버 이벤트
       const [isopen, setIsopen] = useState(false)
 
+// 더 보기 이벤트
+      const [plusMy, setPlusMy] = useState(true)
+      const [plusSeoul, setPlusSeoul] = useState(false)
+      const [plusGg, setPlusGg] = useState(false)
+      const [plusBs, setPlusBs] = useState(false)
+      const [plusDg, setPlusDg] = useState(false)
+      const [plusGj, setPlusGj] = useState(false)
 
 if(state.isLoading) {
   return(<Loading />)
@@ -155,11 +295,11 @@ if(state.isLoading) {
               </div>
 
               <div style={{width:'120rem', margin:'6.5rem auto 0 auto', display:'flex'}}>
-                  <S_category onClick={categorySeoul} type="button"><h3>서울</h3></S_category>
-                  <S_category onClick={categoryIncheon} type="button"><h3>인천</h3></S_category>
-                  <S_category onClick={categoryGg} type="button"><h3>경기</h3></S_category>
-                  <S_category onClick={categoryBusan} type="button"><h3>부산</h3></S_category>
-                  <S_category onClick={categoryJeju} type="button"><h3>제주도</h3></S_category>
+                  <S_category onClick={onclickCategorySeoul} type="button"><h3>서울</h3></S_category>
+                  <S_category onClick={onclickCategoryGg} type="button"><h3>경기</h3></S_category>
+                  <S_category onClick={onclickCategoryBs} type="button"><h3>부산</h3></S_category>
+                  <S_category onClick={onclickCategoryDg} type="button"><h3>대구</h3></S_category>
+                  <S_category onClick={onclickCategoryGj} type="button"><h3>광주</h3></S_category>
               </div>
               
             </div>
@@ -174,12 +314,10 @@ if(state.isLoading) {
                 <Map
                     center={ state.center }
                     style={{ width: "134rem", height: "110rem" }}
-                    level={7}
+                    level={5}
                 >
                     
-                    <MapMarker position={state.center} 
-                    image={{size:{width: 100, height: 80}, src:"http://simpleicon.com/wp-content/uploads/map-marker-5.png"}}  
-                    >
+                    <MapMarker position={state.center}>
                     </MapMarker>
 
                     {
@@ -221,33 +359,19 @@ if(state.isLoading) {
 
 
                 <GymContainer>
-                    <div>
-                        <div style={{width:'100%', height:'9.5rem', borderBottom:'1px solid #ffffff',padding:'3.5rem 3.5rem 3rem 3.5rem'}}>
-                            <h3 style={{fontWeight:'700'}}>{location} 주변 클라이밍짐</h3>
-                        </div>
-                        
-                        <div>
-
+                    <div style={{width:'100%', height:'9.5rem', borderBottom:'1px solid #ffffff',padding:'3.5rem 3.5rem 3rem 3.5rem'}}>
+                        <span style={{fontWeight:'700', fontSize:'2rem'}}>{location}</span>
                         {
-                            gyms?.map((gym, i)=>{
-                                return(
-                                    <div key={gym.id} style={{display:'flex', margin:'2rem auto', width:'50rem', height:'17rem', borderBottom:'1px solid #262626'}} 
-                                    onClick={()=>{ navigate(`/gyms/${gym.id}`) }}>
-                                        <img src={디폴트짐} alt='' style={{width:'15rem', height:'15rem'}}/>
-                                        <div style={{width:'35rem', padding:'1rem'}}>
-                                            <h3 style={{margin:'0 0 0 0'}}>{gym.name}</h3>
-                                            <p style={{margin:'2rem 0 0 0'}}>{gym.location}</p>
-                                            <p style={{margin:'1rem 0 0 0'}}>{gym.phone}</p>
-                                            <p style={{margin:'1rem 0 0 0'}}>✨ {Number(gym.avgScore).toFixed(2)}</p>
-                                            
-                                        </div>
-                                    </div>
-                                );
-                            })
+                          plusMy ? <MoreGym onClick={()=>{setSizeMy(70); setPlusMy(false)}} type="button"> 더 보기</MoreGym> :
+                             plusSeoul ? <MoreGym onMouseOver={()=>{setSizeSeoul(80)}} onClick={categorySeoul} type="button"> 더 보기</MoreGym> :
+                                plusGg ? <MoreGym onMouseOver={()=>{setSizeGg(50)}} onClick={categoryGg} type="button"> 더 보기</MoreGym> :
+                                  plusBs ? <MoreGym onMouseOver={()=>{setSizeBs(50)}} onClick={categoryBs} type="button"> 더 보기</MoreGym> :
+                                    plusDg ? <MoreGym onMouseOver={()=>{setSizeDg(50)}} onClick={categoryDg} type="button"> 더 보기</MoreGym> :
+                                        plusGj ? <MoreGym onMouseOver={()=>{setSizeGj(50)}} onClick={categoryGj} type="button"> 더 보기</MoreGym> : null
                         }
-
-                        </div>
                     </div>
+
+                    <GymList gyms={gyms}/>
                     
                 </GymContainer>
             </div>
@@ -300,6 +424,13 @@ background-color: #141414;
 color: #ffffff;
 border: 1px solid #CCCCCC;
 overflow: auto;
+`
+
+const MoreGym = styled.span`
+font-size: 1.4rem;
+border-bottom: 1px solid #ffffff;
+margin: 0 0 0 15px;
+opacity: 0.8;
 `
 
 export default Gym;

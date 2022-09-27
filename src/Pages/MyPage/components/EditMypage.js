@@ -21,7 +21,7 @@ const params = useParams().memberId
 const [editContent, setEditContent] = useState('')
 const [editNickname, setEditNickname] = useState('')
 
-const [fileUrl, setFileUrl] = useState('')
+const [fileUrl, setFileUrl] = useState(myPage?.imgUrl !== null ? myPage?.imgUrl : 사용자기본이미지)
 console.log(fileUrl)
 
 const changeImage = async (e) => {
@@ -34,6 +34,12 @@ const changeImage = async (e) => {
   }
   
   const EditDone = () => {
+    if (editContent==='') {
+        alert('자기소개를 입력해주세요')
+    } else if (editNickname==='') {
+        alert('닉네임을 입력해주세요')
+    } else {
+
     const payload = {
         content: editContent,
         nickname: editNickname,
@@ -41,9 +47,11 @@ const changeImage = async (e) => {
       
     }
     dispatch(__putMyPage(payload))
+    window.localStorage.setItem("nickname", editNickname);
     alert('프로필 편집완료')
-    navigate('/members/params')
-  }
+    setEditMypage(false)
+    navigate(`/members/${params}`)
+  }}
 
 
     return(
@@ -51,7 +59,7 @@ const changeImage = async (e) => {
             <Container>
                 
                 <Flex1>
-                    <ProfileImg src={fileUrl !== '' ? fileUrl : myPage?.imgUrl}/>
+                    <ProfileImg src={fileUrl !== "" ? fileUrl : 사용자기본이미지 }/>
                     
                                 <label htmlFor="upload-photo">
                                     <input
@@ -169,6 +177,7 @@ color: #FFFFFF;
 width: 60rem;
 height: 10rem;
 margin: 1.5rem 75.7rem 0rem 7rem;
+overflow: auto;
 `
 const LikeGymTitle = styled.div`
 color: #666666;
@@ -180,6 +189,7 @@ color: #FFFFFF;
 width: 60rem;
 height: 29rem;
 margin: 1.5rem 75.7rem 0 7rem;
+overflow: auto;
 `
 
 const ButtonBox = styled.div`

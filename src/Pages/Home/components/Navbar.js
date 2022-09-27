@@ -1,9 +1,10 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ModalPortal from "../../Login/MordalPortal";
 import LoginModal from "../../Login/LoginModal";
 import Register from "../../Register/Register";
+
 
 const Navbar = () => {
 
@@ -30,6 +31,7 @@ const Navbar = () => {
   const handleRegisterModal = () => {
     setRegisterVisible(!registerVisible);
   };
+
 
   return (
     <NavContainer>

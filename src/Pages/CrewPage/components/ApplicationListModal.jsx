@@ -107,7 +107,7 @@ const Login = styled.p`
 
 const PhotoButton = styled.div`
   width: 410px;
-  height: 100%
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
