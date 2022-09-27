@@ -118,7 +118,7 @@ border-right: 1px solid #393939;
 display: flex;
 flex-direction: column;
 align-items: center;
-padding: 0 0 0 30rem;
+padding: 4rem 0 0 30rem;
 `
 const ProfileImg = styled.img`
 width: 25rem;
@@ -176,7 +176,7 @@ margin: 1rem 85.7rem 1.5rem 7rem ;
 
 const JoinCrewContent = styled.div`
 color: #FFFFFF;
-width: 60rem;
+width: 83rem;
 height: 9rem;
 margin: 1.5rem 75.7rem 0rem 7rem;
 overflow: auto;
@@ -188,8 +188,8 @@ margin: 5rem 85.7rem 1.5rem 7rem ;
 `
 const LikeGymContent = styled.div`
 color: #FFFFFF;
-width: 60rem;
-height: 15rem;
+width: 83rem;
+height: 13rem;
 margin: 1.5rem 75.7rem 0 7rem;
 overflow: auto;
 `

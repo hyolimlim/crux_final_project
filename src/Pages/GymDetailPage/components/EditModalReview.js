@@ -21,11 +21,11 @@ function EditModalReview({ setEditModal, reviewId, gym, reload, setReload }) {
     };
 
     // 별점 주기 <star rating> 라이브러리!
-    const [rating, setRating] = useState(5);
+    const [rating, setRating] = useState(1);
     // console.log(rating)
     const handleRating = (rate: number) => {
         if (rate < 20) {
-            setRating(0);
+            setRating(1);
         } else {
             setRating(rate / 20);
         }
@@ -91,19 +91,20 @@ if(gym === undefined) {
         <ModalPage onClick={closeModal}>
             <Container onClick={(e) => e.stopPropagation()}>
 
-                <div style={{ margin: '7% auto 0 auto', width: '90%' }}>
+                <div style={{ margin: '8rem auto 0 auto', width: '98rem' }}>
                     <span style={{ fontSize: '36px', fontWeight: '700' }}>엠투 클라이밍</span>
                     <span style={{ fontSize: '1.4rem', margin: '0 0 0 1rem' }}>에 대한 솔직한 리뷰를 작성해주세요</span>
                 </div>
 
-                <div style={{ width: '90%', height: '200px', border: '1px solid black', margin: '3% auto' }}>
-                    <div style={{ width: '100%', height: '50px', display: 'flex', borderBottom: '1px solid black', padding: '5px 0 0 16px' }}>
-                        <div style={{ margin: '0.9rem 1.5rem 0 0', fontSize: '1.4rem' }}>별점 남기기</div>
-                        <div><Rating onClick={handleRating} ratingValue={rating} /></div>
+                <div style={{ width: '98rem', height: '30rem', margin: '3% auto' }}>
+                    <div style={{ width: '100%', height: '8rem', display: 'flex', borderBottom: '1px solid #666666', padding: '5px 0 0 16px', backgroundColor:'#333333', color:'#999999' }}>
+                        <div style={{ margin: '0 1.5rem 0 0', padding:'23px 0 0 16px',fontSize: '2rem' }}>별점 남기기</div>
+                        <div style={{padding:'11px 0 0 0'}}><Rating onClick={handleRating} ratingValue={rating} /></div>
                     </div>
-                    <textarea placeholder='후기를 남겨주세요' style={{ width: '100%', height: '74%', fontSize: '1.3rem', border: 'none', padding: '3%' }}
+                    <S_textarea placeholder='후기를 남겨주세요' style={{ width: '100%', height: '74%', fontSize: '1.3rem', border: 'none', padding: '3%' }}
                         onChange={(e) => { setContent(e.target.value); } } />
                 </div>
+
                 <label>
                     <input
                         encType="multipart/form-data"
@@ -111,19 +112,15 @@ if(gym === undefined) {
                         type="file"
                         style={{ display: 'none' }}
                         onChange={uploadFB} />
-                    <ImgPreview src={fileUrl !== '' ? fileUrl : 이미지업로드} type="button" />
-                    {fileUrl !== "" ? null :
-                        <>
-                            <ImgPreview src={리뷰기본이미지} style={{ margin: '-23px 0 0 9rem' }} />
-                            <div style={{ fontSize: '1rem', position: 'absolute', margin: '-2px 0 0 14.3rem' }}>리뷰 기본이미지입니다</div>
-                        </>}
+                    <ImgPreview src={이미지업로드} type="button" />
+        
 
                 </label>
-                <div style={{ display: 'flex', margin: '-6rem 0 0 31.8rem' }}>
-                    <S_btn style={{ margin: '38px 1rem 0 0' }} onClick={closeModal}>취소</S_btn>
-                    <S_btn onClick={onsubmit}>리뷰 수정하기</S_btn>
+                <div style={{ display: 'flex', margin: '-1rem 0 0 50rem' }}>
+                    <S_btn style={{ margin: '0rem 1rem 0 0' }} onClick={closeModal}>취소</S_btn>
+                    <S_btn onClick={onsubmit}>리뷰 올리기</S_btn>
                 </div>
-
+                
             </Container>
 
         </ModalPage>
@@ -142,8 +139,8 @@ color:black
 `
 
 const Container = styled.div`
-width: 600px;
-height: 400px;
+width: 110rem;
+height: 62rem;
 
 z-index: 999;
 
@@ -152,9 +149,12 @@ top: 50%;
 left: 50%;
 transform: translate(-50%, -50%);
 
-background-color: white;
-border: 1px solid black;
-border-radius: 8px;
+background-color: #262626;
+color: #ffffff;
+`
+const S_textarea = styled.textarea`
+background-color: #333333;
+color: #999999;
 `
 
 const CloseButton = styled.button`
@@ -167,14 +167,21 @@ top: 10px;
 const ImgPreview = styled.img`
 width: 5rem;
 height: 5rem;
-margin: -23px 0 0 3rem;
+margin: -32px 0 0 6rem;
+position: absolute;
+`
+
+const ImgPreview1 = styled.div`
+width: 5rem;
+height: 5rem;
 position: absolute;
 `
 
 const S_btn = styled.button`
-width: 12rem;
-margin: 38px 0 0 0;
-height: 3rem;
+width: 26.5rem;
+height: 6rem;
+margin: 0rem 0 0 0;
+font-size: 2rem;
 background-color: #ffb800;
 `
 

@@ -5,13 +5,13 @@ import 디폴트짐 from "../../../Image/인기 클라이밍짐.png"
 
 
 const GymList = ({gyms}) => {
-
+console.log(gyms)
 const navigate = useNavigate()
 
 
     return (
-        <div>
-                <div>
+        <div style={{margin:'10.5rem 0 0 0'}}>
+                <div style={{height:'85rem', overflow:'auto'}}>
                     
                     { gyms?.length === 0 ?  <p style={{color:'#ffffff', width:'20rem', margin:'6rem 0 0 16rem', fontSize:'1.6rem'}}>검색 결과가 없습니다.</p> : 
                         

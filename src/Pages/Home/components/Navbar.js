@@ -57,7 +57,7 @@ const Navbar = () => {
           {
             userToken !== null ?
             <>
-              <Alam />
+              {/* <Alam /> */}
               <NavLogin type="button" onClick={()=>{navigate(`/members/${userId}`)}}>
                 MYPAGE
               </NavLogin>

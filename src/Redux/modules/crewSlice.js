@@ -212,7 +212,7 @@ export const createCrewNotice = createAsyncThunk(
       const response = await axios
         .post(
           `http://sparta-tim.shop/notices/${payload.id}`,
-          { content: payload.content },
+          { content: payload.content, date: null, time: null },
           {
             headers: {
               Authorization: window.localStorage.getItem("access_token"),

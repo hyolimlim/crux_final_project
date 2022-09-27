@@ -4,7 +4,14 @@ import { useState } from "react";
 import ModalPortal from "../Pages/Login/MordalPortal";
 import LoginModal from "../Pages/Login/LoginModal";
 import Legister from "../Pages/Register/Register";
+import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
+import Loading from "./Loading";
 import Alam from "./Alam";
+import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
+import { __getAlam, _readAlam, _addAlam, _deleteAlam, _deleteAlams, __NreadAlam, _minusAlam, _plusAlam } from "../Redux/modules/notification";
+import { useEffect } from "react";
+
 
 const Navbar = () => {
   const userToken = window.localStorage.getItem("access_token")
@@ -18,6 +25,7 @@ const Navbar = () => {
   }
 
   const navigate = useNavigate();
+  const dispatch = useDispatch()
 
   const [loginVisible, setLoginVisible] = useState(false);
   const [registerVisible, setRegisterVisible] = useState(false);
@@ -29,6 +37,50 @@ const Navbar = () => {
   const handleRegisterModal = () => {
     setRegisterVisible(!registerVisible);
   };
+
+
+//알람 모달 입니다~
+  const [showAlam, setShowAlam] = useState(false)
+  const {isLoading2, error2, NreadAlams} = useSelector((state) => state.NreadAlams)
+  console.log(NreadAlams.data, error2)
+//SSE 연결하기
+const EventSource = EventSourcePolyfill || NativeEventSource;  //eventsource 쓰려면 import 해야됨!
+
+let sse = undefined;
+
+useEffect(()=>{
+  if (userToken) {
+    sse = new EventSource('http://54.180.31.108/subscribe',     //구독
+    {headers: {Authorization: userToken }
+    })
+
+    sse.onopen = event => {
+      console.log("연결완료")
+    }
+
+    sse.addEventListener('sse', (e) => {
+        if(e.data.startsWith('{')) {
+          console.log(JSON.parse(e.data))
+
+          dispatch(_addAlam(JSON.parse(e.data)))
+          dispatch(_plusAlam(1))
+          // setAlam(prev => [...prev, JSON.parse(e.data).content])
+        }}
+    )
+
+    sse.onerror = e => {
+      if (e) {
+        console.log(e)
+      }
+      sse.close();
+    };
+  }
+  
+}, [userToken])
+
+useEffect(()=>{
+  dispatch(__NreadAlam())
+},[])
 
   return (
     <NavContainer>
@@ -53,7 +105,17 @@ const Navbar = () => {
           {
             userToken !== null ?
             <>
-              <Alam />
+             { showAlam ? <Alam setShowAlam={setShowAlam} NreadAlams={NreadAlams}/> : null }
+              <div style={{position:'absolute', margin:'-32px 0 0 84rem'}}>
+                <img style={{width:'3rem'}} src="https://previews.123rf.com/images/get4net/get4net1711/get4net171100677/89003028-%EC%A2%85-%EC%95%84%EC%9D%B4%EC%BD%98.jpg" 
+                  onClick={()=>{setShowAlam(true)}}/>
+                <div style={{width:'3rem', height:'3rem', backgroundColor:'white', borderRadius:'60%', position:'absolute', margin:'-48px 0 0 9px', textAlign:'center', padding:'7px 0 0 0'}}>
+                
+                  { isLoading2 ? <Loading/> : NreadAlams.data.count}
+
+                </div>
+              </div>
+
               <NavLogin type="button" onClick={()=>{navigate(`/members/${userId}`)}}>
                 MYPAGE
               </NavLogin>

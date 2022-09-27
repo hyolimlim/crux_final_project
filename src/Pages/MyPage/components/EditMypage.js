@@ -157,7 +157,7 @@ border-right: 1px solid #393939;
 display: flex;
 flex-direction: column;
 align-items: center;
-padding: 0 0 0 30rem;
+padding: 4rem 0 0 30rem;
 `
 const ProfileImg = styled.img`
 width: 25rem;
@@ -200,6 +200,7 @@ const ButtonBox = styled.div`
 `;
 const ProfileContent =styled.textarea`
 width: 83rem;
+height: 8rem;
 margin: 0 0 0 7rem;
 font-size: 2rem;
 font-weight: 500;
@@ -233,7 +234,7 @@ margin: 5rem 85.7rem 1.5rem 7rem ;
 const LikeGymContent = styled.div`
 color: #FFFFFF;
 width: 83rem;
-height: 15rem;
+height: 13rem;
 margin: 1.5rem 75.7rem 0 7rem;
 overflow: auto;
 `

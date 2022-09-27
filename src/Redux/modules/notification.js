@@ -24,7 +24,7 @@ export const alamSlice = createSlice({
     name: 'alam',
     initialState:{
         alams: {
-            data: [{id: 0, content: "", status: false}],
+            data: [{id: 0, content: {crewId: 0, content:"test"}, status: false}],
             error: null,
             success: true,
         },
@@ -33,8 +33,8 @@ export const alamSlice = createSlice({
     },
     reducers: {
         _addAlam(state, action) {
-            console.log(action.payload)
-            state.alams.data.push(action.payload)
+            // console.log(action.payload)
+            state.alams.data.unshift(action.payload)
         },
         _readAlam(state, action) {
             // console.log(current(state.alams.data))

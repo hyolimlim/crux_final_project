@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import 돋보기 from '../../Image/검색 아이콘.png'
+import 오른쪽버튼 from '../../Image/btn_right.png'
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Loading from "../../Shared/Loading.js"
@@ -138,8 +138,8 @@ const Gym = () => {
       setState((prev) => ({
         ...prev,
         center: {
-          lat: 37.56682195018582,
-          lng: 126.97865225946583,
+          lat: lat,
+          lng: lng,
       }}))
     setPlusSeoul(!plusSeoul)
     })
@@ -157,8 +157,8 @@ const Gym = () => {
       setState((prev) => ({
         ...prev,
         center: {
-          lat: 37.23430874181801,
-          lng: 127.20135714691537,
+          lat: lat,
+          lng: lng,
       }}))
       setPlusGg(!plusGg)
     })
@@ -176,8 +176,8 @@ const Gym = () => {
       setState((prev) => ({
         ...prev,
         center: {
-          lat: 35.179735278020225,
-          lng: 129.0750650311972,
+          lat: lat,
+          lng: lng,
       }}))
       setPlusBs(!plusBs)
     })
@@ -195,8 +195,8 @@ const Gym = () => {
       setState((prev) => ({
         ...prev,
         center: {
-          lat: 35.87138346208865,
-          lng: 128.60180223396753,
+          lat: lat,
+          lng: lng,
       }}))
       setPlusDg(!plusDg)
     })
@@ -214,8 +214,8 @@ const Gym = () => {
       setState((prev) => ({
         ...prev,
         center: {
-          lat: 35.160101970076916,
-          lng: 126.8516381907944,
+          lat: lat,
+          lng: lng,
       }}))
       setPlusGj(!plusGj)
     })
@@ -228,6 +228,11 @@ const Gym = () => {
 //gym 검색 API 입니다~
     const [search, setSearch] = useState('')
 
+    const onKeyPress = (e) => {
+      if(e.key == 'Enter') {
+        onclickSearchGym();
+      }
+    }
     const onclickSearchGym = () => {
       if(search === "") {
         alert('한 글자 이상 입력해주세요')
@@ -237,7 +242,7 @@ const Gym = () => {
     }
 
     const searchGym = async() => {
-        await axios.get(`${BASE_URL}/gyms/search?page=0&size=100&query=${search}`)
+        await axios.get(`${BASE_URL}/gyms/search?lastArticleId=10000&size=100&query=${search}`)
         .then((res) => {
           if(res.data.data.length !== 0) {
 
@@ -275,9 +280,6 @@ const Gym = () => {
       const [plusDg, setPlusDg] = useState(false)
       const [plusGj, setPlusGj] = useState(false)
 
-if(state.isLoading) {
-  return(<Loading />)
-}
 
     return (
         <div>
@@ -289,8 +291,10 @@ if(state.isLoading) {
               <div style={{width:'120rem', margin:'0 auto 0 auto'}}>
                   <h1 style={{width:'38rem', margin:'0 35.2rem 0 0'}}>클라이밍짐 후기</h1>
                  
-                  <S_input onChange={(e)=>{ setSearch(e.target.value) }} value={search} placeholder="검색어를 입력해 주세요"/> 
-                  <FontAwesomeIcon icon={faMagnifyingGlass} size="3x" color='white' onClick={onclickSearchGym} style={{position:'absolute', margin:'4.5rem 0 0 -5rem'}} type="button"/> 
+                  <S_input value={search} placeholder="검색어를 입력해 주세요"
+                    onChange={(e)=>{ setSearch(e.target.value) }}  onKeyPress={onKeyPress}/> 
+                  <FontAwesomeIcon icon={faMagnifyingGlass} size="3x" color='white' style={{position:'absolute', margin:'4.5rem 0 0 -5rem'}} type="button" 
+                    onClick={onclickSearchGym} /> 
                   
               </div>
 
@@ -309,9 +313,10 @@ if(state.isLoading) {
             <div style={{display:'flex', justifyContent:'center'}}>
 
 
-                {/* 카카오 Map 입니다 */}
+            {/* 카카오 Map 입니다 */}
                 
-                <Map
+              { state.isLoading ? <Loading /> :
+                (<Map
                     center={ state.center }
                     style={{ width: "134rem", height: "97rem" }}
                     level={5}
@@ -342,10 +347,12 @@ if(state.isLoading) {
                             >
                               <Wrap>
                                 <GymName>{val.name}</GymName>
-                                <GymAddress>{val.location}</GymAddress>
-                                <a href={`https://map.kakao.com/link/to/HelloWorld!,${val.lat},${val.lon}`} target="_blank"rel="noreferrer">
-                                  <span className="title">길찾기</span>
-                                </a>
+                                {/* <GymAddress>{val.location}</GymAddress> */}
+                                <GymFind>
+                                  <a href={`https://map.kakao.com/link/to/HelloWorld!,${val.lat},${val.lon}`} target="_blank"rel="noreferrer">
+                                    <img src={오른쪽버튼} style={{width:'2.3rem', padding:'10px 0 0 13px'}}/>
+                                  </a>
+                                </GymFind>
                               </Wrap>
                             </CustomOverlayMap>
                             )}
@@ -355,11 +362,12 @@ if(state.isLoading) {
                     }
                     
 
-                </Map>
+                </Map>)
+              }
 
 
                 <GymContainer>
-                    <div style={{width:'100%', height:'9.5rem', borderBottom:'1px solid #666',padding:'3.5rem 3.5rem 3rem 3.5rem'}}>
+                    <div style={{width:'58rem', position:'absolute', borderBottom:'1px solid #666',padding:'3.5rem 3.5rem 3rem 3.5rem'}}>
                         <span style={{fontWeight:'700', fontSize:'2rem'}}>{location}</span>
                         {
                           plusMy ? <MoreGym onClick={()=>{setSizeMy(70); setPlusMy(false)}} type="button"> 더 보기</MoreGym> :
@@ -381,27 +389,34 @@ if(state.isLoading) {
     );
 }
 const Wrap = styled.div`
-    border: 1px solid gray;
-    border-radius: 1px;
-    height: 6rem;
-    text-align: center;
-    margin: -126px 0 0 -8px;
-    background-color: white;
+border: 1px solid #ddd;
+border-radius: 6px;
+width: 18rem;
+height: 4rem;
+margin: -106px 0 0 -25px;
+background-color: white;
+color: black;
+/* box-shadow: 0px 1px 2px #888; */
+display: flex;
 `
 
 const GymName = styled.div`
 font-size: 14px;
-width:100%;
-height: 2rem;
-padding: 2px 0 0 0;
-border-bottom: #ebebeb;
-background-color: #eeeeee;
-
+text-align: center;
+width: 80%;
+height: 100%;
+padding: 8px 15px;
+border-bottom: #666666;
+/* background-color: #eeeeee; */
+`
+const GymFind = styled.div`
+width: 20%;
+height: 100%;
+border-radius: 0 6px 6px 0;
+background: #fec200;
 `
 
-const GymAddress = styled.div`
-font-size: 11px;
-`
+
 
 const S_input = styled.input`
 width: 60rem;
@@ -428,7 +443,7 @@ height: 97rem;
 background-color: #141414;
 color: #ffffff;
 border-top: 1px solid #ccc;
-overflow: auto ;
+/* overflow: auto ; */
 `
 
 const MoreGym = styled.span`

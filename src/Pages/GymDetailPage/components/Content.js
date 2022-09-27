@@ -4,7 +4,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import 플러스기호 from "../../../Image/플러스 기호.png"
 import ModalReview from "./ModalReview";
-import ReviewSlider from "./ReviewSlider";
 import 클라이밍 from '../../../Image/인기 클라이밍짐.png'
 import {LikeHeart, LikedHeart } from "../../../Shared/components/LikeHeart";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,7 +23,7 @@ const { isLoading, error, gymDetail } = useSelector((state) => state.gymDetail)
 // console.log(isLoading, error, gymDetail)
 
 const gym = gymDetail.data
-// console.log(gym)
+console.log(gym)
 
 const navigate = useNavigate()
 const [modal, setModal] = useState(false)
@@ -76,7 +75,7 @@ return(
                 <div style={{width:'60rem', height:'60rem', margin:'10rem 0 0 0', padding:'0rem 4rem 4rem 4rem', backgroundColor:'#262626', color:'#666666'}}>
                     
                     <div style={{margin:'0 0 0 0', color:'#999999'}}> <span style={{margin:'0 16rem 0 0'}}>💛 {gym.likeNum}명 | 리뷰 {gym?.reviews.length}건 </span></div>
-                    <div style={{fontSize:'3.2rem', fontWeight:'700', color:'#ffffff',margin:'1rem 0 0 0'}}>{gym?.name}</div>
+                    <div style={{fontSize:'3.2rem', fontWeight:'700', color:'#ffffff',margin:'2rem 0 3rem 0'}}>{gym?.name}</div>
                     <S_title> 주소 <S_content> {gym.location} </S_content></S_title>
                     <S_title>전화번호 <S_content> {gym.phone} </S_content></S_title>
                     
@@ -84,17 +83,32 @@ return(
                             
                     </S_title>
                     
-                    <div style={{fontSize:'2rem', fontWeight:'700', margin:'3rem 0 0 0'}}>방문객 포토리뷰</div>
+                    <div style={{fontSize:'2rem', fontWeight:'700', margin:'8rem 0 0 0'}}>방문객 리뷰 {gym?.reviews.length}건</div>
 
-                    <div style={{width:'38rem', height:'25rem', margin:'2rem 0 0 0'}}>
+                    <div style={{width:'38rem', height:'17rem', margin:'2rem 0 0 0'}}>
                         {
                             gym?.reviews.length === 0 ? 
                             
                             <div style={{color:'#ffffff', fontSize:'3rem', textAlign:'center', padding:'7rem 0 0 0' }}>아직 포토 리뷰가 없습니다 <br/>
                                 제일 먼저 리뷰를 남겨주세요!</div> 
-                            
                             :  
-                                <ReviewSlider reviews={gym.reviews}/>
+                            
+                            gym?.reviews.length === 1 ? 
+                                    <ReviewWrap>
+                                        <ReviewNickname>{gym.reviews[gym.reviews.length-1].nickname}</ReviewNickname>
+                                        <ReviewContent>{gym.reviews[gym.reviews.length-1].content}</ReviewContent>
+                                    </ReviewWrap>
+                            :
+                                <>
+                                    <ReviewWrap >
+                                        <ReviewNickname style={{fontWeight:'700', margin:'0 2rem 0 0'}}>{gym.reviews[gym.reviews.length-1].nickname}</ReviewNickname>
+                                        <ReviewContent>{gym.reviews[gym.reviews.length-1].content}</ReviewContent>
+                                    </ReviewWrap>
+                                    <ReviewWrap>
+                                        <ReviewNickname>{gym.reviews[gym.reviews.length-2].nickname}</ReviewNickname>
+                                        <ReviewContent>{gym.reviews[gym.reviews.length-2].content}</ReviewContent>
+                                    </ReviewWrap>
+                                </>
                         }
                     </div>
                     <div style={{display:'flex'}}>
@@ -132,6 +146,21 @@ margin-left: 1rem;
 font-size: 2rem;
 font-weight: 400;
 color: #cccccc;
+`
+
+const ReviewWrap = styled.div`
+    display: flex;
+    width: 90%;
+    border-bottom: 1px solid rgb(204, 204, 204);
+    padding: 10px;
+`
+const ReviewNickname = styled.div`
+    margin: 0px 2rem 0px 0px;
+    font-weight: 700;
+`
+const ReviewContent = styled.div`
+    margin: 0px 0px 0px 0px;
+    font-weight: 400;
 `
 
 const ButtonBox = styled.div`

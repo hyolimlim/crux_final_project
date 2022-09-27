@@ -30,6 +30,11 @@ const Crew = () => {
   const [search, setSearch] = useState("");
   const [searchData, setSearchData] = useState([])
 
+  const onKeyPress = (e) => {
+    if(e.key == 'Enter') {
+      onclickSearchCrew();
+    }
+  }
   const onclickSearchCrew = () => {
     searchCrew()
   };
@@ -61,6 +66,7 @@ const Crew = () => {
           <S_search
             placeholder="검색어를 입력해 주세요"
             onChange={(e) => setSearch(e.target.value)}
+            onKeyPress={onKeyPress}
             value={search}
           />
           <FontAwesomeIcon

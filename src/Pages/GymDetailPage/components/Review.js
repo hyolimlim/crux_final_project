@@ -5,13 +5,21 @@ import { __delReview } from "../../../Redux/modules/gymDetilSlice";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 import EditModalReview from "./EditModalReview";
+import ReviewImgSlider from "./ReviewImgSlider";
 import { useEffect } from "react";
 import axios from "axios";
 
 const Review = ({gym, reload, setReload}) => {
 const BASE_URL = "http://sparta-tim.shop";
-const [editModal, setEditModal] = useState(false) 
+const [editModal, setEditModal] = useState(false)
 const [reviewId, setReviewId] = useState('')
+const [reviewImgModal, setReviewImgModal] = useState(false)
+const [reviewData, setReviewData] = useState([])
+
+const openModal = (review) => {
+    setReviewImgModal(true);
+    setReviewData(review)
+}
 
 const userId = Number(window.localStorage.getItem('userId'))
 console.log(userId)
@@ -54,20 +62,24 @@ if(gym === undefined) {
                                         <span style={{opacity:'0.5', margin:'0 0 0 2rem'}}>{review.createdAt?.substr(0,10)}</span>
                                     </div>
                                 
-                                <div style={{height:'4rem', margin:'0.5rem 0 0 0'}}>
-                                    {
-                                    review.score === 1 ? <Star />
-                                     : review.score === 2 ? <Star2 />
-                                        : review.score === 3 ? <Star3 />
-                                            : review.score === 4 ? <Star4 />
-                                                : review.score === 5 ? <Star5 />
-                                                    : ''
-                                    }
-                                </div>
-                                    <div style={{margin:'0.5rem 0 0 0'}}>{review.content}</div>
-                                    <img src={review.reviewPhotoList[0]?.imgUrl} style={{width:'12rem', height:'12rem', margin:'1.4rem 1rem 0 0'}}/>
-                                </div>
+                                    <div style={{height:'4rem', margin:'0.5rem 0 0 0'}}>
+                                        {
+                                        review.score === 1 ? <Star />
+                                        : review.score === 2 ? <Star2 />
+                                            : review.score === 3 ? <Star3 />
+                                                : review.score === 4 ? <Star4 />
+                                                    : review.score === 5 ? <Star5 />
+                                                        : ''
+                                        }
+                                    </div>
 
+                                    <div style={{margin:'0.5rem 0 0 0'}}>
+                                        {review.content}
+                                    </div>
+                                    <img src={review.reviewPhotoList[0]?.imgUrl} style={{width:'12rem', height:'12rem', margin:'1.4rem 1rem 2rem 0'}}
+                                        onClick={()=>{openModal(review); setReviewId(review.id)}}/>
+                                </div>
+                                
                                 {
                                     review?.memberId !== userId ? null : 
                                         <div style={{margin:'1rem 0 0 58rem'}}>
@@ -79,7 +91,7 @@ if(gym === undefined) {
                                 {
                                         editModal && <EditModalReview setEditModal={setEditModal} reviewId={reviewId} gym={gym} reload={reload} setReload={setReload} />
                                 }
-                                
+
                             </div>
                         )
                     })
@@ -87,7 +99,7 @@ if(gym === undefined) {
                 
             </div>
             
-
+                    {reviewImgModal ? <ReviewImgSlider setReviewImgModal={setReviewImgModal} reviewData={reviewData} reviewId={reviewId}/> : null}
 
         </div>
     )
