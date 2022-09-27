@@ -10,6 +10,8 @@ import axios from "axios";
 const Alam = ({setShowAlam, NreadAlams}) => {
 
 const BASE_URL = "http://sparta-tim.shop";
+// const BASE_URL = 'https://01192mg.shop'
+
 const {isLoading, error, alams} = useSelector((state) => state.alams)
 console.log(alams)
 
@@ -82,40 +84,54 @@ useEffect(()=>{
 },[])
 
 
-
     return (
         <ModalPage onClick={closeModal}>
           
             <AlamBox onClick={(e)=>e.stopPropagation()}>
             
-            {
-              isLoading ? <Loading /> :
-              alams?.data.length === 0 ? (<p>아직 알람이 없습니다</p>) : (
-                    
-                  <>
-                    <div style={{fontSize:'2rem', margin:'7px 0 0 14px'}}> 나의 알림
-                      <S_button onClick={(e)=>{e.stopPropagation(); onclickDeleteAlams()}}>전체 삭제</S_button>
-                    </div>
-                    
-                    {
-                        alams?.data.map((alam) => {
-                      return (
-                        <div key={alam.id}>
-                          {!alam.status ? 
-                            (<AlamContent onClick={(e)=>{e.stopPropagation(); onclickReadAlam(alam.id); navigate(`/crews/${alam.content.crewId}`)}} >
-                              {alam.content.content} <button onClick={(e)=>{e.stopPropagation(); onclickDeleteAlam(alam.id)}}>삭제</button> 
-                            </AlamContent>)
-                          :
-                          (<ReadAlamContent onClick={(e)=>{e.stopPropagation(); navigate(`/crews/${alam.content.crewId}`)}}>
-                              {alam.content.content} <button onClick={(e)=>{e.stopPropagation(); onclickDeleteAlam(alam.id); }}>삭제</button> 
-                            </ReadAlamContent>)
-                          }
-                        </div>
-                      )})
-                    }
-
-                  </>)
-            }
+              {
+                isLoading ? <Loading /> :
+                alams?.data.length === 0 ? 
+                    (<div style={{height:'46rem'}}>
+                        <div style={{padding:'3rem 0 0 0', textAlign:'center', fontSize:'1.4rem'}}>아직 알람이 없습니다</div>
+                      </div>) : (
+                      
+                    <>
+                      <div style={{fontSize:'2rem', margin:'4rem 0 2rem 2.5rem'}}> 
+                        나의 알림
+                      </div>
+                      
+                      <div style={{height:'37rem', overflow:'auto'}}>
+                        {
+                            alams?.data.map((alam) => {
+                          return (
+                            <div key={alam.id}>
+                              {!alam.status ? 
+                                (<AlamList onClick={()=>{ onclickReadAlam(alam.id); navigate(`/crews/${alam.content.crewId}`); console.log(alam.content.crewId)}}>
+                                  <AlamContent >
+                                    <span >{alam.content.content}</span> 
+                                    <AlamDelete onClick={(e)=>{e.stopPropagation(); onclickDeleteAlam(alam.id)}}>삭제</AlamDelete> 
+                                  </AlamContent>
+                                </AlamList>)
+                              :
+                                (<AlamList onClick={()=>{ navigate(`/crews/${alam.content.crewId}`)}}>
+                                  <ReadAlamContent >
+                                    <span >{alam.content.content}</span>
+                                    <AlamDelete onClick={(e)=>{e.stopPropagation(); onclickDeleteAlam(alam.id); }}>삭제</AlamDelete> 
+                                  </ReadAlamContent>
+                                </AlamList>)
+                              }
+                            </div>
+                          )})
+                        }
+                      </div>
+                    </>
+                  )
+              }
+            
+                <AlamsDelete onClick={(e)=>{e.stopPropagation(); onclickDeleteAlams()}}>
+                    <div style={{textAlign:'center'}}>전체 삭제</div>
+                </AlamsDelete>
             </AlamBox>
           
         </ModalPage>
@@ -132,23 +148,39 @@ z-index: 900;
 `
 
 const AlamBox = styled.div`
-width: 30rem;
-height: 30rem;
-border: 1px solid yellow;
-border-radius: 10px;
+width: 43rem;
+height: 55rem;
+box-shadow: 10px 20px 20px rgba(0, 0, 0, 0.4);
+border-radius: 15px;
 position: absolute;
-top: 32rem;
-left: 70%;
+top: 45rem;
+left: 67%;
 transform: translate(-50%, -50%);
-background: #ffffff;
-color: #141414;
+background: #262626;
+color: #cccccc;
 overflow: auto;
 z-index: 901;
+font-size: 1.2rem;
+`
+const AlamList = styled.div`
+width: 38rem;
+height: 5.6rem;
+margin: 1rem auto;
+background-color: #333333;
+border-radius: 1.5rem;
+padding: 1.8rem 2rem 2rem 2rem;
+`
+const AlamDelete = styled.span`
+float: right;
 `
 
-const S_button = styled.button`
+const AlamsDelete = styled.div`
 font-size: 1.4rem;
-margin:0 0 0 7rem;
+margin: 3rem 0 0 0rem;
+position: absolute;
+width: 43rem;
+height: 6rem;
+background: linear-gradient(180deg, rgba(217, 217, 217, 0) -70.63%, rgba(20, 20, 20, 0) -70.62%, rgba(20, 20, 20, 0) 3.13%, rgba(20, 20, 20, 0) 13.79%, rgba(20, 20, 20, 0.443299) 52.01%, rgba(20, 20, 20, 0.463918) 53.79%, #141414 100%);
 `
 
 const AlamContent = styled.div`

@@ -44,23 +44,27 @@ const Navbar = () => {
   const {isLoading2, error2, NreadAlams} = useSelector((state) => state.NreadAlams)
   console.log(NreadAlams.data, error2)
 //SSE 연결하기
+const [lastEventId, setLastEventId] = useState("")
 const EventSource = EventSourcePolyfill || NativeEventSource;  //eventsource 쓰려면 import 해야됨!
+console.log(lastEventId)
 
 let sse = undefined;
-
 useEffect(()=>{
   if (userToken) {
-    sse = new EventSource('http://54.180.31.108/subscribe',     //구독
-    {headers: {Authorization: userToken }
-    })
-
-    sse.onopen = event => {
+    sse = new EventSource(`http://sparta-tim.shop/subscribe`,   //구독
+    {headers: {Authorization: userToken}  })
+    // {"Last-Event-ID": lastEventId}
+    
+    
+    sse.onopen = e => {
       console.log("연결완료")
     }
 
-    sse.addEventListener('sse', (e) => {
+    sse.addEventListener('sse', e => {
         if(e.data.startsWith('{')) {
+          console.log(e)
           console.log(JSON.parse(e.data))
+          setLastEventId(e.lastEventId)
 
           dispatch(_addAlam(JSON.parse(e.data)))
           dispatch(_plusAlam(1))
@@ -69,11 +73,9 @@ useEffect(()=>{
     )
 
     sse.onerror = e => {
-      if (e) {
-        console.log(e)
-      }
-      sse.close();
+      // if (e) { console.log(e) }
     };
+
   }
   
 }, [userToken])

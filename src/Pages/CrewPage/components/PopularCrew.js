@@ -11,7 +11,8 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
 const PopularCrew = ({searchData}) => {
 
-    const BASE_URL = "http://sparta-tim.shop";
+    // const BASE_URL = "http://sparta-tim.shop";
+    const BASE_URL = 'https://01192mg.shop'
   
     const navigate = useNavigate();
   

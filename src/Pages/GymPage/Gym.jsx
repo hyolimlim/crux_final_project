@@ -14,7 +14,8 @@ import GymList from './components/GymList';
 
 
 const Gym = () => {
-    const BASE_URL = "http://sparta-tim.shop"
+    // const BASE_URL = "http://sparta-tim.shop"
+    const BASE_URL = 'https://01192mg.shop'
 
     const [location, setLocation] = useState('내 주변 클라이밍짐')
     const [gyms, setGyms] = useState([]) 

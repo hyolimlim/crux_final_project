@@ -3,6 +3,8 @@ import axios from 'axios';
 import { bool } from "yup";
 
 const BASE_URL = 'http://sparta-tim.shop'
+// const BASE_URL = 'https://01192mg.shop'
+
 
 export const __getAlam = createAsyncThunk(
     'getAlam',
