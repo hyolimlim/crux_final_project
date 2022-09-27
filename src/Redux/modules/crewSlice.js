@@ -212,7 +212,7 @@ export const createCrewNotice = createAsyncThunk(
       const response = await axios
         .post(
           `http://sparta-tim.shop/notices/${payload.id}`,
-          { content: payload.content },
+          { content: payload.content, date: null, time: null },
           {
             headers: {
               Authorization: window.localStorage.getItem("access_token"),
@@ -318,17 +318,35 @@ export const getCrewPhoto = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await axios.get(
-        `http://sparta-tim.shop/crews/${payload}?page=0&size=10`,
-        {
-          headers: {
-            Authorization: window.localStorage.getItem("access_token"),
-          },
-        }
+        `http://sparta-tim.shop/crews/${payload}/posts?page=0&size=10`
       );
       console.log(response.data);
       return thunkAPI.fulfillWithValue(response.data);
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
+    }
+  }
+);
+
+//크루 사진 삭제
+export const deleteCrewPhoto = createAsyncThunk(
+  "delete/CrewPhoto",
+  async (payload, thunkAPI) => {
+    console.log(payload);
+    try {
+      const response = await axios
+        .delete(`http://sparta-tim.shop/crews/posts/${payload}`, {
+          headers: {
+            Authorization: window.localStorage.getItem("access_token"),
+          },
+        })
+        .then((response) => {
+          console.log(response);
+        });
+      window.alert("사진 삭제 완료");
+      return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.data);
     }
   }
 );

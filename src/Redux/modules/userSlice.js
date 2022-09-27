@@ -10,7 +10,7 @@ const initialState = {
   user: [],
   isLoading: false,
   isSuccess: false,
-  error: null,
+  error: [],
 };
 
 //회원가입
@@ -71,11 +71,11 @@ export const login = createAsyncThunk(
             response.headers.access_token
           );
           window.localStorage.setItem("userId", response.data.data.id);
-          window.location.reload();
+          // window.location.reload();
         });
       return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.data);
+      return thunkAPI.rejectWithValue(error.response.data.error);
     }
   }
 );
@@ -100,20 +100,22 @@ export const loginSlice = createSlice({
   },
 });
 
-//카카오톡 로그인
+//카카오톡 로그인-->주소만 잠시 현우님걸로 해둠(변경예정),id저장 수정필요
 export const kakaoLogin = createAsyncThunk(
   "members/kakaoLogin",
   async (payload, thunkAPI) => {
     try {
       const response = await axios
-        .get(`http://sparta-tim.shop/oauth/kakao/callback?code=${payload}`)
+        .get(`http://3.39.237.124/oauth/kakao/callback?code=${payload}`)
         .then((response) => {
           console.log(response);
           window.localStorage.setItem(
             "access_token",
-            response.headers.access_token
+            response.headers.authorization
           );
+          window.localStorage.setItem("userId", response.data.data.id);
         });
+      window.location.replace("/");
       return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.data);

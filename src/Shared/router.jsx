@@ -9,6 +9,10 @@ import KakaoLogin from "../Pages/Login/KakaoLogin";
 import CreateCrew from "../Pages/CrewPage/CreateCrew";
 import CrewEdit from "../Pages/CrewPage/CrewEdit";
 import Mypage from "../Pages/MyPage/Mypage";
+import ChatList from "../Pages/Chatting/ChatList";
+import ChatRoom from "../Pages/Chatting/ChatRoom";
+import TermsOfUse from "../Pages/Register/TermsOfUse";
+import Userprivacy from "../Pages/Register/Userprivacy";
 
 const Router = () => {
   return (
@@ -23,7 +27,11 @@ const Router = () => {
           <Route path="/kakaoLogin" element={<KakaoLogin />} />
           <Route path="/createcrew" element={<CreateCrew />} />
           <Route path="/crewedit/:id" element={<CrewEdit />} />
-          <Route path={"/members/:memberId"} element={<Mypage />}/>
+          <Route path={"/members/:memberId"} element={<Mypage />} />
+          <Route path="/chat" element={<ChatList />} />
+          <Route path={"/chat/:roomId"} element={<ChatRoom />} />
+          <Route path="/terms/terms-of-use" element={<TermsOfUse />} />
+          <Route path="/terms/user-privacy" element={<Userprivacy />} />
         </Routes>
       </Container>
     </Warp>

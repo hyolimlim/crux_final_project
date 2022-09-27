@@ -3,6 +3,7 @@ import { crewSlice } from "../modules/crewSlice";
 import { gymSlice } from "../modules/gymSlice";
 import { gymDetailSlice } from "../modules/gymDetilSlice";
 import { MyPageSlice } from "../modules/mypageSlice";
+import chat from "../modules/chatSlice";
 import {
   loginSlice,
   kakaoLoginSlice,
@@ -12,6 +13,7 @@ import {
 
 const store = configureStore({
   reducer: {
+    chat,
     user: userSlice.reducer,
     crews: crewSlice.reducer,
     login: loginSlice.reducer,
@@ -19,7 +21,7 @@ const store = configureStore({
     kakaoLogin: kakaoLoginSlice.reducer,
     gyms: gymSlice.reducer,
     gymDetail: gymDetailSlice.reducer,
-    myPage: MyPageSlice.reducer, 
+    myPage: MyPageSlice.reducer,
   },
 });
 

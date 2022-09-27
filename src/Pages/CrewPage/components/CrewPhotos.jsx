@@ -15,14 +15,13 @@ function CrewPhotos() {
 
   useEffect(() => {
     dispatch(getCrewPhoto(params));
-  }, []);
+  }, [dispatch]);
 
   const crewPhotos = useSelector((state) => state?.crews?.crewPhotos?.data);
-  console.log(crewPhotos);
   // const Photos = crewPhotos?.data;
 
-  //   const userData = useSelector((state) => state);
-  //   console.log(userData);
+  // const userData = useSelector((state) => state);
+  // console.log(userData);
 
   //업로드 모달 띄우기
   const [uploadModalVisible, setUploadModaVisible] = useState(false);
@@ -34,17 +33,23 @@ function CrewPhotos() {
   //이미지 리스트 모달 띄우기-->모달에 postId전달.
   const [photoDetailModalVisible, setImgListModaVisible] = useState(false);
   const [photoId, setPhotoId] = useState([]);
+  const [postId, setPostId] = useState([]);
 
-  const handleImgMadalClick = (data) => {
+  const handleImgMadalClick = (data, id) => {
     setImgListModaVisible(!photoDetailModalVisible);
     setPhotoId(data);
+    setPostId(id?.postId);
   };
 
   return (
     <Container>
       {uploadModalVisible && <UploadPhotoModal onClose={handleMadalClick} />}
       {photoDetailModalVisible && (
-        <PhotoDetailModal onClose={handleImgMadalClick} photoId={photoId} />
+        <PhotoDetailModal
+          onClose={handleImgMadalClick}
+          photoId={photoId}
+          postId={postId}
+        />
       )}
       <ImgBox onClick={handleMadalClick}>사진 등록하기</ImgBox>
       {crewPhotos &&
@@ -53,7 +58,7 @@ function CrewPhotos() {
             type="button"
             key={photo.postId}
             onClick={() => {
-              handleImgMadalClick(photo.imgList);
+              handleImgMadalClick(photo.imgList, photo);
             }}
           >
             <img src={photo.imgList[0]?.imgUrl}></img>
@@ -85,6 +90,10 @@ const ImgBox = styled.div`
   img {
     width: 100%;
     height: 100%;
+  }
+  :hover& {
+    transform: scale(1.05);
+    transition: 0.5s;
   }
 `;
 

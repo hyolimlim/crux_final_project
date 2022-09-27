@@ -9,7 +9,7 @@ const RegisterValidation = () => {
       .shape({
         email: yup
           .string()
-          .email("유효한 이메일이 아닙니다.")
+          .email("이메일을 정확히 입력해주세요.")
           .required("이메일을 입력해주세요."),
         //   .test(
         //     "verifyEmail",
