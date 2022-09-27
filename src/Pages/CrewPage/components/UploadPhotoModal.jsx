@@ -1,14 +1,20 @@
-import { useRef, useState } from "react";
-import { storage } from "../../../Shared/firebase";
-import { useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { useForm } from "react-hook-form";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import React from "react";
 import styled from "styled-components";
+import { storage } from "../../../Shared/firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
+import useOutSideClick from "../../../Shared/hooks/useOutSideClick";
+import { ReactComponent as ImgUploadIcon } from "../../../Image/imgUploadBox.svg";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+// import 슬라이더왼쪽버튼 from "../../Image/btn_left.png";
+// import 슬라이더오른쪽버튼 from "../../Image/btn_left.png";
 import { addCrewPhoto } from "../../../Redux/modules/crewSlice";
 
 function UploadPhotoModal({ onClose }) {
+  //기본 세팅
   const params = useParams().crewId;
   const dispatch = useDispatch();
 
@@ -16,39 +22,14 @@ function UploadPhotoModal({ onClose }) {
   const [isUploading, setUploading] = useState(false); // 업로드 상태
   const [photoURL, setPhotosURL] = useState([]); // 업로드 완료된 사진 링크들
 
-  //useform 전송
-  const {
-    handleSubmit,
-    formState: { isSubmitting },
-  } = useForm();
-
-  const onSubmit = () => {
-    const payload = {
-      id: params,
-      imgUrl: photoURL,
-    };
-    dispatch(addCrewPhoto(payload));
-  };
-
-  // 이거로도 바꿔서 해보기~
-  //   const handlePermit = (data) => {
-  //     const payload = {
-  //       memberId: data,
-  //       crewId: params,
-  //     };
-  //     console.log(payload);
-  //     dispatch(permitCrew(payload));
-  //   };
-
   // 파일 선택시 파일리스트 상태 변경해주는 함수
   const handleImageChange = (e) => {
     for (const image of e.target.files) {
       setFileList((prevState) => [...prevState, image]);
-      console.log(files);
     }
   };
 
-  // 업로드시 호출될 함수
+  // 이미지 업로드 & dispatch
   const handleImageUpload = async (e, fileList) => {
     e.preventDefault();
     try {
@@ -56,49 +37,107 @@ function UploadPhotoModal({ onClose }) {
       const urls = await Promise.all(
         fileList?.map((file) => {
           const storageRef = ref(storage, `images/${file.name}`);
-          const task = uploadBytesResumable(storageRef, file);
+          const task = uploadBytes(storageRef, file);
           return getDownloadURL(storageRef);
         })
       );
       setPhotosURL(urls);
       console.log(photoURL);
+      const payload = {
+        id: params,
+        imgUrl: photoURL,
+      };
+      dispatch(addCrewPhoto(payload));
     } catch (err) {
       console.error(err);
     }
   };
 
-  //div클릭하면 file호출
+  //이미지 미리보기
+  const [imgPreview, setImgPreview] = useState([]);
+  console.log(imgPreview);
+
+  // 이미지 상대경로 저장
+  const handleAddImages = (e) => {
+    const imageLists = e.target.files;
+
+    let imageUrlLists = [...imgPreview];
+
+    for (let i = 0; i < imageLists.length; i++) {
+      const currentImageUrl = URL.createObjectURL(imageLists[i]);
+      imageUrlLists.push(currentImageUrl);
+    }
+    if (imageUrlLists.length > 5) {
+      window.alert("사진은 5장까지만 등록 가능합니다.");
+      imageUrlLists = imageUrlLists.slice(0, 5);
+    }
+    setImgPreview(imageUrlLists);
+  };
+
+  //이미지 삭제
+  const handleDeleteImage = (id) => {
+    setImgPreview(imgPreview.filter((_, index) => index !== id));
+    setFileList(files.filter((_, index) => index !== id));
+  };
+
+  //버튼 클릭하면 file호출
   const imgRef = useRef();
+
   const onClickImg = () => {
     imgRef.current.click();
   };
 
+  //모달 스크롤 방지
+  useEffect(() => {
+    const $body = document.querySelector("body");
+    $body.style.overflow = "hidden";
+    return () => ($body.style.overflow = "auto");
+  }, []);
+
+  //모달 바깎 클릭시 close
+  const modalRef = useRef(null);
+  useOutSideClick(modalRef, onClose);
+
   return (
     <Background>
-      <Modal>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Title>사진 등록 (n/5)</Title>
-          <Xbtn onClick={onClose}></Xbtn>
-          <ImgBox type="button" onClick={onClickImg}>
+      <Modal ref={modalRef} onSubmit={(e) => handleImageUpload(e, files)}>
+        <Title>
+          <h1>사진 ({imgPreview.length}/5)</h1>
+        </Title>
+        <Xbtn onClick={onClose}></Xbtn>
+        <ImgBox>
+          <StyledSlider {...settings}>
+            {imgPreview.map((image, id) => (
+              <div key={id}>
+                <img src={image} />
+              </div>
+            ))}
+          </StyledSlider>
+        </ImgBox>
+        <PreviewBox>
+          <div>
+            <ImgUploadIcon type="button" onClick={onClickImg} />
             <input
               type="file"
               multiple
-              accept=".jpg, .png"
+              accept="image/*"
               ref={imgRef}
               onChange={(e) => {
+                handleAddImages(e);
                 handleImageChange(e);
-                handleImageUpload(e, files);
               }}
             />
-            <PhotoButton />
-            <ImgPreviewBox></ImgPreviewBox>
-          </ImgBox>
-          <Buttonbox>
-            <button type="submit" disabled={isSubmitting}>
-              등록하기
-            </button>
-          </Buttonbox>
-        </form>
+          </div>
+          {imgPreview?.map((image, id) => (
+            <div key={id} onClick={() => handleDeleteImage(id)}>
+              <img src={image} />
+            </div>
+          ))}
+        </PreviewBox>
+        <ButtonBox>
+          <button type="submit">사진 등록</button>
+          <button type="button">취소</button>
+        </ButtonBox>
       </Modal>
     </Background>
   );
@@ -106,87 +145,125 @@ function UploadPhotoModal({ onClose }) {
 
 export default UploadPhotoModal;
 
-const ImgPreviewBox = styled.div`
-  width: 410px;
-  height: 60px;
-  margin-top: 5px;
-  background-color: red;
+const settings = {
+  dots: false,
+  infinite: false,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  arrows: true,
+  centerMode: false,
+};
+
+const StyledSlider = styled(Slider)`
+  .slick-slide div {
+    outline: none;
+  }
 `;
 
 const Background = styled.div`
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.4);
   position: fixed;
   left: 0;
   top: 0;
   display: flex;
   justify-content: center;
+  padding-top: 200px;
   z-index: 99999;
 `;
 
-const Modal = styled.div`
+const Modal = styled.form`
   width: 500px;
-  height: 635px;
+  height: fit-content;
   background-color: #141414;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 65px 45px 65px 45px;
+  padding: 65px 50px 65px 50px;
   position: relative;
-  margin-top: 200px;
 `;
 
-const Title = styled.p`
-  font-family: "Spoqa Han Sans Neo";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 2.75rem;
-  letter-spacing: -0.05em;
-  color: #ffffff;
-`;
-
-const PhotoButton = styled.div`
-  background-color: gray;
-  width: 410px;
-  height: 300px;
+const Title = styled.div`
+  width: 100%;
+  height: 55px;
   display: flex;
   justify-content: center;
   align-items: center;
+  h1 {
+    font-family: "Spoqa Han Sans Neo";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 44px;
+    letter-spacing: -0.05em;
+    color: #ffffff;
+  }
 `;
 
 const ImgBox = styled.div`
-  display: flex;
-  positon: relative;
-  background=color: red;
-  padding-top: 30px;
-  display: flex;
-  flex-direction: column;
-  input {
-    display: none;
+  width: 400px;
+  height: 300px;
+  background-color: #333333;
+  margin-top: 50px;
+  div {
+    width: 400px;
+    height: 300px;
+    p {
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: -0.05em;
+      position: absolute;
+      color: #999999;
+      z-index: 999;
+      top: 25px;
+      right: 25px;
+    }
+    img {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
   }
 `;
 
-const Buttonbox = styled.div`
-  button {
-    width: 410px;
-    height: 60px;
-    border: none;
-    background-color: #cccccc;
-    font-family: "Spoqa Han Sans Neo";
-    font-style: normal;
-    font-weight: 400;
-    font-size: 1.25rem;
-    color: #141414;
-    letter-spacing: -0.05em;
-    &:first-child {
-      position: absolute;
-      top: 530px;
-      left: 45px;
-      background-color: #fae100;
+const PreviewBox = styled.div`
+  width: 200px;
+  height: 50px;
+  margin-top: 15px;
+  display: felx;
+  flex-direction: row;
+  input {
+    display: none;
+  }
+  div {
+    width: 50px;
+    height: 50px;
+    img {
+      width: 100%;
+      height: 100%;
+      border: 1px solid #666666;
     }
   }
+`;
+
+const ButtonBox = styled.div`
+  width: 400px;
+  height: 60px;
+  margin-top:40px;
+  button {
+    width: 190px;
+    height: 60px;
+    font-size:20px;
+    font-weight:500;
+    color:#262626
+    background-color:#999999
+    letter-spacing: -0.05em;
+    &:nth-child(1) {
+      margin-right: 15px;
+      background-color:#FFB800;}
+      &:nth-child(2) {
+        background-color:#999999}
+}
 `;
 
 const Xbtn = styled.button`

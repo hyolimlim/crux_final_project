@@ -5,6 +5,7 @@ import { gymDetailSlice } from "../modules/gymDetilSlice";
 import { MyPageSlice } from "../modules/mypageSlice";
 import { alamSlice } from "../modules/notification";
 import { NreadAlamSlice } from "../modules/notification";
+import chat from "../modules/chatSlice";
 import {
   loginSlice,
   kakaoLoginSlice,
@@ -16,6 +17,7 @@ const store = configureStore({
   reducer: {
     getCrew: getCrewSlice.reducer,
     getGym: getGymSlice.reducer,
+    chat,
     user: userSlice.reducer,
     crews: crewSlice.reducer,
     login: loginSlice.reducer,
@@ -25,6 +27,7 @@ const store = configureStore({
     myPage: MyPageSlice.reducer, 
     alams: alamSlice.reducer, 
     NreadAlams: NreadAlamSlice.reducer,
+    myPage: MyPageSlice.reducer,
   },
 });
 
