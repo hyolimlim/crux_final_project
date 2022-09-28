@@ -11,8 +11,8 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
 const PopularCrew = ({searchData}) => {
 
-    // const BASE_URL = "http://sparta-tim.shop";
-    const BASE_URL = 'https://01192mg.shop'
+    const BASE_URL = "http://sparta-tim.shop";
+    // const BASE_URL = 'https://01192mg.shop'
   
     const navigate = useNavigate();
   
@@ -73,13 +73,13 @@ return (
           width: "192rem",
           backgroundColor: "#141414",
           color: "#999",
-          // overflow: "auto",
+          overflow: "auto",
         }}
       >
         <Container
           style={{
             width: "120rem",
-            height: "100%",
+            height: "98%",
             margin: "0 auto",
             padding: "0",
           }}

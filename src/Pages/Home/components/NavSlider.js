@@ -11,11 +11,11 @@ const NavSlider = (props) => {
     const navigate = useNavigate()
 
     const settings = {
-        dots: true,
+        dots: false,
         fade: true,
         infinite: true,
         speed: 1000,
-        // autoplay: true,
+        autoplay: true,
         autoplaySpeed: 5000,
         pauseOnHover: true,
         nextArrow: (

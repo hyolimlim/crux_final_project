@@ -9,7 +9,8 @@ import {LikeHeart, LikedHeart } from "../../../Shared/components/LikeHeart";
 import { useDispatch, useSelector } from "react-redux";
 import { __getGymDetail } from "../../../Redux/modules/gymDetilSlice";
 import Loading from "../../../Shared/Loading";
-
+import 노랑별 from "../../../Image/노랑별.png"
+import 검은별 from "../../../Image/검은별.png"
 
 
 
@@ -75,21 +76,29 @@ return(
                 <div style={{width:'60rem', height:'60rem', margin:'10rem 0 0 0', padding:'0rem 4rem 4rem 4rem', backgroundColor:'#262626', color:'#666666'}}>
                     
                     <div style={{margin:'0 0 0 0', color:'#999999'}}> <span style={{margin:'0 16rem 0 0'}}>💛 {gym.likeNum}명 | 리뷰 {gym?.reviews.length}건 </span></div>
-                    <div style={{fontSize:'3.2rem', fontWeight:'700', color:'#ffffff',margin:'2rem 0 3rem 0'}}>{gym?.name}</div>
+                    <div style={{fontSize:'4.4rem', fontWeight:'700', color:'#ffffff',margin:'1rem 0 3.5rem 0'}}>{gym?.name}</div>
                     <S_title> 주소 <S_content> {gym.location} </S_content></S_title>
                     <S_title>전화번호 <S_content> {gym.phone} </S_content></S_title>
                     
-                    <S_title> 평점 <span style={{color:'#cccccc'}}>{Number(gym?.avgScore).toFixed(2)}</span> 
-                            
+                    <S_title> 평점
+                            {
+                                gym?.avgScore === 5 ? <Star5 /> :
+                                    gym?.avgScore >= 4 ? <Star4 /> : 
+                                        gym?.avgScore >= 3 ? <Star3 /> :
+                                            gym?.avgScore >= 2 ? <Star2 /> :
+                                                gym?.avgScore >= 1 ? <Star1 /> :
+                                                                            <Star0 /> 
+                            }
+                              <S_content style={{fontSize:'1.4rem', margin:'0 0 0 0'}}>({Number(gym?.avgScore).toFixed(2)}점)</S_content> 
                     </S_title>
                     
-                    <div style={{fontSize:'2rem', fontWeight:'700', margin:'8rem 0 0 0'}}>방문객 리뷰 {gym?.reviews.length}건</div>
+                    <div style={{fontSize:'2rem', fontWeight:'700', margin:'5rem 0 0 0'}}>방문객 리뷰 {gym?.reviews.length}건</div>
 
-                    <div style={{width:'38rem', height:'17rem', margin:'2rem 0 0 0'}}>
+                    <div style={{width:'38rem', height:'19rem', margin:'2rem 0 0 0'}}>
                         {
                             gym?.reviews.length === 0 ? 
                             
-                            <div style={{color:'#ffffff', fontSize:'3rem', textAlign:'center', padding:'7rem 0 0 0' }}>아직 포토 리뷰가 없습니다 <br/>
+                            <div style={{color:'#ffffff', fontSize:'3rem', textAlign:'center', padding:'4rem 0 0 0' }}>아직 포토 리뷰가 없습니다 <br/>
                                 제일 먼저 리뷰를 남겨주세요!</div> 
                             :  
                             
@@ -99,6 +108,7 @@ return(
                                         <ReviewContent>{gym.reviews[gym.reviews.length-1].content}</ReviewContent>
                                     </ReviewWrap>
                             :
+                            gym?.reviews.length === 2 ? 
                                 <>
                                     <ReviewWrap >
                                         <ReviewNickname style={{fontWeight:'700', margin:'0 2rem 0 0'}}>{gym.reviews[gym.reviews.length-1].nickname}</ReviewNickname>
@@ -108,6 +118,21 @@ return(
                                         <ReviewNickname>{gym.reviews[gym.reviews.length-2].nickname}</ReviewNickname>
                                         <ReviewContent>{gym.reviews[gym.reviews.length-2].content}</ReviewContent>
                                     </ReviewWrap>
+                                </>
+                            :
+                                <>
+                                <ReviewWrap >
+                                    <ReviewNickname style={{fontWeight:'700', margin:'0 2rem 0 0'}}>{gym.reviews[gym.reviews.length-1].nickname}</ReviewNickname>
+                                    <ReviewContent>{gym.reviews[gym.reviews.length-1].content}</ReviewContent>
+                                </ReviewWrap>
+                                <ReviewWrap>
+                                    <ReviewNickname>{gym.reviews[gym.reviews.length-2].nickname}</ReviewNickname>
+                                    <ReviewContent>{gym.reviews[gym.reviews.length-2].content}</ReviewContent>
+                                </ReviewWrap>
+                                <ReviewWrap>
+                                    <ReviewNickname>{gym.reviews[gym.reviews.length-3].nickname}</ReviewNickname>
+                                    <ReviewContent>{gym.reviews[gym.reviews.length-3].content}</ReviewContent>
+                                </ReviewWrap>
                                 </>
                         }
                     </div>
@@ -142,7 +167,7 @@ margin: 1.4rem 0 0 0;
 `
 
 const S_content = styled.span`
-margin-left: 1rem;
+margin-left: 2rem;
 font-size: 2rem;
 font-weight: 400;
 color: #cccccc;
@@ -151,8 +176,11 @@ color: #cccccc;
 const ReviewWrap = styled.div`
     display: flex;
     width: 90%;
-    border-bottom: 1px solid rgb(204, 204, 204);
+    border-bottom: 1px solid #666666;
+    margin: 0 0 2rem 0;
     padding: 10px;
+    font-size: 1.4rem;
+    color: #cccccc;
 `
 const ReviewNickname = styled.div`
     margin: 0px 2rem 0px 0px;
@@ -188,5 +216,103 @@ const ButtonBox = styled.div`
     }
   }
 `
+const Star0 = () => {
+    return(
+        <>
+        <img src ={검은별} 
+                style={{width:'2rem', margin:'0 0.8rem 0 3.8rem'}}/>
+        <img src ={검은별}
+        style={{width:'2rem', margin:'0 0.8rem 0 0'}}/>
+        <img src ={검은별}
+        style={{width:'2rem', margin:'0 0.8rem 0 0'}}/>
+        <img src ={검은별}
+        style={{width:'2rem', margin:'0 0.8rem 0 0'}}/>
+        <img src ={검은별}
+        style={{width:'2rem', margin:'0 0.8rem 0 0'}}/>
+        </>
+    )
+}
+const Star1 = () => {
+    return(
+        <>
+        <img src ={노랑별} 
+                style={{width:'2rem', margin:'0 0.8rem 0 3.8rem'}}/>
+        <img src ={검은별}
+        style={{width:'2rem', margin:'0 0.8rem 0 0'}}/>
+        <img src ={검은별}
+        style={{width:'2rem', margin:'0 0.8rem 0 0'}}/>
+        <img src ={검은별}
+        style={{width:'2rem', margin:'0 0.8rem 0 0'}}/>
+        <img src ={검은별}
+        style={{width:'2rem', margin:'0 0.8rem 0 0'}}/>
+        </>
+    )
+}
+const Star2 = () => {
+    return(
+        <>
+        <img src ={노랑별} 
+                style={{width:'2rem', margin:'0 0.8rem 0 3.8rem'}}/>
+        <img src ={노랑별}
+        style={{width:'2rem', margin:'0 0.8rem 0 0'}}/>
+        <img src ={검은별}
+        style={{width:'2rem', margin:'0 0.8rem 0 0'}}/>
+        <img src ={검은별}
+        style={{width:'2rem', margin:'0 0.8rem 0 0'}}/>
+        <img src ={검은별}
+        style={{width:'2rem', margin:'0 0.8rem 0 0'}}/>
+        </>
+    )
+}
+const Star3 = () => {
+    return(
+        <>
+        <img src ={노랑별} 
+                style={{width:'2rem', margin:'0 0.8rem 0 3.8rem'}}/>
+        <img src ={노랑별}
+        style={{width:'2rem', margin:'0 0.8rem 0 0'}}/>
+        <img src ={노랑별}
+        style={{width:'2rem', margin:'0 0.8rem 0 0'}}/>
+        <img src ={검은별}
+        style={{width:'2rem', margin:'0 0.8rem 0 0'}}/>
+        <img src ={검은별}
+        style={{width:'2rem', margin:'0 0.8rem 0 0'}}/>
+        </>
+    )
+}
+const Star4 = () => {
+    return(
+        <>
+        <img src ={노랑별} 
+                style={{width:'2rem', margin:'0 0.8rem 0 3.8rem'}}/>
+        <img src ={노랑별}
+        style={{width:'2rem', margin:'0 0.8rem 0 0'}}/>
+        <img src ={노랑별}
+        style={{width:'2rem', margin:'0 0.8rem 0 0'}}/>
+        <img src ={노랑별}
+        style={{width:'2rem', margin:'0 0.8rem 0 0'}}/>
+        <img src ={검은별}
+        style={{width:'2rem', margin:'0 0.8rem 0 0'}}/>
+        </>
+    )
+}
+const Star5 = () => {
+    return(
+        <>
+        <img src ={노랑별} 
+                style={{width:'2rem', margin:'0 0.8rem 0 3.8rem'}}/>
+        <img src ={노랑별}
+        style={{width:'2rem', margin:'0 0.8rem 0 0'}}/>
+        <img src ={노랑별}
+        style={{width:'2rem', margin:'0 0.8rem 0 0'}}/>
+        <img src ={노랑별}
+        style={{width:'2rem', margin:'0 0.8rem 0 0'}}/>
+        <img src ={노랑별}
+        style={{width:'2rem', margin:'0 0.8rem 0 0'}}/>
+        </>
+    )
+}
+
+
 
 export default Content;

@@ -11,13 +11,13 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
 const NewCrew = ({searchData}) => {
 
-    // const BASE_URL = "http://sparta-tim.shop";
-    const BASE_URL = 'https://01192mg.shop'
+    const BASE_URL = "http://sparta-tim.shop";
+    // const BASE_URL = 'https://01192mg.shop'
   
     const navigate = useNavigate();
   
     const [list, setList] = useState([]);
-    // console.log(list)
+    console.log(list)
     
   
     // 무한스크롤 적용하기
@@ -71,13 +71,13 @@ return (
           width: "192rem",
           backgroundColor: "#141414",
           color: "#999999",
-          // overflow: "auto",
+          overflow: "auto",
         }}
       >
         <Container
           style={{
             width: "120rem",
-            height: "100%",
+            height: "98%",
             margin: "0 auto",
             padding: "0",
           }}

@@ -43,10 +43,10 @@ const Navbar = () => {
   const [showAlam, setShowAlam] = useState(false)
   const {isLoading2, error2, NreadAlams} = useSelector((state) => state.NreadAlams)
   console.log(NreadAlams.data, error2)
+
 //SSE 연결하기
-const [lastEventId, setLastEventId] = useState("")
 const EventSource = EventSourcePolyfill || NativeEventSource;  //eventsource 쓰려면 import 해야됨!
-console.log(lastEventId)
+// console.log(lastEventId)
 
 let sse = undefined;
 useEffect(()=>{
@@ -64,7 +64,6 @@ useEffect(()=>{
         if(e.data.startsWith('{')) {
           console.log(e)
           console.log(JSON.parse(e.data))
-          setLastEventId(e.lastEventId)
 
           dispatch(_addAlam(JSON.parse(e.data)))
           dispatch(_plusAlam(1))
@@ -82,7 +81,7 @@ useEffect(()=>{
 
 useEffect(()=>{
   dispatch(__NreadAlam())
-},[])
+},[dispatch])
 
   return (
     <NavContainer>
@@ -113,7 +112,7 @@ useEffect(()=>{
                   onClick={()=>{setShowAlam(true)}}/>
                 <div style={{width:'3rem', height:'3rem', backgroundColor:'white', borderRadius:'60%', position:'absolute', margin:'-48px 0 0 9px', textAlign:'center', padding:'7px 0 0 0'}}>
                 
-                  { isLoading2 ? <Loading/> : NreadAlams.data.count}
+                  { isLoading2 ? 0 : NreadAlams.data.count}
 
                 </div>
               </div>

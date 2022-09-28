@@ -16,6 +16,7 @@ import GymList from './components/GymList';
 const Gym = () => {
     // const BASE_URL = "http://sparta-tim.shop"
     const BASE_URL = 'https://01192mg.shop'
+    const navigate = useNavigate()
 
     const [location, setLocation] = useState('내 주변 클라이밍짐')
     const [gyms, setGyms] = useState([]) 
@@ -25,6 +26,15 @@ const Gym = () => {
     const [sizeBs, setSizeBs] = useState(10)
     const [sizeDg, setSizeDg] = useState(10)
     const [sizeGj, setSizeGj] = useState(10)
+
+    const onclickGymList = (lat, lng) => {
+      setState((prev) => ({
+        ...prev,
+        center: {
+          lat: lat,
+          lng: lng,
+      }}))
+    }
 
 // 카카오 Map 입니다
 
@@ -347,12 +357,16 @@ const Gym = () => {
                               yAnchor={1}
                             >
                               <Wrap>
-                                <GymName>{val.name}</GymName>
-                                {/* <GymAddress>{val.location}</GymAddress> */}
-                                <GymFind>
-                                  <a href={`https://map.kakao.com/link/to/HelloWorld!,${val.lat},${val.lon}`} target="_blank"rel="noreferrer">
-                                    <img src={오른쪽버튼} style={{width:'2.3rem', padding:'10px 0 0 13px'}}/>
+                                <GymName>
+                                  {val.name}
+                                  <a href={`https://map.kakao.com/link/to/HelloWorld!,${val.lat},${val.lon}`} target="_blank"rel="noreferrer"
+                                  >
+                                      길찾기
                                   </a>
+                                </GymName>
+                                
+                                <GymFind onClick={()=>{navigate(`/gyms/${val.id}`)}}>
+                                  <img src={오른쪽버튼} style={{width:'2.3rem', padding:'15px 0 0 13px'}}/>
                                 </GymFind>
                               </Wrap>
                             </CustomOverlayMap>
@@ -380,7 +394,7 @@ const Gym = () => {
                         }
                     </div>
 
-                    <GymList gyms={gyms}/>
+                    <GymList gyms={gyms} onclickGymList={onclickGymList}/>
                     
                 </GymContainer>
             </div>
@@ -393,8 +407,8 @@ const Wrap = styled.div`
 border: 1px solid #ddd;
 border-radius: 6px;
 width: 18rem;
-height: 4rem;
-margin: -106px 0 0 -25px;
+height: 5rem;
+margin: -112px 0 0 0px;
 background-color: white;
 color: black;
 /* box-shadow: 0px 1px 2px #888; */
@@ -406,8 +420,10 @@ font-size: 14px;
 text-align: center;
 width: 80%;
 height: 100%;
-padding: 8px 15px;
+padding: 3px 15px;
 border-bottom: #666666;
+display: flex;
+flex-direction: column;
 /* background-color: #eeeeee; */
 `
 const GymFind = styled.div`

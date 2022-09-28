@@ -9,10 +9,6 @@ import axios from "axios";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useInView } from "react-intersection-observer";
 import React from "react";
-import {
-  FontHightlight,
-  FontHightlight2,
-} from "./components/FontHightlight.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import PopularCrew from "./components/PopularCrew.js";
