@@ -92,7 +92,7 @@ return(
                               <S_content style={{fontSize:'1.4rem', margin:'0 0 0 0'}}>({Number(gym?.avgScore).toFixed(2)}점)</S_content> 
                     </S_title>
                     
-                    <div style={{fontSize:'2rem', fontWeight:'700', margin:'5rem 0 0 0'}}>방문객 리뷰 {gym?.reviews.length}건</div>
+                    <div style={{fontSize:'2rem', fontWeight:'700', margin:'6rem 0 0 0'}}>방문객 리뷰 {gym?.reviews.length}건</div>
 
                     <div style={{width:'38rem', height:'19rem', margin:'2rem 0 0 0'}}>
                         {
@@ -108,7 +108,6 @@ return(
                                         <ReviewContent>{gym.reviews[gym.reviews.length-1].content}</ReviewContent>
                                     </ReviewWrap>
                             :
-                            gym?.reviews.length === 2 ? 
                                 <>
                                     <ReviewWrap >
                                         <ReviewNickname style={{fontWeight:'700', margin:'0 2rem 0 0'}}>{gym.reviews[gym.reviews.length-1].nickname}</ReviewNickname>
@@ -119,28 +118,13 @@ return(
                                         <ReviewContent>{gym.reviews[gym.reviews.length-2].content}</ReviewContent>
                                     </ReviewWrap>
                                 </>
-                            :
-                                <>
-                                <ReviewWrap >
-                                    <ReviewNickname style={{fontWeight:'700', margin:'0 2rem 0 0'}}>{gym.reviews[gym.reviews.length-1].nickname}</ReviewNickname>
-                                    <ReviewContent>{gym.reviews[gym.reviews.length-1].content}</ReviewContent>
-                                </ReviewWrap>
-                                <ReviewWrap>
-                                    <ReviewNickname>{gym.reviews[gym.reviews.length-2].nickname}</ReviewNickname>
-                                    <ReviewContent>{gym.reviews[gym.reviews.length-2].content}</ReviewContent>
-                                </ReviewWrap>
-                                <ReviewWrap>
-                                    <ReviewNickname>{gym.reviews[gym.reviews.length-3].nickname}</ReviewNickname>
-                                    <ReviewContent>{gym.reviews[gym.reviews.length-3].content}</ReviewContent>
-                                </ReviewWrap>
-                                </>
                         }
                     </div>
                     <div style={{display:'flex'}}>
                         <ButtonBox onClick={()=>{setShowReview(!showReview)}}>
                             <button>리뷰 상세보기</button>
                         </ButtonBox>
-                        <ButtonBox onClick={()=>{setModal(true)}} style={{margin:'2rem 0 0 2rem'}}>
+                        <ButtonBox onClick={()=>{setModal(true)}} style={{margin:'1rem 0 0 2rem'}}>
                             <button>후기 쓰기</button>
                         </ButtonBox>
                     </div>
@@ -176,19 +160,25 @@ color: #cccccc;
 const ReviewWrap = styled.div`
     display: flex;
     width: 90%;
+    height: 30%;
     border-bottom: 1px solid #666666;
     margin: 0 0 2rem 0;
     padding: 10px;
     font-size: 1.4rem;
     color: #cccccc;
+    overflow: hidden;
 `
 const ReviewNickname = styled.div`
     margin: 0px 2rem 0px 0px;
     font-weight: 700;
+    width: 30%;
 `
 const ReviewContent = styled.div`
     margin: 0px 0px 0px 0px;
     font-weight: 400;
+    width: 70%;
+    height: 30%;
+    overflow: none;
 `
 
 const ButtonBox = styled.div`
@@ -201,7 +191,7 @@ const ButtonBox = styled.div`
   font-weight: 500;
   font-size: 1.4rem;
   letter-spacing: -0.05em;
-  margin: 2rem 0 0 0rem;
+  margin: 1rem 0 0 0rem;
   /* position: absolute; */
   button {
     width: 100%;

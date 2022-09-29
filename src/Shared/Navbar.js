@@ -49,38 +49,40 @@ const EventSource = EventSourcePolyfill || NativeEventSource;  //eventsource 쓰
 // console.log(lastEventId)
 
 let sse = undefined;
-useEffect(()=>{
-  if (userToken) {
-    sse = new EventSource(`http://sparta-tim.shop/subscribe`,   //구독
-    {headers: {Authorization: userToken}  })
-    // {"Last-Event-ID": lastEventId}
+// useEffect(()=>{
+//   if (userToken) {
+//     sse = new EventSource(`http://sparta-tim.shop/subscribe`,   //구독
+//     {headers: {Authorization: userToken}  })
+//     // {"Last-Event-ID": lastEventId}
     
     
-    sse.onopen = e => {
-      console.log("연결완료")
-    }
+//     sse.onopen = e => {
+//       console.log("연결완료")
+//     }
 
-    sse.addEventListener('sse', e => {
-        if(e.data.startsWith('{')) {
-          console.log(e)
-          console.log(JSON.parse(e.data))
+//     sse.addEventListener('sse', e => {
+//         if(e.data.startsWith('{')) {
+//           console.log(e)
+//           console.log(JSON.parse(e.data))
 
-          dispatch(_addAlam(JSON.parse(e.data)))
-          dispatch(_plusAlam(1))
-          // setAlam(prev => [...prev, JSON.parse(e.data).content])
-        }}
-    )
+//           dispatch(_addAlam(JSON.parse(e.data)))
+//           dispatch(_plusAlam(1))
+//           // setAlam(prev => [...prev, JSON.parse(e.data).content])
+//         }}
+//     )
 
-    sse.onerror = e => {
-      // if (e) { console.log(e) }
-    };
-
-  }
-  
-}, [userToken])
+//     sse.onerror = e => {
+//       console.log(e)
+//       sse.close();
+//     }
+//   }
+//   return () => {
+//     sse.close();
+//   }
+// }, [])
 
 useEffect(()=>{
-  dispatch(__NreadAlam())
+  // dispatch(__NreadAlam())
 },[dispatch])
 
   return (

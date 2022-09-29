@@ -19,6 +19,9 @@ const Crew = () => {
 
 
   const [choicePopularCrew, setChoicePopularCrew] = useState(true);
+  
+  const [choiceCrew, setChoiceCrew] = useState(true)
+  const [choiceNewCrew, setChoiceNewCrew] = useState(false)
 
   const navigate = useNavigate();
 
@@ -73,10 +76,14 @@ const Crew = () => {
           />
         </div>
         <div style={{ width: "120rem", margin: "7.5rem auto 0 auto", display:'flex', fontSize:'2rem'}}>
-          <div style={{margin:'0 4rem 0 0'}} type="button" 
-            onClick={()=>{setChoicePopularCrew(true); setSearchData([])}}>인기 크루</div>
-          <div type="button" 
-            onClick={()=>{setChoicePopularCrew(false); setSearchData([])}}>신규 크루</div>
+            <CoiceCrew status={choiceCrew} type="button" 
+                onClick={()=>{setChoicePopularCrew(true); setSearchData([]); setChoiceCrew(true); setChoiceNewCrew(false)}}>
+                  인기 크루
+            </CoiceCrew>
+            <CoiceCrew status={choiceNewCrew} type="button" style={{margin:'0 0 0 4rem'}}
+                onClick={()=>{setChoicePopularCrew(false); setSearchData([]); setChoiceCrew(false); setChoiceNewCrew(true)}}>
+                  신규 크루
+            </CoiceCrew>
         </div>
       </HeaderWrap>
 
@@ -107,9 +114,13 @@ const S_search = styled.input`
   color: #666666;
 `;
 
-const Card = styled.span`
-  width: 38rem;
-  height: 49rem;
-`;
+const CoiceCrew = styled.div`
+font-size: 2rem;
+padding: 0 0 1rem 0;
+border-bottom: ${(props) => (props.status ? `1px solid #ffffff` : null)};
+color: ${(props) => (props.status ? `#ffffff` : `#999999`)};
+font-weight: ${(props) => (props.status ? `700` : `400`)};
+
+`
 
 export default Crew;

@@ -76,32 +76,15 @@ return (
           overflow: "auto",
         }}
       >
-        <Container
-          style={{
-            width: "120rem",
-            height: "98%",
-            margin: "0 auto",
-            padding: "0",
-          }}
-        >
-          <Row md={3} style={{ margin: "0 auto", padding: "1rem 0 0 0" }}>
+        <Wrap>
         
         {
             searchData?.length !== 0 ? 
             
             (searchData?.map((val, i) => (
                 <React.Fragment key={i}>
-                  <Col
-                    key={i}
-                    style={{
-                      width: "38rem",
-                      margin: "2rem 2rem 0 0",
-                      padding: "0",
-                    }}
-                    onClick={() => {
-                      navigate(`/crews/${val.id}`);
-                    }}
-                  >
+                  <CrewList key={i}
+                    onClick={() => {navigate(`/crews/${val.id}`)}}>
                     <img
                       src={val.imgUrl}
                       alt=""
@@ -112,7 +95,7 @@ return (
                     <p style={{ margin: "1rem 0 0 0" }}>
                       🖤 50명 | 🙍‍♀️ {val.crewNum}
                     </p>
-                  </Col>
+                  </CrewList>
                 </React.Fragment>
               ))) 
             
@@ -120,17 +103,8 @@ return (
     // 검색한 크루가 있으면 검색 된 크루를 보여줍니다
               list?.map((val, i) => (
                 <React.Fragment key={i}>
-                  <Col
-                    key={i}
-                    style={{
-                      width: "38rem",
-                      margin: "2rem 2rem 0 0",
-                      padding: "0",
-                    }}
-                    onClick={() => {
-                      navigate(`/crews/${val.id}`);
-                    }}
-                  >
+                  <CrewList key={i}
+                    onClick={() => {navigate(`/crews/${val.id}`)}}>
                     <img
                       src={val.imgUrl}
                       alt=""
@@ -143,7 +117,7 @@ return (
                         <span style={{margin:'0 0.4rem 0 0.6rem'}}>|</span> 
                       🙍‍♀️ {val.crewNum}명
                     </p>
-                  </Col>
+                  </CrewList>
                 </React.Fragment>
               ))
 
@@ -153,10 +127,27 @@ return (
                         
             <div ref={obsRef} ></div>
           
-          </Row>
-        </Container>
+        </Wrap>
       </div>
     )
 }
+
+const Wrap = styled.div`
+/* display: flex; */
+display: grid;
+grid-template-columns: 41rem 41rem 39rem;
+justify-content: center;
+width: 123rem;
+height: 130rem;
+margin: 0 auto;
+padding: 4rem 0 0 0;
+`
+
+const CrewList = styled.div`
+width: 38rem;
+height: 50rem;
+margin: 2rem 1rem 0 2rem;
+padding: 0;
+`
 
 export default PopularCrew;

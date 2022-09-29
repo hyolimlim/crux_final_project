@@ -75,7 +75,7 @@ width: 600px;
 height: 400px;
 z-index: 999;
 position: absolute;
-top: 50%;
+top: 30%;
 left: 50%;
 transform: translate(-50%, -50%);
 background-color: white;
@@ -100,23 +100,23 @@ position: relative;
 `
 
 const Snext = styled.div`
-width: 30px;
-height: 30px;
+width: 5rem;
+height: 5rem;
 position: absolute;
 /* right: 16px; */
 z-index: 100;
-margin: 32% 10% 0 0;
+margin: 52% -10% 0 0;
 /* text-align: right; */
 line-height: 30px;
 `;
 
 const Sprev = styled.div`
-width: 30px;
-height: 30px;
+width: 5rem;
+height: 5rem;
 position: absolute;
 /* left: 16px; */
 z-index: 100;
-margin: 32% 0 0 14%;
+margin: 52% 0 0 -4%;
 /* text-align: left; */
 line-height: 30px;
 `;

@@ -53,7 +53,8 @@ if(gym === undefined) {
                         return(
                             <div key={i} style={{margin:'0 auto',display:'flex', padding:'5rem 0 0 0',borderBottom:'1px solid #202020'}}>
                                 <div style={{width:'11rem', height:'100%'}}>
-                                    <div><img src={review.imgUrl !== null ? review.imgUrl : 사용자이미지} style={{width:'8rem', height:'8rem', borderRadius:'60%'}}/></div>
+
+                                    <div><img src={review.imgUrl} style={{width:'8rem', height:'8rem', borderRadius:'60%'}}/></div>
                                     
                                 </div>
 
@@ -76,8 +77,29 @@ if(gym === undefined) {
                                     <div style={{margin:'0.5rem 0 0 0'}}>
                                         {review.content}
                                     </div>
-                                    <img src={review.reviewPhotoList[0]?.imgUrl} style={{width:'12rem', height:'12rem', margin:'1.4rem 1rem 2rem 0'}}
-                                        onClick={()=>{openModal(review); setReviewId(review.id)}}/>
+                                    
+                                        { review?.reviewPhotoList?.length === 1 ? 
+                                            <img src={review.reviewPhotoList[0].imgUrl} style={{width:'12rem', height:'12rem', margin:'1.4rem 1rem 2rem 0'}}
+                                            onClick={()=>{openModal(review); setReviewId(review.id)}}/> :
+                                            review?.reviewPhotoList?.length === 2 ? 
+                                            <>
+                                            <img src={review.reviewPhotoList[0].imgUrl} style={{width:'12rem', height:'12rem', margin:'1.4rem 1rem 2rem 0'}}
+                                            onClick={()=>{openModal(review); setReviewId(review.id)}}/> 
+                                            <img src={review.reviewPhotoList[1].imgUrl} style={{width:'12rem', height:'12rem', margin:'1.4rem 1rem 2rem 0'}}
+                                            onClick={()=>{openModal(review); setReviewId(review.id)}}/> 
+                                            </> :
+                                            <>
+                                            <img src={review.reviewPhotoList[0].imgUrl} style={{width:'12rem', height:'12rem', margin:'1.4rem 1rem 2rem 0'}}
+                                            onClick={()=>{openModal(review); setReviewId(review.id)}}/> 
+                                            <img src={review.reviewPhotoList[1].imgUrl} style={{width:'12rem', height:'12rem', margin:'1.4rem 1rem 2rem 0'}}
+                                            onClick={()=>{openModal(review); setReviewId(review.id)}}/> 
+                                            <img src={review.reviewPhotoList[2].imgUrl} style={{width:'12rem', height:'12rem', margin:'1.4rem 1rem 2rem 0'}}
+                                            onClick={()=>{openModal(review); setReviewId(review.id)}}/>
+                                            </>
+                                        
+                                        }
+                                        
+                                    
                                 </div>
                                 
                                 {

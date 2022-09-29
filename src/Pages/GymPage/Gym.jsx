@@ -14,8 +14,8 @@ import GymList from './components/GymList';
 
 
 const Gym = () => {
-    // const BASE_URL = "http://sparta-tim.shop"
-    const BASE_URL = 'https://01192mg.shop'
+    const BASE_URL = "http://sparta-tim.shop"
+    // const BASE_URL = 'https://01192mg.shop'
     const navigate = useNavigate()
 
     const [location, setLocation] = useState('내 주변 클라이밍짐')
@@ -384,6 +384,7 @@ const Gym = () => {
                 <GymContainer>
                     <div style={{width:'58rem', position:'absolute', borderBottom:'1px solid #666',padding:'3.5rem 3.5rem 3rem 3.5rem'}}>
                         <span style={{fontWeight:'700', fontSize:'2rem'}}>{location}</span>
+                        
                         {
                           plusMy ? <MoreGym onClick={()=>{setSizeMy(70); setPlusMy(false)}} type="button"> 더 보기</MoreGym> :
                              plusSeoul ? <MoreGym onMouseOver={()=>{setSizeSeoul(80)}} onClick={categorySeoul} type="button"> 더 보기</MoreGym> :
@@ -392,6 +393,7 @@ const Gym = () => {
                                     plusDg ? <MoreGym onMouseOver={()=>{setSizeDg(50)}} onClick={categoryDg} type="button"> 더 보기</MoreGym> :
                                         plusGj ? <MoreGym onMouseOver={()=>{setSizeGj(50)}} onClick={categoryGj} type="button"> 더 보기</MoreGym> : null
                         }
+                        
                     </div>
 
                     <GymList gyms={gyms} onclickGymList={onclickGymList}/>

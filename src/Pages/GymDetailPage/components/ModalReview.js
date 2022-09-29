@@ -34,25 +34,38 @@ function ModalReview({ setModal, gym, reload, setReload }) {
     }, [rating]);
 
     // 이미지 업로드 <firebase> 라이브러리! 
+
+    const [content, setContent] = useState('');
+    const [fileUrl, setFileUrl] = useState([]);
+    console.log(fileUrl)
+    const [files, setFileList] = useState([]); // 파일 리스트
+    const storage = getStorage();
+    // const storageRef = ref(storage);
+    const handleImageChange = (e) => {
+        for (const image of e.target.files) {
+          setFileList((prevState) => [...prevState, image]);
+        }
+      };
+      console.log(files)
+
+    const uploadFB = async (fileList) => {
+        if (fileList > 3) {
+            fileList.slice(0,3)
+        }
+        // uploadBytes(stroage랑, files )
+        const urls = await Promise.all(
+            fileList?.map((file) => {
+              const storageRef = ref(storage, `images/${file.name}`);
+              const task = uploadBytes(storageRef, file);
+              return getDownloadURL(storageRef);
+            })
+        )
+        setFileUrl(urls);
+    };
+
     const onsubmit = () => {
         createReview();
     };
-
-    const [content, setContent] = useState('');
-    const [fileUrl, setFileUrl] = useState('');
-
-    const storage = getStorage();
-    // const storageRef = ref(storage);
-    const uploadFB = async (e) => {
-        const upload_file = await uploadBytes(
-            ref(storage, `images/${e.target.files[0].name}`),
-            e.target.files[0]
-        );
-
-        const file_url = await getDownloadURL(upload_file.ref);
-        setFileUrl(file_url);
-    };
-
     const createReview = useCallback(async () => {
         if (content === '') {
             alert('후기를 입력해주세요');
@@ -61,7 +74,10 @@ function ModalReview({ setModal, gym, reload, setReload }) {
             const payload = {
                 score: rating,
                 content: content,
-                reviewPhotoList: fileUrl !== "" ? [{ imgUrl: fileUrl }] : [{ imgUrl: "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbtOY6e%2FbtrMC0zJgaN%2FE8MiRTJ9nXjXvMPO5q1gQK%2Fimg.jpg" }],
+                reviewPhotoList: fileUrl.length === 1 ? [{ imgUrl: fileUrl[0] }] : 
+                                 fileUrl.length === 2 ? [{ imgUrl: fileUrl[0] }, { imgUrl: fileUrl[1] }] :
+                                 fileUrl.length === 3 ? [{ imgUrl: fileUrl[0] }, { imgUrl: fileUrl[1] }, { imgUrl: fileUrl[2] }]
+                                 : [{ imgUrl: "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbtOY6e%2FbtrMC0zJgaN%2FE8MiRTJ9nXjXvMPO5q1gQK%2Fimg.jpg" }],
             };
             await axios.post(`${BASE_URL}/reviews/${gym.id}`, payload, {
                 headers: { Authorization: window.localStorage.getItem("access_token") }
@@ -80,6 +96,28 @@ function ModalReview({ setModal, gym, reload, setReload }) {
                 });
         }
     }, [onsubmit]);
+
+
+    //이미지 미리보기
+    const [imgPreview, setImgPreview] = useState([])
+    console.log(imgPreview)
+
+    //이미지 상대경로 저장
+    const handleAddImages = (e) => {
+        const imageLists = e.target.files;
+        let imageUrlLists = [...imgPreview];
+
+        for (let i=0; i < imageLists.length; i++) {
+            const currentImageUrl = URL.createObjectURL(imageLists[i]);
+            imageUrlLists.push(currentImageUrl);
+        }
+        if (imageUrlLists.length > 3) {
+            alert('사진은 3장까지만 등록 가능합니다')
+            imageUrlLists = imageUrlLists.slice(0, 3)
+        }
+        setImgPreview(imageUrlLists)
+    }
+    
 
 
 
@@ -106,14 +144,19 @@ function ModalReview({ setModal, gym, reload, setReload }) {
                     <input
                         encType="multipart/form-data"
                         accept='image/*'
-                        type="file"
+                        type="file" multiple
                         style={{ display: 'none' }}
-                        onChange={uploadFB} />
+                        onChange={(e)=>{uploadFB(files); handleImageChange(e); handleAddImages(e)}} />
                     <div style={{display:'flex', position:'absolute', margin:'-3rem 0 0 6rem'}}>
                         <UploadImg> <img src={이미지업로드} style={{ width:"100%", height:'100%'}} type="button"/> </UploadImg>
-                        <ImgPreview> <img src={fileUrl ? fileUrl : null} style={{ width:"100%", height:'100%'}} /></ImgPreview>
-                        <ImgPreview> <img src={fileUrl ? fileUrl : null} style={{ width:"100%", height:'100%'}} /></ImgPreview>
-                        <ImgPreview> <img src={fileUrl ? fileUrl : null} style={{ width:"100%", height:'100%'}} /></ImgPreview>
+                        
+                        {imgPreview?.map((image, i) => (
+                                <ImgPreview key={i}>
+                                    <img src={image} style={{width:"100%", height:'100%'}}/>
+                                </ImgPreview>
+                            ))
+                        }
+                    
                     </div>
                 </label>
                 <div style={{ display: 'flex', margin: '-1rem 0 0 50rem' }}>

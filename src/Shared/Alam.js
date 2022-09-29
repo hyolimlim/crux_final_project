@@ -101,7 +101,7 @@ useEffect(()=>{
                         나의 알림
                       </div>
                       
-                      <div style={{height:'37rem', overflow:'auto'}}>
+                      <AlamLists >
                         {
                             alams?.data.map((alam) => {
                           return (
@@ -124,7 +124,7 @@ useEffect(()=>{
                             </div>
                           )})
                         }
-                      </div>
+                      </AlamLists>
                     </>
                   )
               }
@@ -162,6 +162,14 @@ overflow: auto;
 z-index: 901;
 font-size: 1.2rem;
 `
+const AlamLists = styled.div`
+height: 37rem;
+overflow: auto;
+::-webkit-scrollbar {
+    display: none;
+}
+`
+
 const AlamList = styled.div`
 width: 38rem;
 height: 5.6rem;
