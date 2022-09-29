@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
 
 const BASE_URL = 'http://sparta-tim.shop'
+// const BASE_URL = 'https://01192mg.shop'
 
 export const __getGymDetail = createAsyncThunk(
     'getGymDetail',
@@ -16,23 +17,6 @@ export const __getGymDetail = createAsyncThunk(
         }
     }
 )
-
-export const __delReview = createAsyncThunk(
-    'delReview',
-    async (reviewId, thunkAPI) => {
-        try {
-            console.log(reviewId)
-            const data = await axios.delete(`${BASE_URL}/reviews/${reviewId}`,
-            { headers: {Authorization: window.localStorage.getItem("access_token")}})
-            return thunkAPI.fulfillWithValue(data.data)
-        } catch (error) {
-            return thunkAPI.rejectWithValue(error)
-        }
-    }
-)
-
-
-
 
 export const gymDetailSlice = createSlice({
     name: 'gymDetail',

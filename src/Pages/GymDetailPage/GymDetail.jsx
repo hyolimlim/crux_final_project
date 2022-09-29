@@ -41,21 +41,12 @@ return(
             
             <Navbar />
 
-    {/* 헤더 영역 입니다 */}
-            <div style={{width:'192rem', height:'20rem', backgroundColor:'#262626', color:'#ffffff'}}>
-                <div style={{width:'120rem', margin:'0 auto', padding:'10rem 0 0 0'}}>
-                        <div style={{fontSize:'4.4rem', fontWeight:'700'}}>
-                            {gym?.name} {Number(gym?.avgScore).toFixed(2)} (평점)
-                        </div>
-                </div>
-            </div>
-
     {/* content 영역 입니다 */}
             <Content gym={gym} setShowReview={setShowReview} showReview={showReview} setReload={setReload} reload={reload}/>
 
     {/* review 영역 입니다 */}
         {
-            showReview === false ? null : 
+            showReview === true ? null : 
             <>
                 <img style={{width:'2rem', height:'2rem', position:'absolute', margin:'-5rem 0 0 94rem'}} src="https://www.pngmart.com/files/15/Arrow-Down-PNG-Picture.png"/>
                 <Review gym={gym} setReload={setReload} reload={reload}/>

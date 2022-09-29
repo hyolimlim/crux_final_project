@@ -3,7 +3,8 @@ import axios from "axios";
 
 // const SERVERH = process.env.REACT_APP_SERVER_H;
 // const SERVERM = process.env.REACT_APP_SERVER_M;
-// const BASE_URLM = "https://01192mg.shop/crews";
+// const BASE_URLM = "https://01192mg.shop";
+const BASE_URLM = "http://sparta-tim.shop";
 
 const initialState = {
   crewDetail: [],
@@ -23,7 +24,7 @@ export const createCrew = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await axios.post(
-        `http://sparta-tim.shop/crews`,
+        `${BASE_URLM}/crews`,
         payload,
         {
           headers: {
@@ -46,7 +47,7 @@ export const editCrew = createAsyncThunk(
     try {
       const response = await axios
         .put(
-          `http://sparta-tim.shop/crews/${payload.id}`,
+          `${BASE_URLM}/crews/${payload.id}`,
           {
             name: payload.name,
             content: payload.content,
@@ -75,7 +76,7 @@ export const deleteCrew = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await axios
-        .delete(`http://sparta-tim.shop/crews/${payload}`, {
+        .delete(`${BASE_URLM}/crews/${payload}`, {
           headers: {
             Authorization: window.localStorage.getItem("access_token"),
           },
@@ -97,7 +98,7 @@ export const getCrewDetail = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await axios.get(
-        `http://sparta-tim.shop/crews/${payload}`
+        `${BASE_URLM}/crews/${payload}`
       );
       // console.log(response.data);
       return thunkAPI.fulfillWithValue(response.data);
@@ -116,7 +117,7 @@ export const joinCrew = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await axios
-        .post(`http://sparta-tim.shop/crews/${payload}/members`, null, {
+        .post(`${BASE_URLM}/crews/${payload}/members`, null, {
           headers: {
             Authorization: window.localStorage.getItem("access_token"),
           },
@@ -209,9 +210,10 @@ export const createCrewNotice = createAsyncThunk(
   "post/createCrew",
   async (payload, thunkAPI) => {
     try {
+      // console.log(payload.id)
       const response = await axios
         .post(
-          `http://sparta-tim.shop/notices/${payload.id}`,
+          `${BASE_URLM}/notices/${payload.id}`,
           { content: payload.content, date: null, time: null },
           {
             headers: {
@@ -224,6 +226,7 @@ export const createCrewNotice = createAsyncThunk(
         });
       return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
+      // console.log(error)
       return thunkAPI.rejectWithValue(error.data);
     }
   }
@@ -265,7 +268,7 @@ export const deleteCrewNotice = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await axios
-        .delete(`http://sparta-tim.shop/notices/${payload}`, {
+        .delete(`${BASE_URLM}/notices/${payload}`, {
           headers: {
             Authorization: window.localStorage.getItem("access_token"),
           },

@@ -9,10 +9,6 @@ import axios from "axios";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useInView } from "react-intersection-observer";
 import React from "react";
-import {
-  FontHightlight,
-  FontHightlight2,
-} from "./components/FontHightlight.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import PopularCrew from "./components/PopularCrew.js";
@@ -23,6 +19,9 @@ const Crew = () => {
 
 
   const [choicePopularCrew, setChoicePopularCrew] = useState(true);
+  
+  const [choiceCrew, setChoiceCrew] = useState(true)
+  const [choiceNewCrew, setChoiceNewCrew] = useState(false)
 
   const navigate = useNavigate();
 
@@ -30,6 +29,11 @@ const Crew = () => {
   const [search, setSearch] = useState("");
   const [searchData, setSearchData] = useState([])
 
+  const onKeyPress = (e) => {
+    if(e.key == 'Enter') {
+      onclickSearchCrew();
+    }
+  }
   const onclickSearchCrew = () => {
     searchCrew()
   };
@@ -61,24 +65,31 @@ const Crew = () => {
           <S_search
             placeholder="검색어를 입력해 주세요"
             onChange={(e) => setSearch(e.target.value)}
+            onKeyPress={onKeyPress}
             value={search}
           />
           <FontAwesomeIcon
-            icon={faMagnifyingGlass} size="3x" color="black"
+            icon={faMagnifyingGlass} size="3x" color="#666666"
             onClick={onclickSearchCrew}
-            style={{ position: "absolute", margin: "3rem 1rem 0 -4.5rem" }}
+            style={{ position: "absolute", margin: "35px 2rem 0 -50px" }}
             type="button"
           />
         </div>
         <div style={{ width: "120rem", margin: "7.5rem auto 0 auto", display:'flex', fontSize:'2rem'}}>
-          <div style={{margin:'0 2rem 0 0'}} type="button" 
-            onClick={()=>{setChoicePopularCrew(true); setSearchData([])}}>인기 크루</div>
-          <div type="button" 
-            onClick={()=>{setChoicePopularCrew(false); setSearchData([])}}>신규 크루</div>
+            <CoiceCrew status={choiceCrew} type="button" 
+                onClick={()=>{setChoicePopularCrew(true); setSearchData([]); setChoiceCrew(true); setChoiceNewCrew(false)}}>
+                  인기 크루
+            </CoiceCrew>
+            <CoiceCrew status={choiceNewCrew} type="button" style={{margin:'0 0 0 4rem'}}
+                onClick={()=>{setChoicePopularCrew(false); setSearchData([]); setChoiceCrew(false); setChoiceNewCrew(true)}}>
+                  신규 크루
+            </CoiceCrew>
         </div>
       </HeaderWrap>
 
-          {choicePopularCrew === true ? (<PopularCrew searchData={searchData}/>) : (<NewCrew searchData={searchData}/>)}
+          {choicePopularCrew === true ? 
+            (<PopularCrew searchData={searchData}/>) : 
+              (<NewCrew searchData={searchData}/>)}
 
     </div>
   );
@@ -93,17 +104,23 @@ const HeaderWrap = styled.div`
 
 const S_search = styled.input`
   width: 60rem;
-  height: 5rem;
+  height: 6rem;
   margin: 2rem auto;
-  border: 1px solid #f0f0f0;
-  border-radius: 0.5rem;
+  border: none;
   font-size: 1.4rem;
-  padding: 0 0 0 1rem;
+  font-weight: 400;
+  padding: 0 0 0 2rem;
+  background-color: #333;
+  color: #666666;
 `;
 
-const Card = styled.span`
-  width: 38rem;
-  height: 49rem;
-`;
+const CoiceCrew = styled.div`
+font-size: 2rem;
+padding: 0 0 1rem 0;
+border-bottom: ${(props) => (props.status ? `1px solid #ffffff` : null)};
+color: ${(props) => (props.status ? `#ffffff` : `#999999`)};
+font-weight: ${(props) => (props.status ? `700` : `400`)};
+
+`
 
 export default Crew;

@@ -4,6 +4,8 @@ import Slider from "react-slick";
 import styled from "styled-components";
 import 슬라이더왼쪽버튼 from "../../../Image/btn_left.png"
 import 슬라이더오른쪽버튼 from "../../../Image/btn_right.png"
+import 메인배너 from "../../../Image/메인배너.png"
+import 클라이밍짐배너 from "../../../Image/클라이밍짐배너.png"
 import { useNavigate } from "react-router-dom";
 
 const NavSlider = (props) => {
@@ -11,11 +13,11 @@ const NavSlider = (props) => {
     const navigate = useNavigate()
 
     const settings = {
-        dots: true,
+        dots: false,
         fade: true,
         infinite: true,
         speed: 1000,
-        autoplay: true,
+        // autoplay: true,
         autoplaySpeed: 5000,
         pauseOnHover: true,
         nextArrow: (
@@ -39,9 +41,15 @@ return(
             <div>
                 <BGimg >
                 
-                <div style={{width:'1400px', height:'163px', fontSize:'48px', margin:'0% auto 0 auto', padding:'20% 0 0 0', color:'white'}}>클라이밍 상급자들을 위한 <br/>새로운 클라이밍 코스</div>
+                    <div style={{width:'1200px', height:'163px', fontSize:'48px', margin:'0% auto 0 auto', padding:'20% 0 0 0'}}>
+                        클라이머들을 위한 공간 <br/>
+                        CRUX에서 완등하자!
+                    </div>
 
-                <div style={{width:'1400px', height:'300px', fontSize:'20px', margin:'0 auto', padding:'11% 0 0 0', color:'white'}}>상급자를 위한 새로운 코스를 원하신다면,<br/> 지금 바로 도전해보세요!</div>
+                    <div style={{width:'1200px', height:'300px', fontSize:'20px', margin:'0 auto', padding:'11% 0 0 0'}}>
+                        새로운 크루원들과 클라이밍을 원하신다면,<br/>
+                        지금 바로 모임에 참가해보세요!
+                    </div>
             
                 </BGimg>
             </div>
@@ -50,9 +58,15 @@ return(
             <div>
                 <BGimg2 >
                 
-                <div style={{width:'1400px', height:'163px', fontSize:'48px', margin:'0 auto 0 auto', padding:'20% 0 0 0', color:'white'}}>클라이밍 상급자들을 위한 <br/>새로운 클라이밍 코스</div>
+                    <div style={{width:'1200px', color:'black', fontSize:'48px', margin:'0 auto 0 auto', padding:'5% 0 0 13%'}}>
+                        {/* 클라이머를 위한 것을 한 눈에 <br/> */}
+                        주변 클라이밍짐을 확인해보세요!
+                    </div>
 
-                <div style={{width:'1400px', height:'300px', fontSize:'20px', margin:'0 auto', padding:'11% 0 0 0', color:'white'}}>상급자를 위한 새로운 코스를 원하신다면,<br/> 지금 바로 도전해보세요!</div>
+                    <div style={{width:'61rem', height:'300px', color:'black', fontSize:'20px', margin:'2rem auto', textAlign:'end'}}>
+                        마음에 드는 클라이밍 짐을 찾으셨다면,<br/>
+                        즐겨찾기와 후기를 남겨주세요!
+                    </div>
             
                 </BGimg2>
             </div>
@@ -83,8 +97,8 @@ width: 30px;
 height: 30px;
 position: absolute;
 /* right: 16px; */
-z-index: 99;
-margin: 16% 80% 0 0;
+z-index: 4;
+margin: 24rem 147rem 0 0;
 /* text-align: right; */
 line-height: 30px;
 `;
@@ -94,15 +108,15 @@ width: 30px;
 height: 30px;
 position: absolute;
 /* left: 16px; */
-z-index: 99;
-margin: 16% 0 0 15%;
+z-index: 4;
+margin: 24rem 0 0 38rem;
 /* text-align: left; */
 line-height: 30px;
 `;
 
 
 const BGimg = styled.div`
-background: url('https://cdn.zeplin.io/630cb81b1f30b614a71ea8d4/assets/f0a7d311-2e7e-4507-8dd0-d8fa986ab334.png');
+background: url(${메인배너});
 background-position: center;
 background-size: cover;
 
@@ -111,27 +125,14 @@ height: 1000px;
 margin: 0 auto;
 `
 const BGimg2 = styled.div`
-background: url('https://wc.wallpaperuse.com/wallp/14-144050_s.jpg');
+background: url(${클라이밍짐배너});
 background-position: center;
 background-size: cover;
 
 width: 1920px;
-height: 1000px;
-margin: 0 auto;
+height: 75rem;
+margin: 22rem auto 0 auto;
 `
-
-// const NavBar = styled.div`
-// width: 1400px;
-// margin: 0 auto;
-// padding: 6rem;
-
-
-// display: flex;
-// align-items: end;
-// color: white;
-// font-size: 1.2rem;
-// font-weight: 700;
-// `
 
 
 export default NavSlider;
