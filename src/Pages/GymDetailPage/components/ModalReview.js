@@ -12,7 +12,8 @@ import axios from "axios";
 
 
 function ModalReview({ setModal, gym, reload, setReload }) {
-    const BASE_URL = "https://01192mg.shop";
+    const BASE_URL = "http://sparta-tim.shop";
+    // const BASE_URL = "https://01192mg.shop";
 
     const navigate = useNavigate();
     const closeModal = () => {
@@ -37,40 +38,45 @@ function ModalReview({ setModal, gym, reload, setReload }) {
 
     const [content, setContent] = useState('');
     const [fileUrl, setFileUrl] = useState([]);
-    console.log(fileUrl)
     const [files, setFileList] = useState([]); // 파일 리스트
     const storage = getStorage();
     // const storageRef = ref(storage);
     const handleImageChange = (e) => {
+        let fileSlice = [...files]
         for (const image of e.target.files) {
-          setFileList((prevState) => [...prevState, image]);
+           setFileList((prevState) => [...prevState, image]);
+        }
+        if(files.length > 3) {
+            fileSlice = files.slice(0,3)
+            setFileList(fileSlice)
         }
       };
       console.log(files)
+      console.log(fileUrl)
 
-    const uploadFB = async (fileList) => {
-        if (fileList > 3) {
-            fileList.slice(0,3)
-        }
-        // uploadBytes(stroage랑, files )
+    useEffect(()=>{
+        uploadFB(files)
+    },[files])
+
+    const uploadFB = useCallback(async (files) => {
         const urls = await Promise.all(
-            fileList?.map((file) => {
-              const storageRef = ref(storage, `images/${file.name}`);
-              const task = uploadBytes(storageRef, file);
-              return getDownloadURL(storageRef);
+            files?.map((file) => {
+                const storageRef = ref(storage, `images/${file.name}`);
+                const task = uploadBytes(storageRef, file);
+                return getDownloadURL(storageRef);
             })
         )
         setFileUrl(urls);
-    };
+    },[])
+    
 
     const onsubmit = () => {
         createReview();
     };
-    const createReview = useCallback(async () => {
+    const createReview = async() => {
         if (content === '') {
             alert('후기를 입력해주세요');
         } else {
-
             const payload = {
                 score: rating,
                 content: content,
@@ -95,7 +101,7 @@ function ModalReview({ setModal, gym, reload, setReload }) {
                     console.log(err);
                 });
         }
-    }, [onsubmit]);
+    }
 
 
     //이미지 미리보기
@@ -146,7 +152,7 @@ function ModalReview({ setModal, gym, reload, setReload }) {
                         accept='image/*'
                         type="file" multiple
                         style={{ display: 'none' }}
-                        onChange={(e)=>{uploadFB(files); handleImageChange(e); handleAddImages(e)}} />
+                        onChange={(e)=>{ handleImageChange(e); handleAddImages(e)}} />
                     <div style={{display:'flex', position:'absolute', margin:'-3rem 0 0 6rem'}}>
                         <UploadImg> <img src={이미지업로드} style={{ width:"100%", height:'100%'}} type="button"/> </UploadImg>
                         

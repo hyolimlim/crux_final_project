@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Container, Row, Col } from "react-bootstrap";
 import Loading from "../../../Shared/Loading";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -65,24 +64,18 @@ const PopularCrew = ({searchData}) => {
           setLoad(false);
       }, [page])
 
-
+//window.scroll Top button
+      const goTop = useRef(null);
 
 return (
-    <div
-        style={{
-          width: "192rem",
-          backgroundColor: "#141414",
-          color: "#999",
-          overflow: "auto",
-        }}
-      >
+    <Container >
         <Wrap>
-        
+        <Topbar ref={goTop}></Topbar>
         {
             searchData?.length !== 0 ? 
             
             (searchData?.map((val, i) => (
-                <React.Fragment key={i}>
+                // <React.Fragment key={i}>
                   <CrewList key={i}
                     onClick={() => {navigate(`/crews/${val.id}`)}}>
                     <img
@@ -91,18 +84,18 @@ return (
                       style={{ width: "38rem", height: "38rem" }}
                     />
                     <h3 style={{ margin: "2rem 0 0 0" }}>{val.name}</h3>
-                    <p style={{ margin: "0.5rem 0 0 0" }}>{val.content}</p>
+                    <p style={{ margin: "0.5rem 0 0 0", height:'2rem', overflow:'hidden' }}>{val.content}</p>
                     <p style={{ margin: "1rem 0 0 0" }}>
                       🖤 50명 | 🙍‍♀️ {val.crewNum}
                     </p>
                   </CrewList>
-                </React.Fragment>
+                // </React.Fragment>
               ))) 
             
             :
     // 검색한 크루가 있으면 검색 된 크루를 보여줍니다
               list?.map((val, i) => (
-                <React.Fragment key={i}>
+                // <React.Fragment key={i}>
                   <CrewList key={i}
                     onClick={() => {navigate(`/crews/${val.id}`)}}>
                     <img
@@ -111,29 +104,39 @@ return (
                       style={{ width: "38rem", height: "38rem" }}
                     />
                     <h3 style={{ margin: "2rem 0 0 0" }}>{val.name}</h3>
-                    <p style={{ margin: "0.5rem 0 0 0" }}>{val.content}</p>
+                    <p style={{ margin: "0.5rem 0 0 0", height:'2rem', overflow:'hidden' }}>{val.content}</p>
                     <p style={{ margin: "1rem 0 0 0" }}>
                       🖤 {val.likeNum}명 
                         <span style={{margin:'0 0.4rem 0 0.6rem'}}>|</span> 
                       🙍‍♀️ {val.crewNum}명
                     </p>
                   </CrewList>
-                </React.Fragment>
+                // </React.Fragment>
               ))
 
         }
-
+          <button style={{position:'absolute', top:'116%', right:'24%'}} 
+            onClick={()=>{window.scrollTo({ top: goTop.current.offsetTop, left:0, behavior:"smooth" })}}>goTop</button>
             { load && <Loading />}
                         
             <div ref={obsRef} ></div>
           
         </Wrap>
-      </div>
+      </Container>
     )
 }
 
+const Container = styled.div`
+width: 192rem;
+background-color: #141414;
+color: #999999;
+overflow: auto;
+::-webkit-scrollbar {
+    display: none;
+}
+`
+
 const Wrap = styled.div`
-/* display: flex; */
 display: grid;
 grid-template-columns: 41rem 41rem 39rem;
 justify-content: center;
@@ -145,9 +148,16 @@ padding: 4rem 0 0 0;
 
 const CrewList = styled.div`
 width: 38rem;
-height: 50rem;
+height: 49rem;
 margin: 2rem 1rem 0 2rem;
 padding: 0;
+overflow: hidden;
+`
+
+const Topbar = styled.div`
+width: 122rem;
+margin: 0 auto;
+height: 0.1rem;
 `
 
 export default PopularCrew;

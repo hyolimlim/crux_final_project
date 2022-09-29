@@ -8,9 +8,11 @@ import EditModalReview from "./EditModalReview";
 import ReviewImgSlider from "./ReviewImgSlider";
 import { useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Review = ({gym, reload, setReload}) => {
 const BASE_URL = "http://sparta-tim.shop";
+const navigate = useNavigate()
 const [editModal, setEditModal] = useState(false)
 const [reviewId, setReviewId] = useState('')
 const [reviewImgModal, setReviewImgModal] = useState(false)
@@ -54,7 +56,8 @@ if(gym === undefined) {
                             <div key={i} style={{margin:'0 auto',display:'flex', padding:'5rem 0 0 0',borderBottom:'1px solid #202020'}}>
                                 <div style={{width:'11rem', height:'100%'}}>
 
-                                    <div><img src={review.imgUrl} style={{width:'8rem', height:'8rem', borderRadius:'60%'}}/></div>
+                                    <div><img src={review.imgUrl !== null ? review.imgUrl : 사용자이미지} style={{width:'8rem', height:'8rem', borderRadius:'60%'}}
+                                            onClick={()=>{navigate(`/members/${review.memberId}`)}}/></div>
                                     
                                 </div>
 
@@ -77,7 +80,8 @@ if(gym === undefined) {
                                     <div style={{margin:'0.5rem 0 0 0'}}>
                                         {review.content}
                                     </div>
-                                    
+                {/* ?? 반복문 웨안돼! */}
+                
                                         { review?.reviewPhotoList?.length === 1 ? 
                                             <img src={review.reviewPhotoList[0].imgUrl} style={{width:'12rem', height:'12rem', margin:'1.4rem 1rem 2rem 0'}}
                                             onClick={()=>{openModal(review); setReviewId(review.id)}}/> :
