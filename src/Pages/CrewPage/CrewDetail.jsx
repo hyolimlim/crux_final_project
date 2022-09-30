@@ -21,6 +21,7 @@ import CrewPhotos from "./components/CrewPhotos";
 import CrewNoticeModal from "./components/CrewNoticeModal";
 import ApplicationListModal from "./components/ApplicationListModal";
 import { ReactComponent as Heart } from "../../Image/heart.svg";
+import Loading from "../../Shared/Loading";
 
 const CrewDetail = () => {
   const params = useParams().crewId;
@@ -139,6 +140,9 @@ const CrewDetail = () => {
     }
   };
 
+if(!crewDetail) {
+  return <Loading />
+} 
   return (
     <div>
       <Navbar />

@@ -22,6 +22,15 @@ function CrewNotice() {
   const userId = window?.localStorage?.getItem("userId");
   console.log(userId);
 
+  const onSubmit = (data) => {
+    const payload = {
+      id: params,
+      content: data.content,
+    };
+    // console.log(payload);
+    dispatch(createCrewNotice(payload), [dispatch]);
+  };
+
   //props
   const [noticeData, setNoticeData] = useState({
     id: "",
@@ -30,7 +39,7 @@ function CrewNotice() {
     noticeId: "",
   });
 
-  return (
+return (
     <div>
       {noticeList
         .slice(0)
