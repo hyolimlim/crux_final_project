@@ -150,7 +150,7 @@ export const likeCrew = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await axios
-        .delete(`http://sparta-tim.shop/crews/${payload}/like`, null, {
+        .post(`http://sparta-tim.shop/crews/${payload}/like`, null, {
           headers: {
             Authorization: window.localStorage.getItem("access_token"),
           },

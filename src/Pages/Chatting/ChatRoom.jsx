@@ -41,7 +41,7 @@ function ChatRoom() {
     try {
       client.connect(headers, () => {
         client.subscribe(
-          `/sub/chat/room/${roomId}`,
+          `/sub/chat/room/29`,
           (data) => {
             const newMessage = JSON.parse(data.body);
             dispatch(addMessage(newMessage));

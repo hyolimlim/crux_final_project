@@ -115,15 +115,15 @@ export const joinCrew = createAsyncThunk(
   "post/joinCrew",
   async (payload, thunkAPI) => {
     try {
-      const response = await axios
-        .post(`http://sparta-tim.shop/crews/${payload}/members`, null, {
+      const response = await axios.post(
+        `http://sparta-tim.shop/crews/${payload}/members`,
+        null,
+        {
           headers: {
             Authorization: window.localStorage.getItem("access_token"),
           },
-        })
-        .then((response) => {
-          // console.log(response);
-        });
+        }
+      );
       return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.data);
@@ -212,7 +212,11 @@ export const createCrewNotice = createAsyncThunk(
       const response = await axios
         .post(
           `http://sparta-tim.shop/notices/${payload.id}`,
-          { content: payload.content, date: null, time: null },
+          {
+            content: payload.content,
+            date: payload.time,
+            place: payload.place,
+          },
           {
             headers: {
               Authorization: window.localStorage.getItem("access_token"),

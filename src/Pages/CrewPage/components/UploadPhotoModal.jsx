@@ -136,7 +136,6 @@ function UploadPhotoModal({ onClose }) {
         </PreviewBox>
         <ButtonBox>
           <button type="submit">사진 등록</button>
-          <button type="button">취소</button>
         </ButtonBox>
       </Modal>
     </Background>
@@ -177,7 +176,7 @@ const Background = styled.div`
 const Modal = styled.form`
   width: 500px;
   height: fit-content;
-  background-color: #141414;
+  background-color: #262626;
   display: flex;
   flex-direction: column;
   padding: 65px 50px 65px 50px;
@@ -188,7 +187,7 @@ const Title = styled.div`
   width: 100%;
   height: 55px;
   display: flex;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
   h1 {
     font-family: "Spoqa Han Sans Neo";
@@ -251,18 +250,14 @@ const ButtonBox = styled.div`
   height: 60px;
   margin-top:40px;
   button {
-    width: 190px;
+    width: 100%;
     height: 60px;
     font-size:20px;
     font-weight:500;
-    color:#262626
-    background-color:#999999
     letter-spacing: -0.05em;
-    &:nth-child(1) {
-      margin-right: 15px;
-      background-color:#FFB800;}
-      &:nth-child(2) {
-        background-color:#999999}
+    color:#262626
+    border:none;
+    background-color:#FFB800
 }
 `;
 

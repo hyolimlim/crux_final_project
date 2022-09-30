@@ -8,6 +8,7 @@ import styled from "styled-components";
 import UploadPhotoModal from "./UploadPhotoModal";
 import PhotoDetailModal from "./PhotoDetailModal";
 import { getCrewPhoto } from "../../../Redux/modules/crewSlice";
+import { ReactComponent as ImgUpload } from "../../../Image/imgUpload.svg";
 
 function CrewPhotos() {
   const params = useParams().crewId;
@@ -51,7 +52,9 @@ function CrewPhotos() {
           postId={postId}
         />
       )}
-      <ImgBox onClick={handleMadalClick}>사진 등록하기</ImgBox>
+      <ImgBox onClick={handleMadalClick}>
+        <ImgUpload />
+      </ImgBox>
       {crewPhotos &&
         crewPhotos.map((photo) => (
           <ImgBox
@@ -74,7 +77,6 @@ const Container = styled.div`
   width: 1200px;
   height: auto;
   max-height: 800px;
-  margin-top: 60px;
   margin-bottom: 200px;
   display: grid;
   grid-template-columns: 280px 280px 280px 280px;
