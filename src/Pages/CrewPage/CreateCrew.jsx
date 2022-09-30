@@ -1,14 +1,18 @@
 import { useRef, useState } from "react";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import Navbar from "../../Shared/Navbar";
 import { storage } from "../../Shared/firebase";
 import { createCrew } from "../../Redux/modules/crewSlice";
+import Select from "react-select";
+import DaumPostcode from "react-daum-postcode";
+import { add } from "date-fns";
 
 const CreateCrew = () => {
   const {
+    control,
     register,
     handleSubmit,
     formState: { isSubmitting },
@@ -17,12 +21,13 @@ const CreateCrew = () => {
   const dispatch = useDispatch();
 
   const onSubmit = (data) => {
-    const payload = {
-      name: data.name,
-      content: data.content,
-      imgUrl: fileUrl,
-    };
-    dispatch(createCrew(payload));
+    console.log(data);
+    // const payload = {
+    //   name: data.name,
+    //   content: data.content,
+    //   imgUrl: fileUrl,
+    // };
+    // dispatch(createCrew(payload));
   };
 
   const [imgUrl, setImgUrl] = useState(null);
@@ -78,11 +83,188 @@ const CreateCrew = () => {
     setImgTextVisible(false);
   };
 
+  //셀렉트 저장용
+  const [address, setAddress] = useState("");
+  const [addressD, setAddressD] = useState("");
+  const [keyword, setKeyword] = useState([]);
+
+  const options = [
+    { value: "2", label: "2명" },
+    { value: "3", label: "3명" },
+    { value: "4", label: "4명" },
+    { value: "5", label: "5명" },
+    { value: "6", label: "6명" },
+    { value: "7", label: "7명" },
+    { value: "8", label: "8명" },
+    { value: "9", label: "9명" },
+    { value: "10", label: "10명" },
+    { value: "20", label: "20명" },
+    { value: "999", label: "제한없음" },
+  ];
+
+  const colourOptions = [
+    { value: "초보환영", label: "초보환영", isFixed: true },
+    { value: "정기모임", label: "정기모임" },
+    { value: "유경험자", label: "유경험자" },
+    { value: "주로평일", label: "주로평일" },
+    { value: "주로주말", label: "주로주말" },
+    { value: "성별무관", label: "성별무관", isFixed: true },
+    { value: "여자만", label: "여자만" },
+    { value: "남자만", label: "남자만" },
+    { value: "함께해요", label: "함께해요" },
+    { value: "열정적인", label: "열정적인", isFixed: true },
+    { value: "밝은", label: "밝은" },
+  ];
+
+  const addressOptions = [
+    { value: "서울", label: "서울" },
+    { value: "경기", label: "경기" },
+    { value: "인천", label: "인천" },
+  ];
+
+  const seoulOptions = [
+    { value: "강남/역삼/삼성/논현", label: "강남/역삼/삼성/논현" },
+    { value: "서초/신사/방배", label: "서초/신사/방배" },
+    { value: "잠실/신천(잠실새내)", label: "잠실/신천(잠실새내)" },
+    { value: "영등포/여의도", label: "영등포/여의도" },
+    { value: "신림/서울대/사당/동작", label: "신림/서울대/사당/동작" },
+    { value: "천호/길동/둔촌", label: "천호/길동/둔촌" },
+    { value: "화곡/까치산/양천/목동", label: "화곡/까치산/양천/목동" },
+    { value: "구로/금천/오류/신도림", label: "구로/금천/오류/신도림" },
+  ];
+
+  const incheonOptions = [
+    { value: "1", label: "초보환영" },
+    { value: "2", label: "정기모임" },
+    { value: "3", label: "유경험자" },
+    { value: "영등포/여의도", label: "주로평일" },
+    { value: "신림/서울대/사당/동작", label: "주로주말" },
+    { value: "천호/길동/둔촌", label: "성별무관" },
+    { value: "화곡/까치산.양천/목동", label: "여자만" },
+    { value: "구로/금천/오류/신도림", label: "남자만" },
+    { value: "함께해요", label: "함께해요" },
+    { value: "볼더링좋아", label: "볼더링좋아" },
+  ];
+
+  const addressChoice = () => {};
+
+  //짐 선택
+  //주소 검색 모달 열기
+  const [isOpenPost, setIsOpenPost] = useState(false);
+  const userMenu = useRef();
+
+  //주소 저장
+  const [addressDetail, setAddressDetail] = useState(""); // 상세주소
+
+  const onChangeOpenPost = () => {
+    setIsOpenPost(!isOpenPost);
+  };
+
+  const onCompletePost = (data) => {
+    let fullAddr = data.address;
+    let extraAddr = "";
+
+    if (data.addressType === "R") {
+      if (data.bname !== "") {
+        extraAddr += data.bname;
+      }
+      if (data.buildingName !== "") {
+        extraAddr +=
+          extraAddr !== "" ? `, ${data.buildingName}` : data.buildingName;
+      }
+      fullAddr += extraAddr !== "" ? ` (${extraAddr})` : "";
+    }
+    setAddressDetail(fullAddr);
+    setIsOpenPost(false);
+  };
+
+  const postCodeStyle = {
+    display: "block",
+    width: "400px",
+    height: "400px",
+    zIndex: 100,
+    position: "absolute",
+    top: "240px",
+    right: "250px",
+  };
+
+  const customStyles = {
+    control: (styles) => ({
+      ...styles,
+      backgroundColor: "transparent",
+      border: "none",
+      width: 400,
+      padding: 0,
+    }),
+    valueContainer: (styles) => ({
+      ...styles,
+      padding: 0,
+      fontSize: 14,
+      textalign: "center",
+    }),
+    option: (styles) => ({ ...styles }),
+  };
+
+  const customStyles1 = {
+    control: (styles) => ({
+      ...styles,
+      backgroundColor: "transparent",
+      border: "none",
+      padding: 0,
+      width: 150,
+    }),
+    container: (styles) => ({
+      ...styles,
+    }),
+    singleValue: (styles) => ({
+      ...styles,
+      color: "#666666",
+    }),
+    valueContainer: (styles) => ({
+      ...styles,
+      padding: 0,
+      fontSize: 14,
+      textalign: "center",
+    }),
+    container: (styles) => ({
+      ...styles,
+      padding: 0,
+      backgroundColor: "#333333",
+    }),
+    option: (styles) => ({ ...styles }),
+  };
+
+  const customStyles2 = {
+    control: (styles) => ({
+      ...styles,
+      backgroundColor: "transparent",
+      border: "none",
+      width: 250,
+    }),
+    singleValue: (styles) => ({
+      ...styles,
+      color: "#666666",
+    }),
+    valueContainer: (styles) => ({
+      ...styles,
+      padding: 0,
+      fontSize: 14,
+    }),
+    option: (styles) => ({ ...styles }),
+  };
+
   return (
     <div>
       <Navbar />
       <Warp>
         <ThumbnailContainer onSubmit={handleSubmit(onSubmit)}>
+          {isOpenPost && (
+            <DaumPostcode
+              style={postCodeStyle}
+              onComplete={onCompletePost}
+              autoClose={false}
+            />
+          )}
           <ThumbnailContentBox>
             <ImgBox>
               <input
@@ -108,18 +290,65 @@ const CreateCrew = () => {
                   </PhotoButton>
                 )}
               </ImgText>
-              <img src={imgUrl}></img>
             </ImgBox>
             <ContentBox onSubmit={handleSubmit(onSubmit)}>
               <TextBox>
+                <p>크루 이름</p>
                 <input
-                  placeholder="크루명"
+                  placeholder="크루 이름을 입력해주세요."
                   {...register("name", { required: true })}
                 />
               </TextBox>
+              <TextBox>
+                <p>주 활동 지역</p>
+                //컨트롤러 사용해서 데이터 받아오는거 해보기,,
+                {/* <Controller control={control} name="mainActivityArea">
+                  <Select
+                    options={addressOptions}
+                    placeholder="시 선택"
+                    styles={customStyles1}
+                    onChange={(s) => setAddress(s.target.value)}
+                  />
+                  <Select
+                    options={seoulOptions}
+                    placeholder="상세주소"
+                    styles={customStyles2}
+                    onChange={(s) => setAddressD(s.target.value)}
+                  />
+                </Controller> */}
+              </TextBox>
+              <TextBox>
+                <p>주 활동 짐</p>
+                <input
+                  type="text"
+                  readOnly={true}
+                  style={{ cursor: "pointer" }}
+                  onClick={onChangeOpenPost}
+                  placeholder="장소를 선택해주세요."
+                  defaultValue={addressDetail}
+                />
+              </TextBox>
+              <TextBox>
+                <p>키워드</p>
+                <Select
+                  closeMenuOnSelect={false}
+                  placeholder="크루 키워드를 선택해주세요."
+                  isMulti
+                  width="400px"
+                  height="60px"
+                  onChange={(s) => {
+                    setKeyword(s);
+                    console.log(s);
+                  }}
+                  options={colourOptions}
+                  styles={customStyles}
+                />
+              </TextBox>
               <TextDetail>
+                <p>크루 소개</p>
                 <textarea
-                  placeholder="크루소개"
+                  placeholder="크루에 대한 간단한 소개를 입력해주세요. 
+                  예) 직장인으로 구성된 크루입니다! 매주 토요일마다 정기모임이 있습니다."
                   {...register("content", { required: true })}
                 />
               </TextDetail>
@@ -209,25 +438,58 @@ const ContentBox = styled.div`
   justify-content: space-between;
 `;
 
+// const TextBox = styled.div`
+//   width: 550px;
+//   height: 60px;
+//   input {
+//     width: 100%;
+//     height: 100%;
+//     padding: 20px;
+//     :focus {
+//       outline: none;
+//     }
+//     background-color: #333333;
+//     color: #666666;
+//     border: none;
+//     font-family: "Spoqa Han Sans Neo";
+//     font-style: normal;
+//     font-weight: 400;
+//     font-size: 14px;
+//     letter-spacing: -0.05em;
+//   }
+// `;
+
 const TextBox = styled.div`
   width: 550px;
   height: 60px;
-  background-color: red;
-  input {
-    width: 100%;
-    height: 100%;
-    padding: 20px;
-    :focus {
-      outline: none;
-    }
-    background-color: #333333;
-    color: #666666;
-    border: none;
+  background-color: #333333;
+  padding: 21px 20px 21px 20px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  p {
+    width: 80px;
     font-family: "Spoqa Han Sans Neo";
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
     letter-spacing: -0.05em;
+    color: #666666;
+    margin-right: 20px;
+  }
+  input {
+    height: 100%;
+    width: 100%;
+    background-color: #333333;
+    color: #666666;
+    border: none;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: -0.05em;
+    :focus {
+      outline: none;
+    }
   }
 `;
 
@@ -235,12 +497,26 @@ const TextDetail = styled.div`
   width: 550px;
   height: 420px;
   margin-bottom: 35px;
-  background-color: gray;
+  background-color: #333333;
+  display: flex;
+  padding: 31px 20px 31px 20px;
+  align-items: center;
+  p {
+    width: 80px;
+    font-family: "Spoqa Han Sans Neo";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: -0.05em;
+    color: #666666;
+    margin-right: 20px;
+  }
   textarea {
     width: 100%;
     height: 100%;
-    padding: 31px 20px 31px 20px;
     resize: none;
+    overflow: hidden;
+    white-space: pre-line;
     :focus {
       outline: none;
     }

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
@@ -7,21 +7,21 @@ import {
   createCrewNotice,
   deleteCrewNotice,
 } from "../../../Redux/modules/crewSlice";
+import CrewNoticeEditModal from "./CrewNoticeEditModal";
 
-function CrewNotice({ notice }) {
+function CrewNotice() {
+  const dispatch = useDispatch();
   const params = useParams().crewId;
 
-  const notices = notice;
+  //크루 데이터
+  const crewDetail = useSelector((state) => state?.crews?.crewDetail);
+  const { noticeList } = crewDetail?.data;
+  console.log(noticeList);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = useForm();
+  //userId가져오기
+  const userId = window?.localStorage?.getItem("userId");
+  console.log(userId);
 
-  const dispatch = useDispatch();
-
-  //공지사항 등록
   const onSubmit = (data) => {
     const payload = {
       id: params,
@@ -31,40 +31,54 @@ function CrewNotice({ notice }) {
     dispatch(createCrewNotice(payload), [dispatch]);
   };
 
-  return (
-    <Container>
-      <Intro>
-        <IntroContent>
-          <h2>공지사항 입력</h2>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <input {...register("content", { required: true })} />
-            <button type="submit" disabled={isSubmitting}>
-              입력
-            </button>
-          </form>
-        </IntroContent>
-      </Intro>
-      {notices &&
-        notices.map((notice) => (
-          <Intro key={notice.id}>
+  //props
+  const [noticeData, setNoticeData] = useState({
+    id: "",
+    date: "",
+    place: "",
+    noticeId: "",
+  });
+
+return (
+    <div>
+      {noticeList
+        .slice(0)
+        .reverse()
+        .map((notice) => (
+          <Container key={notice.noticeId}>
             <IntroContent>
-              <TextButton>
-                <span type="button">수정</span>
-                <span
-                  type="button"
-                  onClick={() => {
-                    dispatch(deleteCrewNotice(notice.id));
-                  }}
-                >
-                  삭제
-                </span>
-              </TextButton>
-              <h2>공지사항</h2>
-              <p>{notice.content}</p>
+              {Number(userId) === notice.authorId ? (
+                <TextButton>
+                  <span>수정</span>
+                  <span>|</span>
+                  <span
+                    onClick={() => {
+                      dispatch(deleteCrewNotice(notice.noticeId));
+                    }}
+                  >
+                    삭제
+                  </span>
+                </TextButton>
+              ) : (
+                <div style={{ height: "15px" }} />
+              )}
+              <h3>
+                ++{notice.date}/{notice.place} 모임++
+              </h3>
+              <p>- 일시 : {notice.date}</p>
+              <p>- 장소 : {notice.place}</p>
+              <p>- 상세소개 : {notice.content}</p>
+              <UserContent>
+                <img src={notice.authorProfileImg}></img>
+                <div>
+                  <h1>{notice.authorNickname}</h1>
+                  <p>{notice.authorStatus === "ADMIN" ? "크루장" : "크루원"}</p>
+                </div>
+              </UserContent>
             </IntroContent>
-          </Intro>
+          </Container>
         ))}
-    </Container>
+    </div>
   );
 }
 
@@ -72,42 +86,67 @@ export default CrewNotice;
 
 const Intro = styled.div`
   width: 1200px;
-  height: 155px;
-  background-color: #cccccc;
-  padding: 40px 30px 40px 30px;
+  height: 257px;
   margin-bottom: 20px;
-  input {
-    width: 1000px;
-    height: 30px;
-    margin-top: 20px;
-    border: none;
+  h3 {
+    font-weight: 400;
+    font-size: 20px;
+    letter-spacing: -0.05em;
+    color: #ffffff;
+    margin-bottom: 10px;
   }
-  button {
-    width: 140px;
-    height: 30px;
-    border: none;
+  p {
+    font-size: 14px;
+    color: #999999;
   }
 `;
 
 const IntroContent = styled.div`
   width: 1200px;
-  hieght: 108px;
-  padding: 0;
-  h2 {
-    font-family: "Spoqa Han Sans Neo";
-    font-style: bold;
+  hieght: fit-content;
+  background-color: #262626;
+  padding: 15px 30px 30px 30px;
+  img {
+    width: 60px;
+    height: 60px;
+    border-radius: 70%;
+    overflow: hidden;
+    margin-top: 40px;
+  }
+  h3 {
     font-weight: 400;
     font-size: 20px;
     letter-spacing: -0.05em;
     color: #ffffff;
+    margin-bottom: 10px;
   }
   p {
-    font-family: "Spoqa Han Sans Neo";
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    letter-spacing: -0.05em;
-    color: #ffffff;
+    font-size: 14px;
+    color: #999999;
+  }
+`;
+
+const UserContent = styled.div`
+  display: flex;
+  align-items: center;
+  height: 60px;
+  margin-top: 40px;
+  img {
+    width: 60px;
+    height: 60px;
+    border-radius: 70%;
+    overflow: hidden;
+    margin-top: 0px;
+    margin-right: 20px;
+  }
+  div {
+    h1 {
+      font-style: normal;
+      font-weight: 400;
+      font-size: 20px;
+      letter-spacing: -0.05em;
+      color: #ffffff;
+    }
   }
 `;
 
@@ -123,23 +162,22 @@ const TextButton = styled.div`
   font-size: 12px;
   letter-spacing: -0.05em;
   span {
+    cursor: pointer;
     border: none;
     color: #999999;
     margin-rignt: 6px;
     &:nth-child(1) {
       padding-right: 6px;
     }
-    &:nth-child(2) {
+    &:nth-child(3) {
       padding-left: 6px;
     }
   }
-  position: relative;
-  top: -20px;
 `;
 
 const Container = styled.div`
   width: 1200px;
+  margin-bottom: 25px;
   height: auto;
-  margin-top: 60px;
   positon: absolute;
 `;

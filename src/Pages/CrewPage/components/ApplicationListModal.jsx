@@ -35,7 +35,9 @@ function ApplicationListModal({ onClose }) {
   return (
     <Background>
       <Modal>
-        <Login>신청자 리스트</Login>
+        <Title>
+          <h1>신청자 리스트</h1>
+        </Title>
         <Xbtn onClick={onClose}></Xbtn>
         <ImgBox>
           <PhotoButton>
@@ -64,7 +66,6 @@ function ApplicationListModal({ onClose }) {
               ))}
           </PhotoButton>
         </ImgBox>
-        <Buttonbox></Buttonbox>
       </Modal>
     </Background>
   );
@@ -87,7 +88,7 @@ const Background = styled.div`
 const Modal = styled.div`
   width: 500px;
   height: 635px;
-  background-color: #141414;
+  background-color: #262626;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -96,20 +97,27 @@ const Modal = styled.div`
   margin-top: 200px;
 `;
 
-const Login = styled.p`
-  font-family: "Spoqa Han Sans Neo";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 2.75rem;
-  letter-spacing: -0.05em;
-  color: #ffffff;
+const Title = styled.div`
+  width: 100%;
+  height: 55px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  h1 {
+    font-family: "Spoqa Han Sans Neo";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 44px;
+    letter-spacing: -0.05em;
+    color: #ffffff;
+  }
 `;
-
 const PhotoButton = styled.div`
   width: 410px;
   height: 100%;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  margin-top: 50px;
   align-items: center;
 `;
 
@@ -118,34 +126,6 @@ const ImgBox = styled.div`
   positon: relative;
   width: 410px;
   height: 484px;
-  padding-top: 60px;
-`;
-
-const Buttonbox = styled.div`
-  button {
-    width: 410px;
-    height: 60px;
-    border: none;
-    background-color: #cccccc;
-    font-family: "Spoqa Han Sans Neo";
-    font-style: normal;
-    font-weight: 400;
-    font-size: 1.25rem;
-    color: #141414;
-    letter-spacing: -0.05em;
-    &:first-child {
-      position: absolute;
-      top: 367px;
-      left: 45px;
-      background-color: #ffb800;
-    }
-    &:last-child {
-      position: absolute;
-      top: 510px;
-      left: 45px;
-      background-color: #fae100;
-    }
-  }
 `;
 
 const Xbtn = styled.button`
@@ -176,8 +156,7 @@ const Xbtn = styled.button`
 const Container = styled.div`
   width: 100%;
   height: auto;
-  background-color: #262626;
-  margin-bottom: 10px;
+  background-color: #333333;
 `;
 
 const IntroContent = styled.div`
@@ -202,7 +181,7 @@ const HostDetail = styled.div`
     font-weight: 400;
     font-size: 20px;
     letter-spacing: -0.05em;
-    color: #cccccc;
+    color: #ffffff;
   }
   div {
     p {
@@ -220,11 +199,12 @@ const HostDetail = styled.div`
 const HostDetailBox = styled.div`
   width: 100%;
   height: auto;
-  padding: 10px;
+  padding: 15px 30px 15px 30px;
   display: flex;
   align-items: center;
+  border-bottom: 1px solid #3f3f3f;
   img {
-    width: 50px;
+    width: 70px;
     height: 50px;
     border-radius: 70%;
     overflow: hidden;
@@ -233,7 +213,7 @@ const HostDetailBox = styled.div`
     width: 50px;
     height: 30px;
     border: none;
-    color: #cccccc;
+    color: #999999;
     background-color: transparent;
   }
 `;

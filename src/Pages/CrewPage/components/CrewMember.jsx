@@ -114,7 +114,6 @@ const HostDetail = styled.div`
 const Container = styled.div`
   width: 1200px;
   height: auto;
-  margin-top: 60px;
 `;
 
 //하단 소개박스

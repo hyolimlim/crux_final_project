@@ -3,17 +3,22 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import crewSlice, {
+import {
   getCrewDetail,
   joinCrew,
   deleteCrew,
 } from "../../Redux/modules/crewSlice";
-import { likeCrew, withdrawCrew } from "../../Redux/modules/userSlice";
+import {
+  likeCrew,
+  unLikeCrew,
+  withdrawCrew,
+} from "../../Redux/modules/userSlice";
 import Navbar from "../../Shared/Navbar";
 import CrewIntro from "./components/CrewIntro";
 import CrewMember from "./components/CrewMember";
 import CrewNotice from "./components/CrewNotice";
 import CrewPhotos from "./components/CrewPhotos";
+import CrewNoticeModal from "./components/CrewNoticeModal";
 import ApplicationListModal from "./components/ApplicationListModal";
 import { ReactComponent as Heart } from "../../Image/heart.svg";
 import Loading from "../../Shared/Loading";
@@ -25,7 +30,7 @@ const CrewDetail = () => {
 
   useEffect(() => {
     dispatch(getCrewDetail(params));
-  }, [dispatch]);
+  }, []);
 
   const crewDetail = useSelector((state) => state?.crews?.crewDetail);
   // console.log(crewDetail);
@@ -33,11 +38,12 @@ const CrewDetail = () => {
   // console.log(crew);
 
   //호스트 확인
-  const hostId = crew?.memberList[0]?.id;
-  const userId = window.localStorage.getItem("userId");
+  // const hostId = crew?.memberList[0]?.id;
+  const userId = window?.localStorage?.getItem("userId");
 
   //크루 가입자 확인
   const memberList = crew?.memberList;
+  console.log(memberList);
   const checkmember = memberList?.findIndex((x) => x?.id === Number(userId));
   // console.log(checkmember);
 
@@ -113,20 +119,25 @@ const CrewDetail = () => {
     setPhotosVisible(true);
   };
 
-  //크루 신청 리스트 모달 띄우기
+  //크루 신청 리스트, 모임 공지 모달 띄우기
   const [applicationModalVisible, setapplicationModalVisible] = useState(false);
+  const [isNoticemodal, setIsNoticemodal] = useState(false);
 
   const handleMadalClick = () => {
     setapplicationModalVisible(!applicationModalVisible);
   };
 
-  //하트클릭이벤트 | 만약 하트fill 또는 어쩌고가 true면,
-  const [heartFillClick, setHeartFillClick] = useState(false);
+  const handleNoticeClick = () => {
+    setIsNoticemodal(!isNoticemodal);
+  };
 
-  //클릭하면 하트필 true로 만들어둠
+  //크루 좋아요
   const handleHeartFill = () => {
-    setHeartFillClick(!heartFillClick);
-    dispatch(likeCrew(crew?.id));
+    if (crew?.like) {
+      dispatch(likeCrew(params));
+    } else {
+      dispatch(unLikeCrew(params));
+    }
   };
 
 if(!crewDetail) {
@@ -139,6 +150,7 @@ if(!crewDetail) {
         {applicationModalVisible && (
           <ApplicationListModal onClose={handleMadalClick} />
         )}
+        {isNoticemodal && <CrewNoticeModal onClose={handleNoticeClick} />}
         <ThumbnailContainer>
           <ThumbnailContentBox>
             <ImgBox>
@@ -148,14 +160,14 @@ if(!crewDetail) {
                   height="50px"
                   fill="#000000"
                   onClick={handleHeartFill}
-                  opacity={heartFillClick ? "80%" : "30%"}
+                  opacity={crew?.like ? "80%" : "30%"}
                 />
               </HeartIcon>
               <img src={crewDetail?.data?.imgUrl} />
             </ImgBox>
             <ContentBox>
               <TextBox>
-                {hostId === Number(userId) ? (
+                {crew?.memberList[0]?.id === Number(userId) ? (
                   <TextButton>
                     <span type="button" onClick={onCrewEdit}>
                       수정
@@ -166,13 +178,28 @@ if(!crewDetail) {
                   </TextButton>
                 ) : null}
                 <h1>{crewDetail?.data?.name}</h1>
+                <Keyword>
+                  <div>
+                    <p>#초보환영</p>
+                  </div>
+                  <div>
+                    <p>#주말모임</p>
+                  </div>
+                  <div>
+                    <p>#열정적인</p>
+                  </div>
+                </Keyword>
                 <TextDetail>
                   <Text>
                     <p>참여자</p> <p>{crewDetail?.data?.crewNum}명</p>
                   </Text>
                   <Text>
-                    <p>크루소개</p>
-                    <p>{crewDetail?.data?.content}</p>
+                    <p>주 활동 지역</p>
+                    <p>서울 신림/서울대/사당/동작</p>
+                  </Text>
+                  <Text>
+                    <p>주 활동 짐</p>
+                    <p>서울 강북구 삼양로173길 80 (북한산 국제클라이밍센터)</p>
                   </Text>
                 </TextDetail>
               </TextBox>
@@ -188,24 +215,12 @@ if(!crewDetail) {
                 </ButtonBox>
               ) : checkmember === 0 ? (
                 <ButtonBox>
-                  <button
-                    onClick={() => {
-                      dispatch(joinCrew(crew?.id));
-                    }}
-                  >
-                    모임 공지
-                  </button>
+                  <button onClick={handleNoticeClick}>모임 공지</button>
                   <button onClick={handleMadalClick}>신청 현황</button>
                 </ButtonBox>
               ) : (
                 <ButtonBox>
-                  <button
-                    onClick={() => {
-                      dispatch(joinCrew(crew?.id));
-                    }}
-                  >
-                    모임 공지
-                  </button>
+                  <button onClick={handleNoticeClick}>모임 공지</button>
                   <button onClick={handleWithDrawCrew}>크루 탈퇴</button>
                 </ButtonBox>
               )}
@@ -250,6 +265,29 @@ const Warp = styled.div`
   flex-direction: column;
 `;
 
+const Keyword = styled.div`
+  display: flex;
+  margin-top: 10px;
+  div {
+    width: 79px;
+    height: 26px;
+    border: 1px solid #666666;
+    border-radius: 22px;
+    display: flex;
+    padding: 6px 10px 5px 10px;
+    margin-right: 5px;
+    justify-content: center;
+    align-items: center;
+    p {
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 15px;
+      letter-spacing: -0.05em;
+      color: #666666;
+    }
+  }
+`;
+
 const ThumbnailContainer = styled.div`
   width: 1920px;
   height: 815px;
@@ -264,6 +302,7 @@ const ThumbnailContainer = styled.div`
 const TabContainer = styled.div`
   width: 1920px;
   min-height: 864px;
+  padding-top: 60px;
   height: auto;
   background-color: #141414;
   display: flex;
@@ -317,13 +356,13 @@ const TextBox = styled.div`
 const TextDetail = styled.div`
   width: 550px;
   height: 206px;
-  margin-top: 76px;
+  margin-top: 45px;
 `;
 
 const Text = styled.div`
   display: flex;
   align-items: center;
-  margin-botton: 14px;
+  padding-bottom: 14px;
   p {
     font-family: "Spoqa Han Sans Neo";
     font-style: normal;

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { ReactComponent as Crown } from "../../../Image/crown.svg";
 
 function CrewIntro({ content, adminNickname, adminContent }) {
   return (
@@ -12,6 +13,9 @@ function CrewIntro({ content, adminNickname, adminContent }) {
       <HostIntro>
         <Title>크루장 소개</Title>
         <HostDetailBox>
+          <div>
+            <Crown />
+          </div>
           <img src="https://helpx.adobe.com/content/dam/help/en/photoshop/using/quick-actions/remove-background-before-qa1.png"></img>
           <HostDetail>
             <p>{adminNickname}</p>
@@ -34,10 +38,9 @@ const CrewIntroBox = styled.div`
 
 const Intro = styled.div`
   width: 1200px;
-  height: 218px;
+  height: 158px;
   border-bottom: 1px solid #202020;
   display: flex;
-  align-items: center;
 `;
 
 const IntroContent = styled.div`
